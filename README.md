@@ -8,7 +8,10 @@ Create awesome and powerful modal bottom sheets
 |---|---|---|---|---|
 |<img height="300" src="https://github.com/jamesblasco/modal_bottom_sheet/blob/master/screenshots/cupertino_shared_view.gif?raw=true">| <img  height="300" src="https://github.com/jamesblasco/modal_bottom_sheet/blob/master/screenshots/modal_inside_modal.gif?raw=true">| <img   height="300" src="https://github.com/jamesblasco/modal_bottom_sheet/blob/master/screenshots/material_fit.png?raw=true">|<img   height="300" src="https://github.com/jamesblasco/modal_bottom_sheet/blob/master/screenshots/bar_modal.png?raw=true">| <img height="300" src="https://github.com/jamesblasco/modal_bottom_sheet/blob/master/screenshots/avatar_modal.png?raw=true">|
 
+## First Steps
 
+How to install it? [Follow Instructions](
+https://pub.dev/packages/modal_bottom_sheet#-installing-tab-)
 
 ## Material Modal BottomSheet
 
