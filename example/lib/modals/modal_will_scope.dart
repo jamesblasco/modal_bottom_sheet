@@ -8,7 +8,8 @@ class ModalWillScope extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(child: WillPopScope(
+    return Material(
+        child: WillPopScope(
       onWillPop: () async {
         bool shouldClose = true;
         await showCupertinoDialog(

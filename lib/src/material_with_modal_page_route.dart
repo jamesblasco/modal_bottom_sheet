@@ -1,14 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import '../modal_bottom_sheet.dart';
 import 'bottom_sheet_route.dart';
-
-class e extends PageRouteBuilder {
-  
-}
 
 class MaterialWithModalsPageRoute<T> extends MaterialPageRoute<T> {
   /// Construct a MaterialPageRoute whose contents are defined by [builder].
@@ -29,8 +24,6 @@ class MaterialWithModalsPageRoute<T> extends MaterialPageRoute<T> {
             fullscreenDialog: fullscreenDialog,
             builder: builder,
             maintainState: maintainState);
-
-
 
   ModalBottomSheetRoute _nextModalRoute;
 

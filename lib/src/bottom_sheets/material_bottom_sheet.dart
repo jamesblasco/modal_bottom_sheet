@@ -1,8 +1,6 @@
-
-
-
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'dart:async';
 
 /// Shows a modal material design bottom sheet.
 Future<T> showMaterialModalBottomSheet<T>({
@@ -53,10 +51,10 @@ Future<T> showMaterialModalBottomSheet<T>({
 //Default container builder is the Material Appearance
 WidgetWithChildBuilder _materialContainerBuilder(BuildContext context,
     {Color backgroundColor,
-      double elevation,
-      ThemeData theme,
-      Clip clipBehavior,
-      ShapeBorder shape}) {
+    double elevation,
+    ThemeData theme,
+    Clip clipBehavior,
+    ShapeBorder shape}) {
   final BottomSheetThemeData bottomSheetTheme =
       Theme.of(context).bottomSheetTheme;
   final Color color = backgroundColor ??

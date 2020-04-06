@@ -10,7 +10,7 @@ class ModalFit extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
         child: SafeArea(
-          top: false,
+      top: false,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[

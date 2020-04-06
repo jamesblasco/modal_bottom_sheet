@@ -1,11 +1,11 @@
 name: modal_bottom_sheet
-description: 'Modal bottom sheets: Cupertino, Material, or build your own'
-version: 0.0.1
-author: 'JB <git@jaimeblasco.com>'
+description: 'Create flutter advanced modal bottom sheets. Material, Cupertino or your own style'
+version: 0.1.3
 homepage: 'https://github.com/jamesblasco/modal_bottom_sheet'
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.0.0 <3.0.0"
+  flutter: ">=1.12.0 <2.0.0"
 
 dependencies:
   flutter:

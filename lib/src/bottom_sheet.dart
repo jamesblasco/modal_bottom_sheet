@@ -3,7 +3,6 @@
 // found in the LICENSE file.
 
 import 'dart:async';
-import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -11,8 +10,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
-
-import 'bottom_sheet_route.dart';
 
 const Duration _bottomSheetDuration = Duration(milliseconds: 400);
 const double _minFlingVelocity = 500.0;
@@ -158,8 +155,8 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
 
   bool _isCheckingShouldClose = false;
   FutureOr<bool> shouldClose() async {
-    if(_isCheckingShouldClose) return false;
-    if(widget.shouldClose == null) return null;
+    if (_isCheckingShouldClose) return false;
+    if (widget.shouldClose == null) return null;
     _isCheckingShouldClose = true;
     final result = await widget.shouldClose();
     _isCheckingShouldClose = false;
@@ -202,7 +199,6 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
     if (_dismissUnderway || !isDragging) return;
     isDragging = false;
     _bounceDragController.reverse();
-
 
     bool canClose = true;
     if (widget.shouldClose != null && hasReachedWillPopThreshold) {
@@ -273,20 +269,18 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
         child,
       );
 
-
     // Todo: Add curved Animation when push and pop without gesture
-    final Animation<double> containerAnimation = CurvedAnimation(
+    /* final Animation<double> containerAnimation = CurvedAnimation(
       parent: widget.animationController,
       curve: Curves.easeOut,
-    );
+    );*/
 
     return AnimatedBuilder(
       animation: widget.animationController,
       builder: (context, _) => ClipRect(
         child: CustomSingleChildLayout(
           delegate: _ModalBottomSheetLayout(
-              widget.animationController.value,
-              widget.expanded),
+              widget.animationController.value, widget.expanded),
           child: !widget.enableDrag
               ? child
               : KeyedSubtree(

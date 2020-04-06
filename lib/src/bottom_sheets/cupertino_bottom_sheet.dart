@@ -8,7 +8,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
@@ -200,7 +199,9 @@ class _CupertinoModalTransition extends StatelessWidget {
             final progress = curvedAnimation.value;
             final yOffset = progress * paddingTop;
             final scale = 1 - progress / 10;
-            final radius =  progress == 0 ? 0.0 : (1 - progress) * startRoundCorner + progress * 12;
+            final radius = progress == 0
+                ? 0.0
+                : (1 - progress) * startRoundCorner + progress * 12;
             return Stack(
               children: <Widget>[
                 Container(color: Colors.black),

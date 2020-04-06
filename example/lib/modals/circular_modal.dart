@@ -26,9 +26,10 @@ class AvatarBottomSheet extends StatelessWidget {
                 child: AnimatedBuilder(
                   animation: animation,
                   builder: (context, child) => Transform.translate(
-                    offset: Offset(0, (1 - animation.value) * 100),
+                      offset: Offset(0, (1 - animation.value) * 100),
                       child: Opacity(
-                      child: child, opacity: max(0, animation.value * 2 - 1))),
+                          child: child,
+                          opacity: max(0, animation.value * 2 - 1))),
                   child: Row(
                     children: <Widget>[
                       SizedBox(width: 20),

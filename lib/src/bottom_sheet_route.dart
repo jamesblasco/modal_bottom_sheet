@@ -1,43 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:flutter/widgets.dart';
 
 import '../modal_bottom_sheet.dart';
-import 'material_with_modal_page_route.dart';
 
 const Duration _bottomSheetDuration = Duration(milliseconds: 400);
-
-class _ModalBottomSheetLayout extends SingleChildLayoutDelegate {
-  _ModalBottomSheetLayout(this.progress, this.expand);
-
-  final double progress;
-  final bool expand;
-
-  @override
-  BoxConstraints getConstraintsForChild(BoxConstraints constraints) {
-    return BoxConstraints(
-      minWidth: constraints.maxWidth,
-      maxWidth: constraints.maxWidth,
-      minHeight: expand ? constraints.maxHeight : 0,
-      maxHeight: expand ? constraints.maxHeight : constraints.minHeight,
-    );
-  }
-
-  @override
-  Offset getPositionForChild(Size size, Size childSize) {
-    return Offset(0.0, size.height - childSize.height * progress);
-  }
-
-  @override
-  bool shouldRelayout(_ModalBottomSheetLayout oldDelegate) {
-    return progress != oldDelegate.progress;
-  }
-}
 
 class _ModalBottomSheet<T> extends StatefulWidget {
   const _ModalBottomSheet({
@@ -65,13 +33,14 @@ class _ModalBottomSheet<T> extends StatefulWidget {
 
 class _ModalBottomSheetState<T> extends State<_ModalBottomSheet<T>> {
   String _getRouteLabel(MaterialLocalizations localizations) {
-    switch (Theme.of(context).platform) {
+    final platform = Theme.of(context).platform;
+    switch (platform) {
       case TargetPlatform.iOS:
-      case TargetPlatform.macOS:
         return '';
       case TargetPlatform.android:
       case TargetPlatform.fuchsia:
         return localizations.dialogLabel;
+        break;
     }
     return null;
   }
@@ -100,9 +69,6 @@ class _ModalBottomSheetState<T> extends State<_ModalBottomSheet<T>> {
         MaterialLocalizations.of(context);
     final String routeLabel = _getRouteLabel(localizations);
 
-  
-  
-
     return AnimatedBuilder(
       animation: widget.route._animationController,
       builder: (BuildContext context, Widget child) {
@@ -113,27 +79,25 @@ class _ModalBottomSheetState<T> extends State<_ModalBottomSheet<T>> {
           namesRoute: true,
           label: routeLabel,
           explicitChildNodes: true,
-          child:  ModalBottomSheet(
-                expanded: widget.route.expanded,
-                containerBuilder: widget.route.containerBuilder,
-                animationController: widget.route._animationController,
-                shouldClose: widget.route.hasScopedWillPopCallback
-                    ? () async {
-                        final willPop = await widget.route.willPop();
-                        return willPop != RoutePopDisposition.doNotPop;
-                      }
-                    : null,
-                onClosing: () {
-                  if (widget.route.isCurrent) {
-                    Navigator.of(context).pop();
+          child: ModalBottomSheet(
+            expanded: widget.route.expanded,
+            containerBuilder: widget.route.containerBuilder,
+            animationController: widget.route._animationController,
+            shouldClose: widget.route._hasScopedWillPopCallback
+                ? () async {
+                    final willPop = await widget.route.willPop();
+                    return willPop != RoutePopDisposition.doNotPop;
                   }
-                },
-                builder: widget.route.builder,
-                enableDrag: widget.enableDrag,
-                bounce: widget.bounce,
-              ),
-            
-          
+                : null,
+            onClosing: () {
+              if (widget.route.isCurrent) {
+                Navigator.of(context).pop();
+              }
+            },
+            builder: widget.route.builder,
+            enableDrag: widget.enableDrag,
+            bounce: widget.bounce,
+          ),
         );
       },
     );
@@ -190,6 +154,8 @@ class ModalBottomSheetRoute<T> extends PopupRoute<T> {
         ModalBottomSheet.createAnimationController(navigator.overlay);
     return _animationController;
   }
+
+  bool get _hasScopedWillPopCallback => hasScopedWillPopCallback;
 
   @override
   Widget buildPage(BuildContext context, Animation<double> animation,

@@ -1,8 +1,6 @@
-
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'dart:async';
 
 import '../../modal_bottom_sheet.dart';
 import '../bottom_sheet_route.dart';
@@ -14,51 +12,47 @@ class BarBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
-        value: SystemUiOverlayStyle.light,
-        child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          SizedBox(height: 12),
-          SafeArea(
-            bottom: false,
-            child: Container(
-              height: 6,
-              width: 40,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(6)),
-            ),
-          ),
-          SizedBox(height: 8),
-          Flexible(
-            flex: 1,
-            fit: FlexFit.loose,
-            child: ClipRRect(
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(15),
-                  topRight: Radius.circular(15)),
+      value: SystemUiOverlayStyle.light,
+      child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(height: 12),
+            SafeArea(
+              bottom: false,
               child: Container(
-                  decoration: BoxDecoration(
-                      color: Theme.of(context).scaffoldBackgroundColor,
-                      boxShadow: [
-                        BoxShadow(
-                            blurRadius: 10,
-                            color: Colors.black12,
-                            spreadRadius: 5)
-                      ]),
-                  width: double.infinity,
-                  child: MediaQuery.removePadding(
-                      context: context,
-                      removeTop: true,
-                      child: child
-                  )
+                height: 6,
+                width: 40,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(6)),
               ),
             ),
-          ),
-        ]),);
+            SizedBox(height: 8),
+            Flexible(
+              flex: 1,
+              fit: FlexFit.loose,
+              child: ClipRRect(
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(15),
+                    topRight: Radius.circular(15)),
+                child: Container(
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).scaffoldBackgroundColor,
+                        boxShadow: [
+                          BoxShadow(
+                              blurRadius: 10,
+                              color: Colors.black12,
+                              spreadRadius: 5)
+                        ]),
+                    width: double.infinity,
+                    child: MediaQuery.removePadding(
+                        context: context, removeTop: true, child: child)),
+              ),
+            ),
+          ]),
+    );
   }
-
 }
 
 Future<T> showBarModalBottomSheet<T>({
@@ -88,7 +82,9 @@ Future<T> showBarModalBottomSheet<T>({
       .push(ModalBottomSheetRoute<T>(
     builder: builder,
     bounce: bounce,
-    containerBuilder: (_, __, child) => BarBottomSheet(child: child,),
+    containerBuilder: (_, __, child) => BarBottomSheet(
+      child: child,
+    ),
     secondAnimationController: secondAnimation,
     expanded: expand,
     barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
@@ -98,4 +94,3 @@ Future<T> showBarModalBottomSheet<T>({
   ));
   return result;
 }
-

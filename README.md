@@ -1,14 +1,13 @@
-<img src="https://github.com/jamesblasco/modal_bottom_sheet/blob/master/screenshots/preview.png">
+<img src="https://github.com/jamesblasco/modal_bottom_sheet/blob/master/screenshots/preview.png?raw=true">
 
 # Flutter Modal Bottom Sheet
 
-Create awesome and powerful modal bottom sheets 
+Create awesome and powerful modal bottom sheets
+ 
+|  Cupertino Modal |  Multiple Modals |  Material Modal | Bar Modal  |  Create your own |
+|---|---|---|---|---|
+|<img height="300" src="https://github.com/jamesblasco/modal_bottom_sheet/blob/master/screenshots/cupertino_shared_view.gif?raw=true">| <img  height="300" src="https://github.com/jamesblasco/modal_bottom_sheet/blob/master/screenshots/modal_inside_modal.gif?raw=true">| <img   height="300" src="https://github.com/jamesblasco/modal_bottom_sheet/blob/master/screenshots/material_fit.png?raw=true">|<img   height="300" src="https://github.com/jamesblasco/modal_bottom_sheet/blob/master/screenshots/bar_modal.png?raw=true">| <img height="300" src="https://github.com/jamesblasco/modal_bottom_sheet/blob/master/screenshots/avatar_modal.png?raw=true">|
 
-<img align="left"  height="300" src="https://github.com/jamesblasco/modal_bottom_sheet/blob/master/screenshots/cupertino_shared_view.gif">
-<img align="left"  height="300" src="https://github.com/jamesblasco/modal_bottom_sheet/blob/master/screenshots/modal_inside_modal.gif">
-<img align="left"  height="300" src="https://github.com/jamesblasco/modal_bottom_sheet/blob/master/screenshots/material_fit.png">
-<img align="left"height="300" src="https://github.com/jamesblasco/modal_bottom_sheet/blob/master/screenshots/bar_modal.png">
-<img height="300" src="https://github.com/jamesblasco/modal_bottom_sheet/blob/master/screenshots/avatar_modal.png">
 
 
 ## Material Modal BottomSheet
