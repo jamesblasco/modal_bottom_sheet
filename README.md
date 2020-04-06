@@ -34,7 +34,7 @@ Notice this route type works the same as `MaterialPageRoute` and will support cu
 1. Wrap previous page inside a `CupertinoScaffold`. 
 2. Call `CupertinoScaffold.showCupertinoModalBottomSheet(context:context, builder: ...)`
 
-This two options won't work correctly together. 
+These two options won't work correctly together. 
 
 It supports native features as bouncing, blurred background, dark mode, stacking modals and inside navigation.
 
