@@ -74,7 +74,7 @@ Notice this route type behaves the same as `MaterialPageRoute` and supports cust
 
 How can I change my route class? See cases:
 
-1.  Using `Navigator.of(context).push`
+<details><summary> 1. Using Navigator.of(context).push </summary>
 
 ```dart
 Navigator.of(context).push(MaterialPageRoute(builder: (context) => Container()));`
@@ -83,7 +83,14 @@ Navigator.of(context).push(MaterialPageRoute(builder: (context) => Container()))
  ```dart
  Navigator.of(context).push(MaterialWithModalsPageRoute(builder: (context) => Container()));
  ```
-2. Using `onGenerateRoute` parameter of `MaterialApp`, `CupertinoApp` or `Navigator`
+ 
+ </details>
+ 
+<details><summary>
+ 2. 
+ Using `onGenerateRoute` parameter of `MaterialApp`, `CupertinoApp` or `Navigator` 
+ </summary>
+ 
  ```dart
  onGenerateRoute: (settings) {
     ...
@@ -97,13 +104,30 @@ Navigator.of(context).push(MaterialPageRoute(builder: (context) => Container()))
      return MaterialWithModalsPageRoute(settings: settings, builder: (context) => Container());
  },
  ```
- 3. Using `pageRouteBuilder` parameter of `WidgetApp`
+ 
+  </details>
+  
+ <details><summary>  
+ 3. 
+ Using `pageRouteBuilder` parameter of `WidgetApp` 
+ </summary>
+
 ```dart
 pageRouteBuilder: <T>(RouteSettings settings, WidgetBuilder builder) => MaterialWithModalsPageRoute<T>(settings: settings, builder: builder)
  ```
- 4. Using `routes` parameter from `MaterialApp` or `CupertinoApp`
+ 
+ </details>
+ 
+ <details>
+ <summary>
+ 4. 
+ Using `routes` parameter from `MaterialApp` or `CupertinoApp` 
+ </summary>
+
 Unfortunately this routes are `MaterialPageRoute` and `CupertinoPageRoute` respectively and cannot be changes.
 You can change the way you call the previous route with one of the previous methods or try option 2
+
+ </details>
    
 
 ### OPTION 2. 
