@@ -15,9 +15,32 @@ https://pub.dev/packages/modal_bottom_sheet#-installing-tab-)
 
 ## Material Modal BottomSheet
 
-`showMaterialModalBottomSheet` 
+```dart
+showMaterialModalBottomSheet(
+  context: context,
+  builder: (context, scrollController) => Container(),
+})
+```
+What to use this over flutter `showModalBottomSheet`?
+`showMaterialModalBottomSheet` supports closing bottoms sheets by dragging down even if there is a scrollview inside.
+`showModalBottomSheet` won't work correctly with scrollviews
 
-Improved showModalBottomSheet that support scroll and drag at the same time.
+#### Generic params for all modal bottom sheets
+
+| Param | Description |
+|---|---|
+|bool expand = false| The `expand` parameter specifies id the modal bottom sheet will be full screen size or will fit the content child|
+|bool useRootNavigator = false| The `useRootNavigator` parameter ensures that the root navigator is used to display the bottom sheet when set to `true`. This is useful in the case that a modal bottom sheet needs to be displayed above all other content but the caller is inside another `Navigator`. |
+|bool isDismissible = true| The `isDismissible` parameter specifies whether the bottom sheet will be dismissed when user taps on the scrim. |
+|Color barrierColor | The `barrierColor` parameter controls the color of the scrim for this route |
+|bool enableDrag = true| The `enableDrag` parameter specifies whether the bottom sheet can be dragged up and down and dismissed by swiping downwards. |
+|AnimationController secondAnimation| The `secondAnimation` parameter allows you to provide an animation controller that will be used to animate  push/pop of the modal route. Using this param is advised against and will be probably removed in future versions |
+|bool bounce = false| The `enableDrag` parameter specifies if the bottom sheet can go beyond the top boundary while dragging |
+
+
+#### Material params
+The optional `backgroundColor`, `elevation`, `shape`, and `clipBehavior` parameters can be passed in to customize the appearance and behavior of material bottom sheets.
+
 
 ## Cupertino Modal BottomSheet
 
