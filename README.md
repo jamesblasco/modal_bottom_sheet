@@ -69,7 +69,6 @@ There are two options:
 
 Replace your current route class with `MaterialWithModalsPageRoute`.
 
-For this we created `MaterialWithModalsPageRoute` that needs to replace the route you are using now. 
 Notice this route type behaves the same as `MaterialPageRoute` and supports custom `PageTransitionsBuilder` and `PageTransitionsTheme`.
 
 How can I change my route class? See cases:
