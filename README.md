@@ -56,5 +56,7 @@ Check in the example project `showAvatarModalBottomSheet` for how to create your
 
 - [ ] Allow to set the initial size of the bottom sheet
 
-- [ ] Support hero animations
+- [ ] Support hero animations [Pull Request #2](https://github.com/jamesblasco/modal_bottom_sheet/pull/2)
+
+<img height="400" src="https://user-images.githubusercontent.com/19904063/78669024-e8600800-78db-11ea-81ab-338398728de8.gif">
        
