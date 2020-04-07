@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:example/examples/sliver_container.dart';
 import 'package:example/modals/modal_fit.dart';
 import 'package:flutter/cupertino.dart';
@@ -16,8 +17,10 @@ class CupertinoSharePage extends StatelessWidget {
           child: Center(
             child: Hero(
                 tag: 'image',
-                child: Image.network(
-                    'https://images.unsplash.com/photo-1586042062881-03688ce69774')),
+                child: ClipRect(
+                    child: CachedNetworkImage(
+                        imageUrl:
+                            'https://images.unsplash.com/photo-1586042062881-03688ce69774'))),
           ),
         ),
         bottomNavigationBar: bottomAppBar(context));
@@ -25,6 +28,7 @@ class CupertinoSharePage extends StatelessWidget {
 
   PreferredSizeWidget appBar(BuildContext context) {
     return CupertinoNavigationBar(
+      transitionBetweenRoutes: true,
       middle: Column(
         children: <Widget>[
           Text('New York', style: TextStyle(fontWeight: FontWeight.normal)),
@@ -112,26 +116,99 @@ class PhotoShareBottomSheet extends StatelessWidget {
                           children: <Widget>[
                             Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 6),
-                                child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(12),
-                                    child: Hero(
-                                      tag: 'image',
-                                      child: Image.network(
-                                          'https://images.unsplash.com/photo-1586042062881-03688ce69774'),
+                                child: Hero(
+                                    tag: 'image',
+                                    flightShuttleBuilder: (context, animation,
+                                        direction, fromContext, toHeroContext) {
+                                      final Hero toHero =
+                                          toHeroContext.widget as Hero;
+                                      if (direction ==
+                                          HeroFlightDirection.push) {
+                                        final RenderBox toHeroBox =
+                                            toHeroContext?.findRenderObject()
+                                                as RenderBox;
+                                        final RenderBox finalRouteBox =
+                                            ModalRoute.of(toHeroContext)
+                                                    .subtreeContext
+                                                    ?.findRenderObject()
+                                                as RenderBox;
+                                        final Offset toHeroOrigin =
+                                            toHeroBox.localToGlobal(Offset.zero,
+                                                ancestor: finalRouteBox);
+
+                                        final RenderBox fromHeroBox =
+                                            fromContext?.findRenderObject()
+                                                as RenderBox;
+                                        final RenderBox fromRouteBox =
+                                            ModalRoute.of(fromContext)
+                                                    .subtreeContext
+                                                    ?.findRenderObject()
+                                                as RenderBox;
+                                        final Offset fromHeroOrigin =
+                                            fromHeroBox.localToGlobal(
+                                                Offset.zero,
+                                                ancestor: fromRouteBox);
+                                        return AnimatedBuilder(
+                                            animation: animation,
+                                            builder: (context, child) {
+                                              final y = (toHeroOrigin.dy -
+                                                      fromHeroOrigin.dy -
+                                                      MediaQuery.of(context)
+                                                          .size
+                                                          .height) *
+                                                  animation.value;
+                                              return Transform.translate(
+                                                  offset: Offset(0, y),
+                                                  child: child);
+                                            },
+                                            child: toHero.child);
+                                      } else {
+                                        return toHero.child;
+                                      }
+                                    },
+                                    createRectTween: (begin, end) => RectTween(
+                                          begin: begin,
+                                          end: Rect.fromLTWH(end.left,
+                                              begin.top, end.width, end.height),
+                                        ),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(12),
+                                      child: CachedNetworkImage(
+                                          imageUrl:
+                                              'https://images.unsplash.com/photo-1586042062881-03688ce69774'),
                                     ))),
-                            Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 6),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(12),
-                                  child: Image.network(
-                                      'https://images.unsplash.com/photo-1586042062881-03688ce69774'),
+                            AnimateWhenAppear(
+                                builder: (context, animation, child) {
+                                  return AnimatedBuilder(
+                                    animation: animation,
+                                    child: child,
+                                    builder: (context, child) {
+                                      return Transform.translate(
+                                        offset: Offset(
+                                            -(1 - animation.value) * 200, 0),
+                                        child: child,
+                                      );
+                                    },
+                                  );
+                                },
+                                curve: Curves.easeOutCubic,
+                                duration: Duration(milliseconds: 200),
+                                delay: Duration(milliseconds: 200),
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 6),
+                                  child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(12),
+                                      child: CachedNetworkImage(
+                                          imageUrl:
+                                              'https://images.unsplash.com/photo-1586042062881-03688ce69774')),
                                 )),
                             Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 6),
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(12),
-                                  child: Image.network(
-                                      'https://images.unsplash.com/photo-1586042062881-03688ce69774'),
+                                  child: CachedNetworkImage(
+                                      imageUrl:
+                                          'https://images.unsplash.com/photo-1586042062881-03688ce69774'),
                                 )),
                           ],
                         ),
@@ -159,26 +236,36 @@ class PhotoShareBottomSheet extends StatelessWidget {
                               margin: EdgeInsets.symmetric(horizontal: 4),
                               child: Column(
                                 children: <Widget>[
-                                  Material(
-                                    child: ClipRRect(
-                                      child: Container(
-                                        height: 60,
-                                        width: 60,
-                                        decoration: BoxDecoration(
-                                            image: DecorationImage(
-                                                image:
-                                                    NetworkImage(app.imageUrl),
-                                                fit: BoxFit.cover),
-                                            color: Colors.white,
-                                            borderRadius:
-                                                BorderRadius.circular(15)),
+                                  Container(
+                                    child: Material(
+                                      child: ClipRRect(
+                                        child: Container(
+                                          height: 60,
+                                          width: 60,
+                                          decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                  image:
+                                                      CachedNetworkImageProvider(
+                                                          app.imageUrl),
+                                                  fit: BoxFit.cover),
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(15)),
+                                        ),
                                       ),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(15)),
                                     ),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(15)),
-                                    elevation: 12,
-                                    shadowColor: Colors.black12,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(15),
+                                      boxShadow: [
+                                        BoxShadow(
+                                            blurRadius: 12,
+                                            color:
+                                                Colors.black.withOpacity(0.07))
+                                      ],
+                                    ),
                                   ),
                                   SizedBox(height: 8),
                                   Text(
@@ -292,7 +379,7 @@ class PhotoShareBottomSheet extends StatelessWidget {
                 children: <Widget>[
                   Material(
                     child: CircleAvatar(
-                      backgroundImage: NetworkImage(
+                      backgroundImage: CachedNetworkImageProvider(
                         person.imageUrl,
                       ),
                       radius: 30,
@@ -338,8 +425,9 @@ class PhotoShareBottomSheet extends StatelessWidget {
                       SizedBox(width: 18),
                       ClipRRect(
                           borderRadius: BorderRadius.circular(4),
-                          child: Image.network(
-                            'https://images.unsplash.com/photo-1586042062881-03688ce69774',
+                          child: CachedNetworkImage(
+                            imageUrl:
+                                'https://images.unsplash.com/photo-1586042062881-03688ce69774',
                             fit: BoxFit.cover,
                             height: 40,
                             width: 40,
@@ -411,6 +499,61 @@ class PhotoShareBottomSheet extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class AnimateWhenAppear extends StatefulWidget {
+  final Duration duration;
+  final Duration delay;
+  final Curve curve;
+  final Widget Function(BuildContext context, Animation animation, Widget child)
+      builder;
+  final Widget child;
+
+  const AnimateWhenAppear(
+      {Key key,
+      @required this.duration,
+      @required this.builder,
+      this.child,
+      this.delay, this.curve})
+      : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => _AnimateWhenAppearState();
+}
+
+class _AnimateWhenAppearState extends State<AnimateWhenAppear>
+    with TickerProviderStateMixin {
+  AnimationController controller;
+
+  @override
+  void initState() {
+    controller = AnimationController(vsync: this, duration: widget.duration);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (widget.delay != null)
+        Future.delayed(widget.delay, () => controller.forward());
+      else
+        controller.forward();
+    });
+
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (widget.curve != null) {
+      return widget.builder(
+          context,
+          CurvedAnimation(curve: widget.curve, parent: controller),
+          widget.child);
+    }
+    return widget.builder(context, controller, widget.child);
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 }
 
@@ -500,5 +643,26 @@ class SimpleSliverDelegate extends SliverPersistentHeaderDelegate {
   @override
   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {
     return false;
+  }
+}
+
+class CustomRectTween extends RectTween {
+  CustomRectTween({this.begin, this.end, this.height})
+      : super(begin: begin, end: end);
+  final Rect begin;
+  final Rect end;
+  final double height;
+
+  @override
+  Rect lerp(double t) {
+    final a = Curves.easeInExpo.transform(t);
+    final dist = Curves.easeInExpo.transform(a);
+    //print(dist);
+    //final lerp = lerpDouble(end.top  - height * (1-t) , end.top, t );
+    final lerp = lerpDouble(begin.top, end.top - height * (1 - dist), dist);
+    print(lerp);
+    final rect = Rect.lerp(begin, end, dist);
+    return Rect.fromLTWH(rect.left, rect.top, rect.width, rect.height);
+    ;
   }
 }

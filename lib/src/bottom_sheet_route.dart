@@ -104,7 +104,7 @@ class _ModalBottomSheetState<T> extends State<_ModalBottomSheet<T>> {
   }
 }
 
-class ModalBottomSheetRoute<T> extends PopupRoute<T> {
+class ModalBottomSheetRoute<T> extends PageRoute<T> {
   ModalBottomSheetRoute({
     this.containerBuilder,
     this.builder,
@@ -134,13 +134,22 @@ class ModalBottomSheetRoute<T> extends PopupRoute<T> {
   final AnimationController secondAnimationController;
 
   @override
+  bool get fullscreenDialog => true;
+
+  @override
   Duration get transitionDuration => _bottomSheetDuration;
+
+  @override
+  Curve get barrierCurve => super.barrierCurve;
 
   @override
   bool get barrierDismissible => isDismissible;
 
   @override
   final String barrierLabel;
+
+  @override
+  bool get opaque => false;
 
   @override
   Color get barrierColor => modalBarrierColor ?? Colors.black.withOpacity(0.35);
@@ -192,6 +201,16 @@ class ModalBottomSheetRoute<T> extends PopupRoute<T> {
   ) {
     return child;
   }
+
+  @override
+  bool get maintainState => true;
+
+  // Todo: This is dangerous to do. Check if there is a better way
+  // ModalBarrier animation only works if _offstage is false(is false by default)
+  // In PageRoute HeroController sets offstage to false and the animation for the
+  // modal barrier is not displayed even if there is no Hero widget
+  @override
+  set offstage(bool value) {}
 }
 
 /// Shows a modal material design bottom sheet.

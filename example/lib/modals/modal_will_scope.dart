@@ -38,6 +38,7 @@ class ModalWillScope extends StatelessWidget {
       },
       child: CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
+            transitionBetweenRoutes: false,
             leading: Container(), middle: Text('Modal Page')),
         child: Center(),
       ),

@@ -11,6 +11,7 @@ class SimpleModal extends StatelessWidget {
     return Material(
         child: CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
+          transitionBetweenRoutes: false,
           leading: Container(), middle: Text('Modal Page')),
       child: Center(),
     ));
