@@ -149,11 +149,17 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
   }
 
   void _cancelClose() {
-    widget.animationController.forward();
+    widget.animationController.forward().then((value) {
+      // When using WillPop, animation doesn't end at 1.
+      // Check more in detail the problem
+      if (!widget.animationController.isCompleted)
+        widget.animationController.value = 1;
+    });
     _bounceDragController.reverse();
   }
 
   bool _isCheckingShouldClose = false;
+
   FutureOr<bool> shouldClose() async {
     if (_isCheckingShouldClose) return false;
     if (widget.shouldClose == null) return null;
@@ -178,6 +184,8 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
         _close();
         print('close');
         return;
+      } else {
+        _cancelClose();
       }
     }
 
@@ -218,6 +226,8 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
       } else {
         _cancelClose();
       }
+    } else {
+      _cancelClose();
     }
   }
 
