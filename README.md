@@ -46,25 +46,92 @@ The optional `backgroundColor`, `elevation`, `shape`, and `clipBehavior` paramet
 
 iOS 13 came with an amazing new modal navigation and now it is available to use with Flutter.
 
-### OPTION 1. Recommended.
-1. use `showCupertinoModalBottomSheet` 
-2. `MaterialPageRoute` does not allow animated translation for routes that are not `MaterialPageRoute` or `CupertinoPageRoute`.
-For this we created `MaterialWithModalsPageRoute` that needs to replace the route you are using now. 
-Notice this route type works the same as `MaterialPageRoute` and will support custom `PageTransitionsTheme`.
 
+```dart
+showCupertinoModalBottomSheet(
+  context: context,
+  builder: (context, scrollController) => Container(),
+})
+```
+See generic paramameter in the Material section above
+
+#### Cupertino specific params
+The optional `backgroundColor` parameters can be passed in to customize the backgroundColor cupertino bottom sheets.
+Useful if you want a blurred transparent background as the example Cupertino Photo Share
+
+### CAUTION!: To animate the previous route some changes are needed.
+> **Why?**
+> `MaterialPageRoute` and `CupertinoPageRoute` do not allow animated translation to/from routes that are not the same type. 
+
+There are two options:
+
+### OPTION 1. Recommended.
+
+Replace your current route class with `MaterialWithModalsPageRoute`.
+
+For this we created `MaterialWithModalsPageRoute` that needs to replace the route you are using now. 
+Notice this route type behaves the same as `MaterialPageRoute` and supports custom `PageTransitionsBuilder` and `PageTransitionsTheme`.
+
+How can I change my route class? See cases:
+
+1.  Using `Navigator.of(context).push`
+
+```dart
+Navigator.of(context).push(MaterialPageRoute(builder: (context) => Container()));`
+```
+ Replace it with 
+ ```dart
+ Navigator.of(context).push(MaterialWithModalsPageRoute(builder: (context) => Container()));
+ ```
+2. Using `onGenerateRoute` parameter of `MaterialApp`, `CupertinoApp` or `Navigator`
+ ```dart
+ onGenerateRoute: (settings) {
+    ...
+     return MaterialPageRoute(settings: settings, builder: (context) => Container());
+ },
+ ```
+ Replace it to
+  ```dart
+ onGenerateRoute: (settings) {
+    ...
+     return MaterialWithModalsPageRoute(settings: settings, builder: (context) => Container());
+ },
+ ```
+ 3. Using `pageRouteBuilder` parameter of `WidgetApp`
+```dart
+pageRouteBuilder: <T>(RouteSettings settings, WidgetBuilder builder) => MaterialWithModalsPageRoute<T>(settings: settings, builder: builder)
+ ```
+ 4. Using `routes` parameter from `MaterialApp` or `CupertinoApp`
+Unfortunately this routes are `MaterialPageRoute` and `CupertinoPageRoute` respectively and cannot be changes.
+You can change the way you call the previous route with one of the previous methods or try option 2
+   
 
 ### OPTION 2. 
-1. Wrap previous page inside a `CupertinoScaffold`. 
-2. Call `CupertinoScaffold.showCupertinoModalBottomSheet(context:context, builder: ...)`
+
+1. Wrap previous route inside a `CupertinoScaffold`.
+  Example with `routes` parameter from `MaterialApp` or `CupertinoApp`
+  ```dart
+    routes: <String, WidgetBuilder>{
+      '/previous_route_where_you_push_modal': (BuildContext context) => CupertinoScaffold(body: Container()),
+     },
+   ```
+
+2. Push modal with this method
+ ```dart
+ CupertinoScaffold.showCupertinoModalBottomSheet(context:context, builder: (context) => Container())
+ ```
 
 These two options won't work correctly together. 
 
 It supports native features as bouncing, blurred background, dark mode, stacking modals and inside navigation.
 
-For stacking modals call `showCupertinoModalBottomSheet` inside a modal;
-For inside navigation use a CupertinoTabScaffold or a Navigator.
+## Push new views inside the modal bottom sheet
 
-Also it support flutter features as WillPopScope.
+a. If you want to push a new modal bottom sheet just call `showCupertinoModalBottomSheet` again (works with two option)
+
+b. For inside navigaton add a new `Navigator` or `CupertinoTabScaffold` inside 
+
+c. Also it supports flutter features as WillPopScope to prevent the modal bottom to be closed.
 
 ## Build other BottomSheets 
 
@@ -72,7 +139,17 @@ Try `showBarModalBottomSheet` for a bottomSheet with the appearance used by Face
 
 Check in the example project `showAvatarModalBottomSheet` for how to create your own ModalBottomSheet
 
+## Questions
+
+[Ask a question](https://stackoverflow.com/questions/ask) and ping me @jamesblasco
+
+## Found an issue or have a proposal?
+
+[Create an issue](https://github.com/jamesblasco/modal_bottom_sheet/issues/new)
+
+
 ## Roadmap
+
 - [ ] Support closing by dragging fast on a modal with a scroll view.
 
 - [ ] Improve animation curves when user is not dragging.
