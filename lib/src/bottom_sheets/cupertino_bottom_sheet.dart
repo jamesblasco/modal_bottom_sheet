@@ -16,6 +16,11 @@ import '../bottom_sheet_route.dart';
 
 const double _behind_widget_visible_height = 10;
 
+const BorderRadius _default_border_radius = BorderRadius.only(
+  topLeft: Radius.circular(12),
+  topRight: Radius.circular(12),
+);
+
 /// Cupertino Bottom Sheet Container
 ///
 /// Clip the child widget to rectangle with top rounded corners and adds
@@ -24,16 +29,17 @@ const double _behind_widget_visible_height = 10;
 class _CupertinoBottomSheetContainer extends StatelessWidget {
   final Widget child;
   final Color backgroundColor;
+  final BorderRadius borderRadius;
 
   const _CupertinoBottomSheetContainer(
-      {Key key, this.child, this.backgroundColor})
+      {Key key, this.child, this.backgroundColor, this.borderRadius})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final topSafeAreaPadding = MediaQuery.of(context).padding.top;
     final topPadding = _behind_widget_visible_height + topSafeAreaPadding;
-    final radius = Radius.circular(12);
+
     final shadow =
         BoxShadow(blurRadius: 10, color: Colors.black12, spreadRadius: 5);
     final _backgroundColor =
@@ -41,7 +47,7 @@ class _CupertinoBottomSheetContainer extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.only(top: topPadding),
       child: ClipRRect(
-        borderRadius: BorderRadius.only(topLeft: radius, topRight: radius),
+        borderRadius: borderRadius,
         child: Container(
           decoration:
               BoxDecoration(color: _backgroundColor, boxShadow: [shadow]),
@@ -63,6 +69,7 @@ Future<T> showCupertinoModalBottomSheet<T>({
   Color backgroundColor,
   double elevation,
   ShapeBorder shape,
+  BorderRadius borderRadius = _default_border_radius,
   Clip clipBehavior,
   Color barrierColor,
   bool expand = false,
@@ -85,6 +92,7 @@ Future<T> showCupertinoModalBottomSheet<T>({
     containerBuilder: (context, _, child) => _CupertinoBottomSheetContainer(
       child: child,
       backgroundColor: backgroundColor,
+      borderRadius: borderRadius,
     ),
     secondAnimationController: secondAnimation,
     expanded: expand,
