@@ -1,4 +1,4 @@
-<img src="https://github.com/jamesblasco/modal_bottom_sheet/blob/master/screenshots/preview.png?raw=true">
+<a href="https://jamesblasco.github.io/modal_bottom_sheet/#/"><img src="https://github.com/jamesblasco/modal_bottom_sheet/blob/master/screenshots/preview.png?raw=true"></a>
 
 # Flutter Modal Bottom Sheet
 
