@@ -73,7 +73,10 @@ Notice this route type behaves the same as `MaterialPageRoute` and supports cust
 
 How can I change my route class? See cases:
 
-<details><summary> 1. Using Navigator.of(context).push </summary>
+<details><summary> 1. 
+ 
+ Using `Navigator.of(context).push`
+ </summary>
 
 ```dart
 Navigator.of(context).push(MaterialPageRoute(builder: (context) => Container()));`
@@ -85,9 +88,8 @@ Navigator.of(context).push(MaterialPageRoute(builder: (context) => Container()))
  
  </details>
  
-<details><summary>
+<details><summary>2.
  
- 2. 
  Using `onGenerateRoute` parameter of `MaterialApp`, `CupertinoApp` or `Navigator` 
  </summary>
  
@@ -107,9 +109,8 @@ Navigator.of(context).push(MaterialPageRoute(builder: (context) => Container()))
  
   </details>
   
- <details><summary>  
+ <details><summary>  3. 
  
- 3. 
  Using `pageRouteBuilder` parameter of `WidgetApp` 
  </summary>
 
@@ -120,9 +121,8 @@ pageRouteBuilder: <T>(RouteSettings settings, WidgetBuilder builder) => Material
  </details>
  
  <details>
- <summary>
+ <summary>4.
   
- 4. 
  Using `routes` parameter from `MaterialApp` or `CupertinoApp` 
  </summary>
 
