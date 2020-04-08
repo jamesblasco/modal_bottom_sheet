@@ -15,8 +15,9 @@ Create awesome and powerful modal bottom sheets.
 Explore the [Web Demo](https://jamesblasco.github.io/modal_bottom_sheet/#/) or clone the repository. 
 
 Known problems on web demo:
-Web demo can run very slow on mobile devides.
-Fake status bar doesn't change color as the iOS, Android app
+- Web demo can run very slow on mobile devides.
+
+- Fake status bar doesn't change color as the iOS, Android app
 
 ## First Steps
 
