@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
+import 'modals/floating_modal.dart';
 import 'modals/modal_complex_all.dart';
 import 'modals/modal_fit.dart';
 import 'modals/modal_inside_modal.dart';
@@ -140,6 +141,13 @@ class _MyHomePageState extends State<MyHomePage> {
                             builder: (context, scrollController) =>
                                 ModalInsideModal(
                                     scrollController: scrollController),
+                          )),
+                  ListTile(
+                      title: Text('Float Modal'),
+                      onTap: () => showFloatingModalBottomSheet(
+                            context: context,
+                            builder: (context, scrollController) =>
+                                ModalFit(scrollController: scrollController),
                           )),
                   ListTile(
                       title: Text('Cupertino Modal fit'),
