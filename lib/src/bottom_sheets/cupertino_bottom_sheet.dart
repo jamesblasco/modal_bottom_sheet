@@ -178,7 +178,7 @@ class _CupertinoModalTransition extends StatelessWidget {
   Widget build(BuildContext context) {
     double startRoundCorner = 0;
     final paddingTop = MediaQuery.of(context).padding.top;
-    if (defaultTargetPlatform == TargetPlatform.iOS && paddingTop > 20) {
+    if (Theme.of(context).platform == TargetPlatform.iOS && paddingTop > 20) {
       startRoundCorner = 38.5;
       //https://kylebashour.com/posts/finding-the-real-iphone-x-corner-radius
     }

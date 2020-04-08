@@ -14,11 +14,10 @@ class CupertinoSharePage extends StatelessWidget {
         appBar: appBar(context),
         body: CupertinoPageScaffold(
           child: Center(
-            child: Hero(
-                tag: 'image',
-                child: Image.network(
-                    'https://images.unsplash.com/photo-1586042062881-03688ce69774')),
-          ),
+              child: Hero(
+            tag: 'image',
+            child: Image.asset('assets/demo_image.jpeg'),
+          )),
         ),
         bottomNavigationBar: bottomAppBar(context));
   }
@@ -116,22 +115,20 @@ class PhotoShareBottomSheet extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(12),
                                     child: Hero(
                                       tag: 'image',
-                                      child: Image.network(
-                                          'https://images.unsplash.com/photo-1586042062881-03688ce69774'),
+                                      child:
+                                          Image.asset('assets/demo_image.jpeg'),
                                     ))),
                             Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 6),
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(12),
-                                  child: Image.network(
-                                      'https://images.unsplash.com/photo-1586042062881-03688ce69774'),
+                                  child: Image.asset('assets/demo_image.jpeg'),
                                 )),
                             Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 6),
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(12),
-                                  child: Image.network(
-                                      'https://images.unsplash.com/photo-1586042062881-03688ce69774'),
+                                  child: Image.asset('assets/demo_image.jpeg'),
                                 )),
                           ],
                         ),
@@ -167,7 +164,7 @@ class PhotoShareBottomSheet extends StatelessWidget {
                                         decoration: BoxDecoration(
                                             image: DecorationImage(
                                                 image:
-                                                    NetworkImage(app.imageUrl),
+                                                    AssetImage(app.imageUrl),
                                                 fit: BoxFit.cover),
                                             color: Colors.white,
                                             borderRadius:
@@ -292,7 +289,7 @@ class PhotoShareBottomSheet extends StatelessWidget {
                 children: <Widget>[
                   Material(
                     child: CircleAvatar(
-                      backgroundImage: NetworkImage(
+                      backgroundImage: AssetImage(
                         person.imageUrl,
                       ),
                       radius: 30,
@@ -338,8 +335,8 @@ class PhotoShareBottomSheet extends StatelessWidget {
                       SizedBox(width: 18),
                       ClipRRect(
                           borderRadius: BorderRadius.circular(4),
-                          child: Image.network(
-                            'https://images.unsplash.com/photo-1586042062881-03688ce69774',
+                          child: Image.asset(
+                            'assets/demo_image.jpeg',
                             fit: BoxFit.cover,
                             height: 40,
                             width: 40,
@@ -422,31 +419,24 @@ class Item {
 }
 
 final people = [
-  Item('MacBook Pro',
-      'https://www.uoduckstore.com/TDS%20Product%20Images/Apple%20MacBook%20Pro%2016%20w%20T%20Bar%20Late%202019_1.jpg'),
-  Item('Jaime Blasco',
-      'https://media-exp1.licdn.com/dms/image/C5603AQGfIMBxWBRMSg/profile-displayphoto-shrink_200_200/0?e=1591833600&v=beta&t=r6xnd4oBDfb3A3IcsgliyrT_avYaeBEwRr9XtlizWq8'),
-  Item('Mya Johnston',
-      'https://images.unsplash.com/photo-1520813792240-56fc4a3765a7'),
+  Item('MacBook Pro', 'assets/MacBook.jpg'),
+  Item('Jaime Blasco', 'assets/jaimeblasco.jpeg'),
+  Item('Mya Johnston', 'assets/person1.jpeg'),
+  // https://images.unsplash.com/photo-1520813792240-56fc4a3765a7'
   Item('Maxime Nicholls',
-      'https://images.unsplash.com/photo-1520719627573-5e2c1a6610f0'),
+      'assets/person4.jpeg'), //https://images.unsplash.com/photo-1568707043650-eb03f2536825'
   Item('Susanna Thorne',
-      'https://images.unsplash.com/photo-1568707043650-eb03f2536825'),
-  Item('Jarod Aguilar',
-      'https://images.unsplash.com/photo-1547106634-56dcd53ae883')
+      'assets/person2.jpeg'), //https://images.unsplash.com/photo-1520719627573-5e2c1a6610f0
+  Item('Jarod Aguilar', 'assets/person3.jpeg')
+  //https://images.unsplash.com/photo-1547106634-56dcd53ae883
 ];
 
 final apps = [
-  Item('Messages',
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/IMessage_logo.svg/1200px-IMessage_logo.svg.png'),
-  Item('Github',
-      'https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png'),
-  Item('Slack',
-      'https://is3-ssl.mzstatic.com/image/thumb/Purple113/v4/6e/80/06/6e80063f-e5c8-3f20-d8d5-22dd0740f5ba/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/246x0w.png'),
-  Item('Twitter',
-      'https://cfcdnpull-creativefreedoml.netdna-ssl.com/wp-content/uploads/2015/06/Twitter-bird-white-blue2.png'),
-  Item('Mail',
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Mail_%28iOS%29.svg/1200px-Mail_%28iOS%29.svg.png'),
+  Item('Messages', 'assets/message.png'),
+  Item('Github', 'assets/github_app.png'),
+  Item('Slack', 'assets/slack.png'),
+  Item('Twitter', 'assets/twitter.png'),
+  Item('Mail', 'assets/mail.png'),
 ];
 
 final actions = [

@@ -1,4 +1,5 @@
 import 'package:example/modals/circular_modal.dart';
+import 'package:example/web_frame.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -22,6 +23,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(platform: TargetPlatform.iOS),
+      title: 'BottomSheet Modals',
+      builder: (context, child) => WebFrame(child: child,),
       onGenerateRoute: (RouteSettings settings) {
         switch (settings.name) {
           case '/':
@@ -36,6 +40,7 @@ class MyApp extends StatelessWidget {
                       builder: (context) => CupertinoPageScaffold(
                         backgroundColor: Colors.white,
                         navigationBar: CupertinoNavigationBar(
+                          transitionBetweenRoutes: false,
                           middle: Text('Normal Navigation Presentation'),
                           trailing: GestureDetector(
                               child: Icon(Icons.arrow_upward),
@@ -95,6 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
       child: CupertinoPageScaffold(
         backgroundColor: Colors.white,
         navigationBar: CupertinoNavigationBar(
+          transitionBetweenRoutes: false,
           middle: Text('iOS13 Modal Presentation'),
           trailing: GestureDetector(
             child: Icon(Icons.arrow_forward),
