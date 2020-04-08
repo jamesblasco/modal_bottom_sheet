@@ -2,11 +2,17 @@
 
 # Flutter Modal Bottom Sheet
 
-Create awesome and powerful modal bottom sheets
+Create awesome and powerful modal bottom sheets.
+
+
  
 |  Cupertino Modal |  Multiple Modals |  Material Modal | Bar Modal  |  Create your own |
 |---|---|---|---|---|
 |<img height="300" src="https://github.com/jamesblasco/modal_bottom_sheet/blob/master/screenshots/cupertino_shared_view.gif?raw=true">| <img  height="300" src="https://github.com/jamesblasco/modal_bottom_sheet/blob/master/screenshots/modal_inside_modal.gif?raw=true">| <img   height="300" src="https://github.com/jamesblasco/modal_bottom_sheet/blob/master/screenshots/material_fit.png?raw=true">|<img   height="300" src="https://github.com/jamesblasco/modal_bottom_sheet/blob/master/screenshots/bar_modal.png?raw=true">| <img height="300" src="https://github.com/jamesblasco/modal_bottom_sheet/blob/master/screenshots/avatar_modal.png?raw=true">|
+
+## Try it
+
+Expolre the [Web Demo](https://jamesblasco.github.io/modal_bottom_sheet/#/) or clone the repository
 
 ## First Steps
 
