@@ -86,6 +86,7 @@ Navigator.of(context).push(MaterialPageRoute(builder: (context) => Container()))
  </details>
  
 <details><summary>
+ 
  2. 
  Using `onGenerateRoute` parameter of `MaterialApp`, `CupertinoApp` or `Navigator` 
  </summary>
@@ -107,6 +108,7 @@ Navigator.of(context).push(MaterialPageRoute(builder: (context) => Container()))
   </details>
   
  <details><summary>  
+ 
  3. 
  Using `pageRouteBuilder` parameter of `WidgetApp` 
  </summary>
@@ -119,12 +121,13 @@ pageRouteBuilder: <T>(RouteSettings settings, WidgetBuilder builder) => Material
  
  <details>
  <summary>
+  
  4. 
  Using `routes` parameter from `MaterialApp` or `CupertinoApp` 
  </summary>
 
-Unfortunately this routes are `MaterialPageRoute` and `CupertinoPageRoute` respectively and cannot be changes.
-You can change the way you call the previous route with one of the previous methods or try option 2
+Unfortunately this parameter uses `MaterialPageRoute` and `CupertinoPageRoute` respectively and cannot be changed.
+You can modify the way you call the previous route with one of the previous methods or try option 2
 
  </details>
    
