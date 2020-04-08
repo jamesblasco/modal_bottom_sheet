@@ -1,0 +1,34 @@
+name: Flutter Web
+on:
+  push:
+    branches:
+      - master
+jobs:
+  build:
+    name: Build Web
+    env:
+      my_secret: ${{secrets.commit_secret}}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: 'dev'
+      - run: |
+          cd example
+          flutter config --enable-web
+          flutter pub get
+      - run: |
+         cd example
+         flutter build web --release --dart-define=FLUTTER_WEB_USE_SKIA=true
+      - run: |
+          cd example/build/web
+          git init
+          git config --global user.email git@jaimeblasco.com
+          git config --global user.name jamesblasco
+          git status
+          git remote add origin https://${{secrets.commit_secret}}@github.com/jamesblasco/modal_bottom_sheet.git
+          git checkout -b gh-pages
+          git add --all
+          git commit -m "Update web"
+          git push origin gh-pages -f
