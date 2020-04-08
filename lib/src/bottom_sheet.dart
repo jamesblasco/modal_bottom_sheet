@@ -176,7 +176,6 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
       final canClose = await shouldClose();
       if (canClose) {
         _close();
-        print('close');
         return;
       }
     }
@@ -209,12 +208,10 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
       // If speed is bigger than _minFlingVelocity try to close it
       if (velocity > _minFlingVelocity) {
         _close();
-        print('close2');
       } else if (hasReachedCloseThreshold) {
         if (widget.animationController.value > 0.0)
           widget.animationController.fling(velocity: -1.0);
         _close();
-        print('close3');
       } else {
         _cancelClose();
       }
@@ -235,7 +232,6 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
         dragDetails = notification.dragDetails;
       }
       if (dragDetails != null) {
-        print('scroll');
         _handleDragUpdate(dragDetails.primaryDelta);
       }
       // Todo:  detect dragEnd during scroll so it can bottom sheet can close

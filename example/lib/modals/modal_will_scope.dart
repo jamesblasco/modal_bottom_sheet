@@ -33,7 +33,6 @@ class ModalWillScope extends StatelessWidget {
                     ),
                   ],
                 ));
-        print('hello');
         return shouldClose;
       },
       child: CupertinoPageScaffold(

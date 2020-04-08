@@ -33,7 +33,6 @@ class ComplexModal extends StatelessWidget {
                       ),
                     ],
                   ));
-          print('hello');
           return shouldClose;
         },
         child: Navigator(

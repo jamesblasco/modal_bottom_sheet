@@ -660,7 +660,6 @@ class CustomRectTween extends RectTween {
     //print(dist);
     //final lerp = lerpDouble(end.top  - height * (1-t) , end.top, t );
     final lerp = lerpDouble(begin.top, end.top - height * (1 - dist), dist);
-    print(lerp);
     final rect = Rect.lerp(begin, end, dist);
     return Rect.fromLTWH(rect.left, rect.top, rect.width, rect.height);
     ;
