@@ -12,7 +12,8 @@ Create awesome and powerful modal bottom sheets.
 
 ## Try it
 
-Expolre the [Web Demo](https://jamesblasco.github.io/modal_bottom_sheet/#/) or clone the repository
+Explre the [Web Demo](https://jamesblasco.github.io/modal_bottom_sheet/#/) or clone the repository. 
+The web demo can run very slow on mobile devides.
 
 ## First Steps
 
