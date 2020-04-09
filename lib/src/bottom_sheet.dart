@@ -30,13 +30,11 @@ typedef WidgetWithChildBuilder = Widget Function(
 /// See also:
 ///
 ///  * [showMaterialModalBottomSheet] which can be used to display a modal bottom
+///    sheet with Material appareance.
+///  * [showCupertinoModalBottomSheet] which can be used to display a modal bottom
 ///    sheet with Cupertino appareance.
 class ModalBottomSheet extends StatefulWidget {
   /// Creates a bottom sheet.
-  ///
-  /// Typically, bottom sheets are created implicitly by
-  /// [ScaffoldState.showBottomSheet], for persistent bottom sheets, or by
-  /// [showModalBottomSheet], for modal bottom sheets.
   const ModalBottomSheet({
     Key key,
     this.animationController,
@@ -85,8 +83,6 @@ class ModalBottomSheet extends StatefulWidget {
 
   /// A builder for the contents of the sheet.
   ///
-  /// The bottom sheet will wrap the widget produced by this builder in a
-  /// [Material] widget.
   final ScrollWidgetBuilder builder;
 
   /// If true, the bottom sheet can be dragged up and down and dismissed by
