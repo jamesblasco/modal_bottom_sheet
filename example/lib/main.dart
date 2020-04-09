@@ -165,7 +165,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 ModalFit(scrollController: scrollController),
                           )),
                   ListTile(
-                      title: Text('Cupertino Small Modal forzed to expand'),
+                      title: Text('Cupertino Small Modal forced to expand'),
                       onTap: () => showCupertinoModalBottomSheet(
                             expand: true,
                             context: context,
