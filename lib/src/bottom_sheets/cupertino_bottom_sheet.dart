@@ -275,7 +275,6 @@ class CupertinoScaffold extends StatefulWidget {
     assert(useRootNavigator != null);
     assert(enableDrag != null);
     assert(debugCheckHasMediaQuery(context));
-    assert(debugCheckHasMediaQuery(context));
     final isCupertinoApp = Theme.of(context, shadowThemeOnly: true) == null;
     String barrierLabel = '';
     if (!isCupertinoApp) {
