@@ -9,8 +9,6 @@ import 'modals/floating_modal.dart';
 import 'modals/modal_complex_all.dart';
 import 'modals/modal_fit.dart';
 import 'modals/modal_inside_modal.dart';
-import 'modals/modal_inside_modal.dart';
-import 'modals/modal_simple.dart';
 import 'modals/modal_will_scope.dart';
 import 'modals/modal_with_navigator.dart';
 import 'modals/modal_with_scroll.dart';
@@ -25,7 +23,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(platform: TargetPlatform.iOS),
       title: 'BottomSheet Modals',
-      builder: (context, child) => WebFrame(child: child,),
+      builder: (context, child) => WebFrame(
+        child: child,
+      ),
       onGenerateRoute: (RouteSettings settings) {
         switch (settings.name) {
           case '/':
@@ -181,6 +181,16 @@ class _MyHomePageState extends State<MyHomePage> {
                             backgroundColor: Colors.transparent,
                             builder: (context, scrollController) =>
                                 ModalInsideModal(
+                                    scrollController: scrollController),
+                          )),
+                  ListTile(
+                      title: Text('Cupertino Modal with inside navigation'),
+                      onTap: () => showCupertinoModalBottomSheet(
+                            expand: true,
+                            context: context,
+                            backgroundColor: Colors.transparent,
+                            builder: (context, scrollController) =>
+                                ModalWithNavigator(
                                     scrollController: scrollController),
                           )),
                   ListTile(

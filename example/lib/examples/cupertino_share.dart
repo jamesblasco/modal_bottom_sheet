@@ -1,9 +1,7 @@
 import 'dart:ui';
 
 import 'package:example/examples/sliver_container.dart';
-import 'package:example/modals/modal_fit.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
@@ -163,8 +161,7 @@ class PhotoShareBottomSheet extends StatelessWidget {
                                         width: 60,
                                         decoration: BoxDecoration(
                                             image: DecorationImage(
-                                                image:
-                                                    AssetImage(app.imageUrl),
+                                                image: AssetImage(app.imageUrl),
                                                 fit: BoxFit.cover),
                                             color: Colors.white,
                                             borderRadius:

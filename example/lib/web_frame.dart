@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class WebFrame extends StatelessWidget {
@@ -55,7 +54,8 @@ class WebFrame extends StatelessWidget {
                                       MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
                                     Padding(
-                                        padding: EdgeInsets.only(left: 30, top: 4),
+                                        padding:
+                                            EdgeInsets.only(left: 30, top: 4),
                                         child: Text(
                                           '${date.hour}:${date.minute}',
                                           style: TextStyle(
@@ -113,37 +113,43 @@ class WebFrame extends StatelessWidget {
                   child: FittedBox(
                       fit: BoxFit.scaleDown,
                       child: Container(
-                        padding: EdgeInsets.only(bottom: 40),
-                      width: mediaQuery.size.width,
-                      height: mediaQuery.size.height,
-                      alignment: Alignment.center,
-                      child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: <Widget>[
-                      Expanded(
-                          child:  Text(
-                                    'Modal\nBottom\nSheet',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 80,
-                                    ),
-                                    maxLines: 3,
-                                    overflow: TextOverflow.clip,
-                                  )),
-                      Spacer(),
-                      Row(children: <Widget>[
-                        InkWell(
-                          onTap: () => launch('https://pub.dev/packages/modal_bottom_sheet'),
-                          child: Image.asset('assets/flutter.png', height: 60),
-                        ),
-                        Spacer(),
-                        InkWell(
-                          onTap: () => launch('https://github.com/jamesblasco/modal_bottom_sheet'),
-                          child: Image.asset('assets/github.png', height: 60),
-                        ),
-                      ],)
-                    ],
-                  ))))
+                          padding: EdgeInsets.only(bottom: 40),
+                          width: mediaQuery.size.width,
+                          height: mediaQuery.size.height,
+                          alignment: Alignment.center,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: <Widget>[
+                              Expanded(
+                                  child: Text(
+                                'Modal\nBottom\nSheet',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 80,
+                                ),
+                                maxLines: 3,
+                                overflow: TextOverflow.clip,
+                              )),
+                              Spacer(),
+                              Row(
+                                children: <Widget>[
+                                  InkWell(
+                                    onTap: () => launch(
+                                        'https://pub.dev/packages/modal_bottom_sheet'),
+                                    child: Image.asset('assets/flutter.png',
+                                        height: 60),
+                                  ),
+                                  Spacer(),
+                                  InkWell(
+                                    onTap: () => launch(
+                                        'https://github.com/jamesblasco/modal_bottom_sheet'),
+                                    child: Image.asset('assets/github.png',
+                                        height: 60),
+                                  ),
+                                ],
+                              )
+                            ],
+                          ))))
             ],
           ),
         ),

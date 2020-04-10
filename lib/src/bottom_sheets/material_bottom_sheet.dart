@@ -55,14 +55,13 @@ WidgetWithChildBuilder _materialContainerBuilder(BuildContext context,
     ThemeData theme,
     Clip clipBehavior,
     ShapeBorder shape}) {
-  final BottomSheetThemeData bottomSheetTheme =
-      Theme.of(context).bottomSheetTheme;
-  final Color color = backgroundColor ??
+  final bottomSheetTheme = Theme.of(context).bottomSheetTheme;
+  final color = backgroundColor ??
       bottomSheetTheme?.modalBackgroundColor ??
       bottomSheetTheme?.backgroundColor;
-  final double _elevation = elevation ?? bottomSheetTheme.elevation ?? 0;
-  final ShapeBorder _shape = shape ?? bottomSheetTheme.shape;
-  final Clip _clipBehavior =
+  final _elevation = elevation ?? bottomSheetTheme.elevation ?? 0.0;
+  final _shape = shape ?? bottomSheetTheme.shape;
+  final _clipBehavior =
       clipBehavior ?? bottomSheetTheme.clipBehavior ?? Clip.none;
 
   final result = (context, animation, child) => Material(

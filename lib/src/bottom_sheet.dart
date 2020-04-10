@@ -124,8 +124,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
   AnimationController _bounceDragController;
 
   double get _childHeight {
-    final RenderBox renderBox =
-        _childKey.currentContext.findRenderObject() as RenderBox;
+    final renderBox = _childKey.currentContext.findRenderObject() as RenderBox;
     return renderBox.size.height;
   }
 
@@ -152,8 +151,9 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
     widget.animationController.forward().then((value) {
       // When using WillPop, animation doesn't end at 1.
       // Check more in detail the problem
-      if (!widget.animationController.isCompleted)
+      if (!widget.animationController.isCompleted) {
         widget.animationController.value = 1;
+      }
     });
     _bounceDragController.reverse();
   }
@@ -208,7 +208,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
     isDragging = false;
     _bounceDragController.reverse();
 
-    bool canClose = true;
+    var canClose = true;
     if (widget.shouldClose != null && hasReachedWillPopThreshold) {
       _cancelClose();
       canClose = await shouldClose();
@@ -219,8 +219,9 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
         _close();
         print('close2');
       } else if (hasReachedCloseThreshold) {
-        if (widget.animationController.value > 0.0)
+        if (widget.animationController.value > 0.0) {
           widget.animationController.fling(velocity: -1.0);
+        }
         _close();
         print('close3');
       } else {
@@ -231,11 +232,11 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
     }
   }
 
-  _handleScrollUpdate(ScrollNotification notification) {
+  void _handleScrollUpdate(ScrollNotification notification) {
     if (notification.metrics.pixels <= notification.metrics.minScrollExtent) {
       //Check if listener is same from scrollController
       if (_scrollController.position.pixels != notification.metrics.pixels) {
-        return false;
+        return;
       }
       DragUpdateDetails dragDetails;
       if (notification is ScrollUpdateNotification) {
@@ -270,14 +271,15 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
       curve: Curves.easeOutSine,
     );
 
-    Widget child = widget.builder(context, _scrollController);
+    var child = widget.builder(context, _scrollController);
 
-    if (widget.containerBuilder != null)
+    if (widget.containerBuilder != null) {
       child = widget.containerBuilder(
         context,
         widget.animationController,
         child,
       );
+    }
 
     // Todo: Add curved Animation when push and pop without gesture
     /* final Animation<double> containerAnimation = CurvedAnimation(
@@ -366,15 +368,14 @@ class _CustomBottomSheetLayout extends SingleChildLayoutDelegate {
 
   @override
   Offset getPositionForChild(Size size, Size childSize) {
-    if (this.childHeight == null) this.childHeight = childSize.height;
-
+    childHeight ??= childSize.height;
     return Offset(0.0, size.height - childSize.height);
   }
 
   @override
   bool shouldRelayout(_CustomBottomSheetLayout oldDelegate) {
     if (progress != oldDelegate.progress) {
-      this.childHeight = oldDelegate.childHeight;
+      childHeight = oldDelegate.childHeight;
       return true;
     }
     return false;

@@ -57,7 +57,7 @@ class _ModalBottomSheetState<T> extends State<_ModalBottomSheet<T>> {
     super.dispose();
   }
 
-  updateController() {
+  void updateController() {
     widget.secondAnimationController?.value = widget.route.animation.value;
   }
 
@@ -65,9 +65,8 @@ class _ModalBottomSheetState<T> extends State<_ModalBottomSheet<T>> {
   Widget build(BuildContext context) {
     assert(debugCheckHasMediaQuery(context));
     assert(debugCheckHasMaterialLocalizations(context));
-    final MaterialLocalizations localizations =
-        MaterialLocalizations.of(context);
-    final String routeLabel = _getRouteLabel(localizations);
+    final localizations = MaterialLocalizations.of(context);
+    final routeLabel = _getRouteLabel(localizations);
 
     return AnimatedBuilder(
       animation: widget.route._animationController,

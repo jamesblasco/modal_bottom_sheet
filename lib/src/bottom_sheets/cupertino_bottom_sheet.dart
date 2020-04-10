@@ -176,7 +176,7 @@ class _CupertinoModalTransition extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double startRoundCorner = 0;
+    var startRoundCorner = 0.0;
     final paddingTop = MediaQuery.of(context).padding.top;
     if (Theme.of(context).platform == TargetPlatform.iOS && paddingTop > 20) {
       startRoundCorner = 38.5;
@@ -194,8 +194,6 @@ class _CupertinoModalTransition extends StatelessWidget {
           animation: curvedAnimation,
           child: body,
           builder: (context, child) {
-            Widget result = child;
-
             final progress = curvedAnimation.value;
             final yOffset = progress * paddingTop;
             final scale = 1 - progress / 10;
@@ -212,7 +210,7 @@ class _CupertinoModalTransition extends StatelessWidget {
                     alignment: Alignment.topCenter,
                     child: ClipRRect(
                         borderRadius: BorderRadius.circular(radius),
-                        child: result),
+                        child: child),
                   ),
                 )
               ],
@@ -225,6 +223,7 @@ class _CupertinoModalTransition extends StatelessWidget {
 class _CupertinoScaffold extends InheritedWidget {
   final AnimationController animation;
 
+  @override
   final Widget child;
 
   const _CupertinoScaffold({Key key, this.animation, this.child})
