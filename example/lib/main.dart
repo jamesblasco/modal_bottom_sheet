@@ -165,7 +165,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 ModalFit(scrollController: scrollController),
                           )),
                   ListTile(
-                      title: Text('Cupertino Small Modal forzed to expand'),
+                      title: Text('Cupertino Small Modal forced to expand'),
                       onTap: () => showCupertinoModalBottomSheet(
                             expand: true,
                             context: context,
@@ -194,7 +194,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     scrollController: scrollController),
                           )),
                   ListTile(
-                      title: Text('Cupertino Navigator + Scroll + WillScope'),
+                      title: Text('Cupertino Navigator + Scroll + WillPopScope'),
                       onTap: () => showCupertinoModalBottomSheet(
                             expand: true,
                             context: context,
@@ -204,7 +204,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     scrollController: scrollController),
                           )),
                   ListTile(
-                      title: Text('Cupertino Modal with WillScope'),
+                      title: Text('Cupertino Modal with WillPopScope'),
                       onTap: () => showCupertinoModalBottomSheet(
                             expand: true,
                             context: context,
