@@ -4,10 +4,15 @@
 
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/cupertino.dart' show CupertinoTheme;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'
+    show
+        Colors,
+        Theme,
+        MaterialLocalizations,
+        debugCheckHasMaterialLocalizations;
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
@@ -78,7 +83,13 @@ Future<T> showCupertinoModalBottomSheet<T>({
   assert(useRootNavigator != null);
   assert(enableDrag != null);
   assert(debugCheckHasMediaQuery(context));
-  assert(debugCheckHasMaterialLocalizations(context));
+  final isCupertinoApp = Theme.of(context, shadowThemeOnly: true) == null;
+  String barrierLabel = '';
+  if (!isCupertinoApp) {
+    assert(debugCheckHasMaterialLocalizations(context));
+    barrierLabel = MaterialLocalizations.of(context).modalBarrierDismissLabel;
+  }
+
   final result = await Navigator.of(context, rootNavigator: useRootNavigator)
       .push(CupertinoModalBottomSheetRoute<T>(
     builder: builder,
@@ -88,7 +99,7 @@ Future<T> showCupertinoModalBottomSheet<T>({
     ),
     secondAnimationController: secondAnimation,
     expanded: expand,
-    barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+    barrierLabel: barrierLabel,
     elevation: elevation,
     bounce: bounce,
     shape: shape,
@@ -264,7 +275,13 @@ class CupertinoScaffold extends StatefulWidget {
     assert(useRootNavigator != null);
     assert(enableDrag != null);
     assert(debugCheckHasMediaQuery(context));
-    assert(debugCheckHasMaterialLocalizations(context));
+    assert(debugCheckHasMediaQuery(context));
+    final isCupertinoApp = Theme.of(context, shadowThemeOnly: true) == null;
+    String barrierLabel = '';
+    if (!isCupertinoApp) {
+      assert(debugCheckHasMaterialLocalizations(context));
+      barrierLabel = MaterialLocalizations.of(context).modalBarrierDismissLabel;
+    }
     final result = await Navigator.of(context, rootNavigator: useRootNavigator)
         .push(CupertinoModalBottomSheetRoute<T>(
       builder: builder,
@@ -274,7 +291,7 @@ class CupertinoScaffold extends StatefulWidget {
         backgroundColor: backgroundColor,
       ),
       expanded: expand,
-      barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+      barrierLabel: barrierLabel,
       bounce: bounce,
       isDismissible: isDismissible ?? expand == false ? true : false,
       modalBarrierColor: barrierColor ?? Colors.black12,

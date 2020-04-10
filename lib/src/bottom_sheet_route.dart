@@ -32,17 +32,22 @@ class _ModalBottomSheet<T> extends StatefulWidget {
 }
 
 class _ModalBottomSheetState<T> extends State<_ModalBottomSheet<T>> {
-  String _getRouteLabel(MaterialLocalizations localizations) {
-    final platform = Theme.of(context).platform;
-    switch (platform) {
-      case TargetPlatform.iOS:
-        return '';
-      case TargetPlatform.android:
-      case TargetPlatform.fuchsia:
-        return localizations.dialogLabel;
-        break;
+  String _getRouteLabel() {
+    if (Theme.of(context, shadowThemeOnly: true) == null) {
+      return '';
+    } else {
+      final platform = Theme.of(context).platform;
+      switch (platform) {
+        case TargetPlatform.iOS:
+          return '';
+        case TargetPlatform.android:
+        case TargetPlatform.fuchsia:
+          assert(debugCheckHasMaterialLocalizations(context));
+          return MaterialLocalizations.of(context).dialogLabel;
+          break;
+      }
+      return null;
     }
-    return null;
   }
 
   @override
@@ -64,9 +69,6 @@ class _ModalBottomSheetState<T> extends State<_ModalBottomSheet<T>> {
   @override
   Widget build(BuildContext context) {
     assert(debugCheckHasMediaQuery(context));
-    assert(debugCheckHasMaterialLocalizations(context));
-    final localizations = MaterialLocalizations.of(context);
-    final routeLabel = _getRouteLabel(localizations);
 
     return AnimatedBuilder(
       animation: widget.route._animationController,
@@ -76,7 +78,7 @@ class _ModalBottomSheetState<T> extends State<_ModalBottomSheet<T>> {
         return Semantics(
           scopesRoute: true,
           namesRoute: true,
-          label: routeLabel,
+          label: _getRouteLabel(),
           explicitChildNodes: true,
           child: ModalBottomSheet(
             expanded: widget.route.expanded,
