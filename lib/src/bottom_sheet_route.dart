@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../modal_bottom_sheet.dart';
@@ -33,21 +34,19 @@ class _ModalBottomSheet<T> extends StatefulWidget {
 
 class _ModalBottomSheetState<T> extends State<_ModalBottomSheet<T>> {
   String _getRouteLabel() {
-    if (Theme.of(context, shadowThemeOnly: true) == null) {
-      return '';
-    } else {
-      final platform = Theme.of(context).platform;
-      switch (platform) {
-        case TargetPlatform.iOS:
-          return '';
-        case TargetPlatform.android:
-        case TargetPlatform.fuchsia:
-          assert(debugCheckHasMaterialLocalizations(context));
+    final platform = Theme.of(context)?.platform ?? defaultTargetPlatform;
+    switch (platform) {
+      case TargetPlatform.iOS:
+        return '';
+      case TargetPlatform.android:
+      case TargetPlatform.fuchsia:
+        if (Localizations.of(context, MaterialLocalizations) != null) {
           return MaterialLocalizations.of(context).dialogLabel;
-          break;
-      }
-      return null;
+        } else {
+          return DefaultMaterialLocalizations().dialogLabel;
+        }
     }
+    return null;
   }
 
   @override
