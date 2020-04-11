@@ -213,13 +213,11 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
       // If speed is bigger than _minFlingVelocity try to close it
       if (velocity > _minFlingVelocity) {
         _close();
-        print('close2');
       } else if (hasReachedCloseThreshold) {
         if (widget.animationController.value > 0.0) {
           widget.animationController.fling(velocity: -1.0);
         }
         _close();
-        print('close3');
       } else {
         _cancelClose();
       }
@@ -228,6 +226,14 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
     }
   }
 
+
+  // As we cannot access the dragGesture detector of the scroll view
+  // we can not know the DragDownDetails and therefore the end velocity.
+  // VelocityTracker it is used to calculate the end velocity  of the scroll
+  // when user is trying to close the modal by dragging
+  VelocityTracker _velocityTracker;
+  DateTime _startTime;
+
   void _handleScrollUpdate(ScrollNotification notification) {
     if (notification.metrics.pixels <= notification.metrics.minScrollExtent) {
       //Check if listener is same from scrollController
@@ -235,6 +241,10 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
         return;
       }
       DragUpdateDetails dragDetails;
+      if (notification is ScrollStartNotification) {
+        _velocityTracker = VelocityTracker();
+        _startTime = DateTime.now();
+      }
       if (notification is ScrollUpdateNotification) {
         dragDetails = notification.dragDetails;
       }
@@ -242,12 +252,16 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
         dragDetails = notification.dragDetails;
       }
       if (dragDetails != null) {
-        print('scroll');
+        final duration = _startTime.difference(DateTime.now());
+        print(duration);
+        final offset = Offset(0, _scrollController.offset);
+        _velocityTracker.addPosition(duration, offset);
         _handleDragUpdate(dragDetails.primaryDelta);
       }
-      // Todo:  detect dragEnd during scroll so it can bottom sheet can close
-      // if  velocity  > _minFlingVelocity
-      else if (isDragging) _handleDragEnd(0);
+      else if (isDragging) {
+        final velocity = _velocityTracker.getVelocity().pixelsPerSecond.dy;
+        _handleDragEnd(velocity);
+      }
     }
   }
 
