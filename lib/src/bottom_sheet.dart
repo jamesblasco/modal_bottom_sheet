@@ -231,8 +231,9 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
   void _handleScrollUpdate(ScrollNotification notification) {
     if (notification.metrics.pixels <= notification.metrics.minScrollExtent) {
       //Check if listener is same from scrollController
-      if (_scrollController.hasClients &&
-          _scrollController.position.pixels != notification.metrics.pixels) {
+      if (!_scrollController.hasClients) return;
+
+      if (_scrollController.position.pixels != notification.metrics.pixels) {
         return;
       }
       DragUpdateDetails dragDetails;
