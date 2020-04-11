@@ -178,7 +178,6 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
       final canClose = await shouldClose();
       if (canClose) {
         _close();
-        print('close');
         return;
       } else {
         _cancelClose();
@@ -253,7 +252,6 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
       }
       if (dragDetails != null) {
         final duration = _startTime.difference(DateTime.now());
-        print(duration);
         final offset = Offset(0, _scrollController.offset);
         _velocityTracker.addPosition(duration, offset);
         _handleDragUpdate(dragDetails.primaryDelta);
