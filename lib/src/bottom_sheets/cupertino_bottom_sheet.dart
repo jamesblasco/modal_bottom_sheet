@@ -83,12 +83,12 @@ Future<T> showCupertinoModalBottomSheet<T>({
   assert(useRootNavigator != null);
   assert(enableDrag != null);
   assert(debugCheckHasMediaQuery(context));
-  final isCupertinoApp = Theme.of(context, shadowThemeOnly: true) == null;
-  String barrierLabel = '';
-  if (!isCupertinoApp) {
-    assert(debugCheckHasMaterialLocalizations(context));
-    barrierLabel = MaterialLocalizations.of(context).modalBarrierDismissLabel;
-  }
+  final hasMaterialLocalizations =
+      Localizations.of<MaterialLocalizations>(context, MaterialLocalizations) !=
+          null;
+  final barrierLabel = hasMaterialLocalizations
+      ? MaterialLocalizations.of(context).modalBarrierDismissLabel
+      : '';
 
   final result = await Navigator.of(context, rootNavigator: useRootNavigator)
       .push(CupertinoModalBottomSheetRoute<T>(
