@@ -1,6 +1,6 @@
 name: modal_bottom_sheet
 description: 'Create awesome and powerful modal bottom sheets. Material, Cupertino or create your own'
-version: 0.1.4
+version: 0.1.5
 homepage: 'https://github.com/jamesblasco/modal_bottom_sheet'
 
 environment:

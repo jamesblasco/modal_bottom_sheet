@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../modal_bottom_sheet.dart';
@@ -32,15 +33,18 @@ class _ModalBottomSheet<T> extends StatefulWidget {
 }
 
 class _ModalBottomSheetState<T> extends State<_ModalBottomSheet<T>> {
-  String _getRouteLabel(MaterialLocalizations localizations) {
-    final platform = Theme.of(context).platform;
+  String _getRouteLabel() {
+    final platform = Theme.of(context)?.platform ?? defaultTargetPlatform;
     switch (platform) {
       case TargetPlatform.iOS:
         return '';
       case TargetPlatform.android:
       case TargetPlatform.fuchsia:
-        return localizations.dialogLabel;
-        break;
+        if (Localizations.of(context, MaterialLocalizations) != null) {
+          return MaterialLocalizations.of(context).dialogLabel;
+        } else {
+          return DefaultMaterialLocalizations().dialogLabel;
+        }
     }
     return null;
   }
@@ -64,9 +68,6 @@ class _ModalBottomSheetState<T> extends State<_ModalBottomSheet<T>> {
   @override
   Widget build(BuildContext context) {
     assert(debugCheckHasMediaQuery(context));
-    assert(debugCheckHasMaterialLocalizations(context));
-    final localizations = MaterialLocalizations.of(context);
-    final routeLabel = _getRouteLabel(localizations);
 
     return AnimatedBuilder(
       animation: widget.route._animationController,
@@ -76,7 +77,7 @@ class _ModalBottomSheetState<T> extends State<_ModalBottomSheet<T>> {
         return Semantics(
           scopesRoute: true,
           namesRoute: true,
-          label: routeLabel,
+          label: _getRouteLabel(),
           explicitChildNodes: true,
           child: ModalBottomSheet(
             expanded: widget.route.expanded,
