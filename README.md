@@ -35,7 +35,8 @@ showMaterialModalBottomSheet(
 What to use this over flutter `showModalBottomSheet`?
 
 `showMaterialModalBottomSheet` supports closing bottoms sheets by dragging down even if there is a scrollview inside.
-`showModalBottomSheet` won't work correctly with scrollviews
+`showModalBottomSheet` won't work correctly with scrollviews. 
+Also it supports `WillPopScope` to prevent closing the dialog
 
 #### Generic params for all modal bottom sheets
 
