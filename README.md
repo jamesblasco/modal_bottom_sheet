@@ -187,7 +187,7 @@ Check in the example project `showAvatarModalBottomSheet` for how to create your
 
 ## Roadmap
 
-- [ X ] Support closing by dragging fast on a modal with a scroll view.
+- [X] Support closing by dragging fast on a modal with a scroll view.
 
 - [ ] Improve animation curves when user is not dragging.
 
