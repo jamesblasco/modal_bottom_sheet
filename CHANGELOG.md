@@ -4,6 +4,7 @@
 
 ## [0.1.4] - Clean code and fix small bugs
 
-## [0.1.5] - Bugfixes
-- fix assertion in CupertinoBottomSheet and BottomSheetRoute when using the CupetinoApp or WidgetsApp as root
-- fix assertion when scrollController isn't used by the builder 
+## [0.1.5] - Scroll improvements and bug fixes
+- Support for closing a modal with a scroll view by dragging down fast.
+- Fix assertion in CupertinoBottomSheet and BottomSheetRoute when using the CupetinoApp or WidgetsApp as root
+- Fix assertion when scrollController isn't used by the builder 

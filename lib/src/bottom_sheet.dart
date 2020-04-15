@@ -225,7 +225,6 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
     }
   }
 
-
   // As we cannot access the dragGesture detector of the scroll view
   // we can not know the DragDownDetails and therefore the end velocity.
   // VelocityTracker it is used to calculate the end velocity  of the scroll
@@ -257,8 +256,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
         final offset = Offset(0, _scrollController.offset);
         _velocityTracker.addPosition(duration, offset);
         _handleDragUpdate(dragDetails.primaryDelta);
-      }
-      else if (isDragging) {
+      } else if (isDragging) {
         final velocity = _velocityTracker.getVelocity().pixelsPerSecond.dy;
         _handleDragEnd(velocity);
       }

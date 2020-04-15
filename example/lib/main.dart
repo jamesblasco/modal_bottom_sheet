@@ -194,7 +194,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                     scrollController: scrollController),
                           )),
                   ListTile(
-                      title: Text('Cupertino Navigator + Scroll + WillPopScope'),
+                      title:
+                          Text('Cupertino Navigator + Scroll + WillPopScope'),
                       onTap: () => showCupertinoModalBottomSheet(
                             expand: true,
                             context: context,
