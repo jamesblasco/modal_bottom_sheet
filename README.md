@@ -46,7 +46,7 @@ What to use this over flutter `showModalBottomSheet`?
 |Color barrierColor | The `barrierColor` parameter controls the color of the scrim for this route |
 |bool enableDrag = true| The `enableDrag` parameter specifies whether the bottom sheet can be dragged up and down and dismissed by swiping downwards. |
 |AnimationController secondAnimation| The `secondAnimation` parameter allows you to provide an animation controller that will be used to animate  push/pop of the modal route. Using this param is advised against and will be probably removed in future versions |
-|bool bounce = false| The `enableDrag` parameter specifies if the bottom sheet can go beyond the top boundary while dragging |
+|bool bounce = false| The `bounce` parameter specifies if the bottom sheet can go beyond the top boundary while dragging |
 
 
 #### Material params
