@@ -1,4 +1,5 @@
 import 'package:example/modals/circular_modal.dart';
+import 'package:example/modals/modal_fit_resizable.dart';
 import 'package:example/web_frame.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -212,6 +213,17 @@ class _MyHomePageState extends State<MyHomePage> {
                             backgroundColor: Colors.transparent,
                             builder: (context, scrollController) =>
                                 ModalWillScope(
+                                    scrollController: scrollController),
+                          )),
+                  ListTile(
+                      title: Text('Material fit resizable'),
+                      onTap: () => showMaterialModalBottomSheet(
+                            expand: false,
+                            bounce: true,
+                            context: context,
+                            backgroundColor: Colors.transparent,
+                            builder: (context, scrollController) =>
+                                ModalFitResizable(
                                     scrollController: scrollController),
                           )),
                 ],

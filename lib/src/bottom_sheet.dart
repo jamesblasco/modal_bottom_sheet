@@ -336,6 +336,7 @@ class _ModalBottomSheetLayout extends SingleChildLayoutDelegate {
 
   final double progress;
   final bool expand;
+  double childHeight;
 
   @override
   BoxConstraints getConstraintsForChild(BoxConstraints constraints) {
@@ -349,12 +350,15 @@ class _ModalBottomSheetLayout extends SingleChildLayoutDelegate {
 
   @override
   Offset getPositionForChild(Size size, Size childSize) {
+    childHeight = childSize.height;
     return Offset(0.0, size.height - childSize.height * progress);
   }
 
   @override
   bool shouldRelayout(_ModalBottomSheetLayout oldDelegate) {
-    return progress != oldDelegate.progress;
+    // Todo: avoid if is bouncing
+    return progress != oldDelegate.progress ||
+        childHeight != oldDelegate.childHeight;
   }
 }
 
