@@ -66,6 +66,7 @@ Future<T> showBarModalBottomSheet<T>({
   bool bounce = true,
   bool expand = false,
   AnimationController secondAnimation,
+  Curve animationCurve,
   bool useRootNavigator = false,
   bool isDismissible = true,
   bool enableDrag = true,
@@ -91,6 +92,7 @@ Future<T> showBarModalBottomSheet<T>({
     isDismissible: isDismissible,
     modalBarrierColor: barrierColor,
     enableDrag: enableDrag,
+    animationCurve: animationCurve,
   ));
   return result;
 }

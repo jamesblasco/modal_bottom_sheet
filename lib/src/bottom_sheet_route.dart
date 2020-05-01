@@ -17,6 +17,7 @@ class _ModalBottomSheet<T> extends StatefulWidget {
     this.scrollController,
     this.expanded = false,
     this.enableDrag = true,
+    this.animationCurve,
   })  : assert(expanded != null),
         assert(enableDrag != null),
         super(key: key);
@@ -26,6 +27,7 @@ class _ModalBottomSheet<T> extends StatefulWidget {
   final bool bounce;
   final bool enableDrag;
   final AnimationController secondAnimationController;
+  final Curve animationCurve;
   final ScrollController scrollController;
 
   @override
@@ -97,6 +99,7 @@ class _ModalBottomSheetState<T> extends State<_ModalBottomSheet<T>> {
             builder: widget.route.builder,
             enableDrag: widget.enableDrag,
             bounce: widget.bounce,
+            animationCurve: widget.animationCurve,
           ),
         );
       },
@@ -116,6 +119,7 @@ class ModalBottomSheetRoute<T> extends PopupRoute<T> {
     this.enableDrag = true,
     @required this.expanded,
     this.bounce = false,
+    this.animationCurve,
     RouteSettings settings,
   })  : assert(expanded != null),
         assert(isDismissible != null),
@@ -132,6 +136,7 @@ class ModalBottomSheetRoute<T> extends PopupRoute<T> {
   final ScrollController scrollController;
 
   final AnimationController secondAnimationController;
+  final Curve animationCurve;
 
   @override
   Duration get transitionDuration => _bottomSheetDuration;
@@ -172,6 +177,7 @@ class ModalBottomSheetRoute<T> extends PopupRoute<T> {
         scrollController: scrollController,
         bounce: bounce,
         enableDrag: enableDrag,
+        animationCurve: animationCurve,
       ),
     );
     return bottomSheet;
@@ -195,22 +201,24 @@ class ModalBottomSheetRoute<T> extends PopupRoute<T> {
 }
 
 /// Shows a modal material design bottom sheet.
-Future<T> showCustomModalBottomSheet<T>(
-    {@required BuildContext context,
-    @required ScrollWidgetBuilder builder,
-    @required WidgetWithChildBuilder containerWidget,
-    Color backgroundColor,
-    double elevation,
-    ShapeBorder shape,
-    Clip clipBehavior,
-    Color barrierColor,
-    bool bounce = false,
-    bool expand = false,
-    AnimationController secondAnimation,
-    bool useRootNavigator = false,
-    bool isDismissible = true,
-    bool enableDrag = true,
-    ScrollController scrollController}) async {
+Future<T> showCustomModalBottomSheet<T>({
+  @required BuildContext context,
+  @required ScrollWidgetBuilder builder,
+  @required WidgetWithChildBuilder containerWidget,
+  Color backgroundColor,
+  double elevation,
+  ShapeBorder shape,
+  Clip clipBehavior,
+  Color barrierColor,
+  bool bounce = false,
+  bool expand = false,
+  AnimationController secondAnimation,
+  Curve animationCurve,
+  bool useRootNavigator = false,
+  bool isDismissible = true,
+  bool enableDrag = true,
+  ScrollController scrollController,
+}) async {
   assert(context != null);
   assert(builder != null);
   assert(containerWidget != null);
@@ -231,6 +239,7 @@ Future<T> showCustomModalBottomSheet<T>(
     isDismissible: isDismissible,
     modalBarrierColor: barrierColor,
     enableDrag: enableDrag,
+    animationCurve: animationCurve,
   ));
   return result;
 }
