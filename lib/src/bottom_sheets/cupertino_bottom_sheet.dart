@@ -72,8 +72,8 @@ Future<T> showCupertinoModalBottomSheet<T>({
   Color barrierColor,
   bool expand = false,
   AnimationController secondAnimation,
-  Curve routeAnimationCurve,
-  Curve modalAnimationCurve,
+  Curve animationCurve,
+  Curve previousRouteAnimationCurve,
   bool useRootNavigator = false,
   bool bounce = true,
   bool isDismissible,
@@ -109,14 +109,14 @@ Future<T> showCupertinoModalBottomSheet<T>({
     isDismissible: isDismissible ?? expand == false ? true : false,
     modalBarrierColor: barrierColor ?? Colors.black12,
     enableDrag: enableDrag,
-    routeAnimationCurve: routeAnimationCurve,
-    modalAnimationCurve: modalAnimationCurve,
+    animationCurve: animationCurve,
+    previousRouteAnimationCurve: previousRouteAnimationCurve,
   ));
   return result;
 }
 
 class CupertinoModalBottomSheetRoute<T> extends ModalBottomSheetRoute<T> {
-  final Curve modalAnimationCurve;
+  final Curve previousRouteAnimationCurve;
 
   CupertinoModalBottomSheetRoute({
     ScrollWidgetBuilder builder,
@@ -126,14 +126,14 @@ class CupertinoModalBottomSheetRoute<T> extends ModalBottomSheetRoute<T> {
     ShapeBorder shape,
     Clip clipBehavior,
     AnimationController secondAnimationController,
-    Curve routeAnimationCurve,
+    Curve animationCurve,
     Color modalBarrierColor,
     bool bounce = true,
     bool isDismissible = true,
     bool enableDrag = true,
     @required bool expanded,
     RouteSettings settings,
-    this.modalAnimationCurve,
+    this.previousRouteAnimationCurve,
   })  : assert(expanded != null),
         assert(isDismissible != null),
         assert(enableDrag != null),
@@ -148,7 +148,7 @@ class CupertinoModalBottomSheetRoute<T> extends ModalBottomSheetRoute<T> {
           enableDrag: enableDrag,
           expanded: expanded,
           settings: settings,
-          animationCurve: routeAnimationCurve,
+          animationCurve: animationCurve,
         );
 
   @override
@@ -183,7 +183,7 @@ class CupertinoModalBottomSheetRoute<T> extends ModalBottomSheetRoute<T> {
     return _CupertinoModalTransition(
       secondaryAnimation: secondaryAnimation,
       body: child,
-      animationCurve: modalAnimationCurve,
+      animationCurve: previousRouteAnimationCurve,
     );
   }
 }
@@ -277,8 +277,8 @@ class CupertinoScaffold extends StatefulWidget {
   static Future<T> showCupertinoModalBottomSheet<T>({
     @required BuildContext context,
     @required ScrollWidgetBuilder builder,
-    Curve routeAnimationCurve,
-    Curve modalAnimationCurve,
+    Curve animationCurve,
+    Curve previousRouteAnimationCurve,
     Color backgroundColor,
     Color barrierColor,
     bool expand = false,
@@ -313,8 +313,8 @@ class CupertinoScaffold extends StatefulWidget {
       isDismissible: isDismissible ?? expand == false ? true : false,
       modalBarrierColor: barrierColor ?? Colors.black12,
       enableDrag: enableDrag,
-      routeAnimationCurve: routeAnimationCurve,
-      modalAnimationCurve: modalAnimationCurve,
+      animationCurve: animationCurve,
+      previousRouteAnimationCurve: previousRouteAnimationCurve,
     ));
     return result;
   }
