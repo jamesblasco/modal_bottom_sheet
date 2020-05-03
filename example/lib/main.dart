@@ -1,14 +1,14 @@
 import 'package:example/modals/circular_modal.dart';
+import 'package:example/web_frame.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
+import 'modals/floating_modal.dart';
 import 'modals/modal_complex_all.dart';
 import 'modals/modal_fit.dart';
 import 'modals/modal_inside_modal.dart';
-import 'modals/modal_inside_modal.dart';
-import 'modals/modal_simple.dart';
 import 'modals/modal_will_scope.dart';
 import 'modals/modal_with_navigator.dart';
 import 'modals/modal_with_scroll.dart';
@@ -21,6 +21,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(platform: TargetPlatform.iOS),
+      title: 'BottomSheet Modals',
+      builder: (context, child) => WebFrame(
+        child: child,
+      ),
       onGenerateRoute: (RouteSettings settings) {
         switch (settings.name) {
           case '/':
@@ -35,6 +40,7 @@ class MyApp extends StatelessWidget {
                       builder: (context) => CupertinoPageScaffold(
                         backgroundColor: Colors.white,
                         navigationBar: CupertinoNavigationBar(
+                          transitionBetweenRoutes: false,
                           middle: Text('Normal Navigation Presentation'),
                           trailing: GestureDetector(
                               child: Icon(Icons.arrow_upward),
@@ -94,6 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
       child: CupertinoPageScaffold(
         backgroundColor: Colors.white,
         navigationBar: CupertinoNavigationBar(
+          transitionBetweenRoutes: false,
           middle: Text('iOS13 Modal Presentation'),
           trailing: GestureDetector(
             child: Icon(Icons.arrow_forward),
@@ -142,6 +149,13 @@ class _MyHomePageState extends State<MyHomePage> {
                                     scrollController: scrollController),
                           )),
                   ListTile(
+                      title: Text('Float Modal'),
+                      onTap: () => showFloatingModalBottomSheet(
+                            context: context,
+                            builder: (context, scrollController) =>
+                                ModalFit(scrollController: scrollController),
+                          )),
+                  ListTile(
                       title: Text('Cupertino Modal fit'),
                       onTap: () => showCupertinoModalBottomSheet(
                             expand: false,
@@ -151,7 +165,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 ModalFit(scrollController: scrollController),
                           )),
                   ListTile(
-                      title: Text('Cupertino Small Modal forzed to expand'),
+                      title: Text('Cupertino Small Modal forced to expand'),
                       onTap: () => showCupertinoModalBottomSheet(
                             expand: true,
                             context: context,
@@ -170,7 +184,18 @@ class _MyHomePageState extends State<MyHomePage> {
                                     scrollController: scrollController),
                           )),
                   ListTile(
-                      title: Text('Cupertino Navigator + Scroll + WillScope'),
+                      title: Text('Cupertino Modal with inside navigation'),
+                      onTap: () => showCupertinoModalBottomSheet(
+                            expand: true,
+                            context: context,
+                            backgroundColor: Colors.transparent,
+                            builder: (context, scrollController) =>
+                                ModalWithNavigator(
+                                    scrollController: scrollController),
+                          )),
+                  ListTile(
+                      title:
+                          Text('Cupertino Navigator + Scroll + WillPopScope'),
                       onTap: () => showCupertinoModalBottomSheet(
                             expand: true,
                             context: context,
@@ -180,7 +205,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     scrollController: scrollController),
                           )),
                   ListTile(
-                      title: Text('Cupertino Modal with WillScope'),
+                      title: Text('Cupertino Modal with WillPopScope'),
                       onTap: () => showCupertinoModalBottomSheet(
                             expand: true,
                             context: context,

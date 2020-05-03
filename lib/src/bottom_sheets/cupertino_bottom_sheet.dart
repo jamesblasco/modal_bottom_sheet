@@ -4,10 +4,15 @@
 
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/cupertino.dart' show CupertinoTheme;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'
+    show
+        Colors,
+        Theme,
+        MaterialLocalizations,
+        debugCheckHasMaterialLocalizations;
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
@@ -85,7 +90,13 @@ Future<T> showCupertinoModalBottomSheet<T>({
   assert(useRootNavigator != null);
   assert(enableDrag != null);
   assert(debugCheckHasMediaQuery(context));
-  assert(debugCheckHasMaterialLocalizations(context));
+  final hasMaterialLocalizations =
+      Localizations.of<MaterialLocalizations>(context, MaterialLocalizations) !=
+          null;
+  final barrierLabel = hasMaterialLocalizations
+      ? MaterialLocalizations.of(context).modalBarrierDismissLabel
+      : '';
+
   final result = await Navigator.of(context, rootNavigator: useRootNavigator)
       .push(CupertinoModalBottomSheetRoute<T>(
     builder: builder,
@@ -96,7 +107,7 @@ Future<T> showCupertinoModalBottomSheet<T>({
     ),
     secondAnimationController: secondAnimation,
     expanded: expand,
-    barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+    barrierLabel: barrierLabel,
     elevation: elevation,
     bounce: bounce,
     shape: shape,
@@ -184,9 +195,9 @@ class _CupertinoModalTransition extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double startRoundCorner = 0;
+    var startRoundCorner = 0.0;
     final paddingTop = MediaQuery.of(context).padding.top;
-    if (defaultTargetPlatform == TargetPlatform.iOS && paddingTop > 20) {
+    if (Theme.of(context).platform == TargetPlatform.iOS && paddingTop > 20) {
       startRoundCorner = 38.5;
       //https://kylebashour.com/posts/finding-the-real-iphone-x-corner-radius
     }
@@ -202,8 +213,6 @@ class _CupertinoModalTransition extends StatelessWidget {
           animation: curvedAnimation,
           child: body,
           builder: (context, child) {
-            Widget result = child;
-
             final progress = curvedAnimation.value;
             final yOffset = progress * paddingTop;
             final scale = 1 - progress / 10;
@@ -220,7 +229,7 @@ class _CupertinoModalTransition extends StatelessWidget {
                     alignment: Alignment.topCenter,
                     child: ClipRRect(
                         borderRadius: BorderRadius.circular(radius),
-                        child: result),
+                        child: child),
                   ),
                 )
               ],
@@ -233,6 +242,7 @@ class _CupertinoModalTransition extends StatelessWidget {
 class _CupertinoScaffold extends InheritedWidget {
   final AnimationController animation;
 
+  @override
   final Widget child;
 
   const _CupertinoScaffold({Key key, this.animation, this.child})
@@ -273,7 +283,12 @@ class CupertinoScaffold extends StatefulWidget {
     assert(useRootNavigator != null);
     assert(enableDrag != null);
     assert(debugCheckHasMediaQuery(context));
-    assert(debugCheckHasMaterialLocalizations(context));
+    final isCupertinoApp = Theme.of(context, shadowThemeOnly: true) == null;
+    String barrierLabel = '';
+    if (!isCupertinoApp) {
+      assert(debugCheckHasMaterialLocalizations(context));
+      barrierLabel = MaterialLocalizations.of(context).modalBarrierDismissLabel;
+    }
     final result = await Navigator.of(context, rootNavigator: useRootNavigator)
         .push(CupertinoModalBottomSheetRoute<T>(
       builder: builder,
@@ -283,7 +298,7 @@ class CupertinoScaffold extends StatefulWidget {
         backgroundColor: backgroundColor,
       ),
       expanded: expand,
-      barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+      barrierLabel: barrierLabel,
       bounce: bounce,
       isDismissible: isDismissible ?? expand == false ? true : false,
       modalBarrierColor: barrierColor ?? Colors.black12,

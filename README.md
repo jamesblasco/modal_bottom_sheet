@@ -1,12 +1,23 @@
-<img src="https://github.com/jamesblasco/modal_bottom_sheet/blob/master/screenshots/preview.png?raw=true">
+<a href="https://jamesblasco.github.io/modal_bottom_sheet/#/"><img src="https://github.com/jamesblasco/modal_bottom_sheet/blob/master/screenshots/preview.png?raw=true"></a>
 
 # Flutter Modal Bottom Sheet
 
-Create awesome and powerful modal bottom sheets
+Create awesome and powerful modal bottom sheets.
+
+
  
 |  Cupertino Modal |  Multiple Modals |  Material Modal | Bar Modal  |  Create your own |
 |---|---|---|---|---|
 |<img height="300" src="https://github.com/jamesblasco/modal_bottom_sheet/blob/master/screenshots/cupertino_shared_view.gif?raw=true">| <img  height="300" src="https://github.com/jamesblasco/modal_bottom_sheet/blob/master/screenshots/modal_inside_modal.gif?raw=true">| <img   height="300" src="https://github.com/jamesblasco/modal_bottom_sheet/blob/master/screenshots/material_fit.png?raw=true">|<img   height="300" src="https://github.com/jamesblasco/modal_bottom_sheet/blob/master/screenshots/bar_modal.png?raw=true">| <img height="300" src="https://github.com/jamesblasco/modal_bottom_sheet/blob/master/screenshots/avatar_modal.png?raw=true">|
+
+## Try it
+
+Explore the [Web Demo](https://jamesblasco.github.io/modal_bottom_sheet/#/) or clone the repository. 
+
+Known problems on web demo:
+- Web demo can run very slow on mobile devides.
+
+- Fake status bar doesn't change color as the iOS, Android app
 
 ## First Steps
 
@@ -19,11 +30,13 @@ https://pub.dev/packages/modal_bottom_sheet#-installing-tab-)
 showMaterialModalBottomSheet(
   context: context,
   builder: (context, scrollController) => Container(),
-})
+)
 ```
 What to use this over flutter `showModalBottomSheet`?
+
 `showMaterialModalBottomSheet` supports closing bottoms sheets by dragging down even if there is a scrollview inside.
-`showModalBottomSheet` won't work correctly with scrollviews
+`showModalBottomSheet` won't work correctly with scrollviews. 
+Also it supports `WillPopScope` to prevent closing the dialog
 
 #### Generic params for all modal bottom sheets
 
@@ -35,7 +48,7 @@ What to use this over flutter `showModalBottomSheet`?
 |Color barrierColor | The `barrierColor` parameter controls the color of the scrim for this route |
 |bool enableDrag = true| The `enableDrag` parameter specifies whether the bottom sheet can be dragged up and down and dismissed by swiping downwards. |
 |AnimationController secondAnimation| The `secondAnimation` parameter allows you to provide an animation controller that will be used to animate  push/pop of the modal route. Using this param is advised against and will be probably removed in future versions |
-|bool bounce = false| The `enableDrag` parameter specifies if the bottom sheet can go beyond the top boundary while dragging |
+|bool bounce = false| The `bounce` parameter specifies if the bottom sheet can go beyond the top boundary while dragging |
 
 
 #### Material params
@@ -51,7 +64,7 @@ iOS 13 came with an amazing new modal navigation and now it is available to use 
 showCupertinoModalBottomSheet(
   context: context,
   builder: (context, scrollController) => Container(),
-})
+)
 ```
 See generic paramameter in the Material section above
 
@@ -73,7 +86,10 @@ Notice this route type behaves the same as `MaterialPageRoute` and supports cust
 
 How can I change my route class? See cases:
 
-<details><summary> 1. Using Navigator.of(context).push </summary>
+<details><summary> 1. 
+ 
+ Using `Navigator.of(context).push`
+ </summary>
 
 ```dart
 Navigator.of(context).push(MaterialPageRoute(builder: (context) => Container()));`
@@ -85,8 +101,8 @@ Navigator.of(context).push(MaterialPageRoute(builder: (context) => Container()))
  
  </details>
  
-<details><summary>
- 2. 
+<details><summary>2.
+ 
  Using `onGenerateRoute` parameter of `MaterialApp`, `CupertinoApp` or `Navigator` 
  </summary>
  
@@ -106,8 +122,8 @@ Navigator.of(context).push(MaterialPageRoute(builder: (context) => Container()))
  
   </details>
   
- <details><summary>  
- 3. 
+ <details><summary>  3. 
+ 
  Using `pageRouteBuilder` parameter of `WidgetApp` 
  </summary>
 
@@ -118,13 +134,13 @@ pageRouteBuilder: <T>(RouteSettings settings, WidgetBuilder builder) => Material
  </details>
  
  <details>
- <summary>
- 4. 
+ <summary>4.
+  
  Using `routes` parameter from `MaterialApp` or `CupertinoApp` 
  </summary>
 
-Unfortunately this routes are `MaterialPageRoute` and `CupertinoPageRoute` respectively and cannot be changes.
-You can change the way you call the previous route with one of the previous methods or try option 2
+Unfortunately this parameter uses `MaterialPageRoute` and `CupertinoPageRoute` respectively and cannot be changed.
+You can modify the way you call the previous route with one of the previous methods or try option 2
 
  </details>
    
@@ -173,7 +189,7 @@ Check in the example project `showAvatarModalBottomSheet` for how to create your
 
 ## Roadmap
 
-- [ ] Support closing by dragging fast on a modal with a scroll view.
+- [X] Support closing by dragging fast on a modal with a scroll view.
 
 - [ ] Improve animation curves when user is not dragging.
 

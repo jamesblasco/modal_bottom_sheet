@@ -14,11 +14,14 @@ description: A new Flutter project.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
+  url_launcher: ^5.4.2
+  modal_bottom_sheet:
+    path: '../'
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -28,8 +31,6 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  modal_bottom_sheet:
-    path: '../'
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -42,6 +43,8 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
+  assets:
+   - assets/
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

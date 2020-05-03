@@ -69,6 +69,7 @@ class _SliverGroupElement extends RenderObjectElement {
     if (child == _backgroundDecoration) _backgroundDecoration = null;
     if (child == _foregroundDecoration) _foregroundDecoration = null;
     if (child == _sliver) _sliver = null;
+    super.forgetChild(child);
   }
 
   @override

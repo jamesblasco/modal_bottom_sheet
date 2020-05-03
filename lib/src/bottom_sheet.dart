@@ -30,13 +30,11 @@ typedef WidgetWithChildBuilder = Widget Function(
 /// See also:
 ///
 ///  * [showMaterialModalBottomSheet] which can be used to display a modal bottom
+///    sheet with Material appareance.
+///  * [showCupertinoModalBottomSheet] which can be used to display a modal bottom
 ///    sheet with Cupertino appareance.
 class ModalBottomSheet extends StatefulWidget {
   /// Creates a bottom sheet.
-  ///
-  /// Typically, bottom sheets are created implicitly by
-  /// [ScaffoldState.showBottomSheet], for persistent bottom sheets, or by
-  /// [showModalBottomSheet], for modal bottom sheets.
   const ModalBottomSheet({
     Key key,
     this.animationController,
@@ -85,8 +83,6 @@ class ModalBottomSheet extends StatefulWidget {
 
   /// A builder for the contents of the sheet.
   ///
-  /// The bottom sheet will wrap the widget produced by this builder in a
-  /// [Material] widget.
   final ScrollWidgetBuilder builder;
 
   /// If true, the bottom sheet can be dragged up and down and dismissed by
@@ -124,8 +120,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
   AnimationController _bounceDragController;
 
   double get _childHeight {
-    final RenderBox renderBox =
-        _childKey.currentContext.findRenderObject() as RenderBox;
+    final renderBox = _childKey.currentContext.findRenderObject() as RenderBox;
     return renderBox.size.height;
   }
 
@@ -152,8 +147,9 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
     widget.animationController.forward().then((value) {
       // When using WillPop, animation doesn't end at 1.
       // Check more in detail the problem
-      if (!widget.animationController.isCompleted)
+      if (!widget.animationController.isCompleted) {
         widget.animationController.value = 1;
+      }
     });
     _bounceDragController.reverse();
   }
@@ -182,7 +178,6 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
       final canClose = await shouldClose();
       if (canClose) {
         _close();
-        print('close');
         return;
       } else {
         _cancelClose();
@@ -208,7 +203,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
     isDragging = false;
     _bounceDragController.reverse();
 
-    bool canClose = true;
+    var canClose = true;
     if (widget.shouldClose != null && hasReachedWillPopThreshold) {
       _cancelClose();
       canClose = await shouldClose();
@@ -217,12 +212,11 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
       // If speed is bigger than _minFlingVelocity try to close it
       if (velocity > _minFlingVelocity) {
         _close();
-        print('close2');
       } else if (hasReachedCloseThreshold) {
-        if (widget.animationController.value > 0.0)
+        if (widget.animationController.value > 0.0) {
           widget.animationController.fling(velocity: -1.0);
+        }
         _close();
-        print('close3');
       } else {
         _cancelClose();
       }
@@ -231,13 +225,26 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
     }
   }
 
-  _handleScrollUpdate(ScrollNotification notification) {
+  // As we cannot access the dragGesture detector of the scroll view
+  // we can not know the DragDownDetails and therefore the end velocity.
+  // VelocityTracker it is used to calculate the end velocity  of the scroll
+  // when user is trying to close the modal by dragging
+  VelocityTracker _velocityTracker;
+  DateTime _startTime;
+
+  void _handleScrollUpdate(ScrollNotification notification) {
     if (notification.metrics.pixels <= notification.metrics.minScrollExtent) {
       //Check if listener is same from scrollController
+      if (!_scrollController.hasClients) return;
+
       if (_scrollController.position.pixels != notification.metrics.pixels) {
-        return false;
+        return;
       }
       DragUpdateDetails dragDetails;
+      if (notification is ScrollStartNotification) {
+        _velocityTracker = VelocityTracker();
+        _startTime = DateTime.now();
+      }
       if (notification is ScrollUpdateNotification) {
         dragDetails = notification.dragDetails;
       }
@@ -245,12 +252,14 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
         dragDetails = notification.dragDetails;
       }
       if (dragDetails != null) {
-        print('scroll');
+        final duration = _startTime.difference(DateTime.now());
+        final offset = Offset(0, _scrollController.offset);
+        _velocityTracker.addPosition(duration, offset);
         _handleDragUpdate(dragDetails.primaryDelta);
+      } else if (isDragging) {
+        final velocity = _velocityTracker.getVelocity().pixelsPerSecond.dy;
+        _handleDragEnd(velocity);
       }
-      // Todo:  detect dragEnd during scroll so it can bottom sheet can close
-      // if  velocity  > _minFlingVelocity
-      else if (isDragging) _handleDragEnd(0);
     }
   }
 
@@ -270,14 +279,15 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
       curve: Curves.easeOutSine,
     );
 
-    Widget child = widget.builder(context, _scrollController);
+    var child = widget.builder(context, _scrollController);
 
-    if (widget.containerBuilder != null)
+    if (widget.containerBuilder != null) {
       child = widget.containerBuilder(
         context,
         widget.animationController,
         child,
       );
+    }
 
     // Todo: Add curved Animation when push and pop without gesture
     /* final Animation<double> containerAnimation = CurvedAnimation(
@@ -366,15 +376,14 @@ class _CustomBottomSheetLayout extends SingleChildLayoutDelegate {
 
   @override
   Offset getPositionForChild(Size size, Size childSize) {
-    if (this.childHeight == null) this.childHeight = childSize.height;
-
+    childHeight ??= childSize.height;
     return Offset(0.0, size.height - childSize.height);
   }
 
   @override
   bool shouldRelayout(_CustomBottomSheetLayout oldDelegate) {
     if (progress != oldDelegate.progress) {
-      this.childHeight = oldDelegate.childHeight;
+      childHeight = oldDelegate.childHeight;
       return true;
     }
     return false;

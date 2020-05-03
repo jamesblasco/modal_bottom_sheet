@@ -40,7 +40,7 @@ class MaterialWithModalsPageRoute<T> extends MaterialPageRoute<T> {
   @override
   void didChangeNext(Route nextRoute) {
     if (nextRoute is ModalBottomSheetRoute) {
-      this._nextModalRoute = nextRoute;
+      _nextModalRoute = nextRoute;
     }
 
     super.didChangeNext(nextRoute);
@@ -60,7 +60,7 @@ class MaterialWithModalsPageRoute<T> extends MaterialPageRoute<T> {
   @override
   Widget buildTransitions(BuildContext context, Animation<double> animation,
       Animation<double> secondaryAnimation, Widget child) {
-    final PageTransitionsTheme theme = Theme.of(context).pageTransitionsTheme;
+    final theme = Theme.of(context).pageTransitionsTheme;
     if (_nextModalRoute != null) {
       if (!secondaryAnimation.isDismissed) {
         // Avoid default transition theme to animate when a new modal view is pushed
