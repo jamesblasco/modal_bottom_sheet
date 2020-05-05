@@ -14,6 +14,7 @@ Future<T> showMaterialModalBottomSheet<T>({
   bool bounce = false,
   bool expand = false,
   AnimationController secondAnimation,
+  Curve animationCurve,
   bool useRootNavigator = false,
   bool isDismissible = true,
   bool enableDrag = true,
@@ -44,6 +45,7 @@ Future<T> showMaterialModalBottomSheet<T>({
     isDismissible: isDismissible,
     modalBarrierColor: barrierColor,
     enableDrag: enableDrag,
+    animationCurve: animationCurve,
   ));
   return result;
 }

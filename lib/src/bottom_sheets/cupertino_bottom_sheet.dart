@@ -72,6 +72,8 @@ Future<T> showCupertinoModalBottomSheet<T>({
   Color barrierColor,
   bool expand = false,
   AnimationController secondAnimation,
+  Curve animationCurve,
+  Curve previousRouteAnimationCurve,
   bool useRootNavigator = false,
   bool bounce = true,
   bool isDismissible,
@@ -107,11 +109,15 @@ Future<T> showCupertinoModalBottomSheet<T>({
     isDismissible: isDismissible ?? expand == false ? true : false,
     modalBarrierColor: barrierColor ?? Colors.black12,
     enableDrag: enableDrag,
+    animationCurve: animationCurve,
+    previousRouteAnimationCurve: previousRouteAnimationCurve,
   ));
   return result;
 }
 
 class CupertinoModalBottomSheetRoute<T> extends ModalBottomSheetRoute<T> {
+  final Curve previousRouteAnimationCurve;
+
   CupertinoModalBottomSheetRoute({
     ScrollWidgetBuilder builder,
     WidgetWithChildBuilder containerBuilder,
@@ -120,12 +126,14 @@ class CupertinoModalBottomSheetRoute<T> extends ModalBottomSheetRoute<T> {
     ShapeBorder shape,
     Clip clipBehavior,
     AnimationController secondAnimationController,
+    Curve animationCurve,
     Color modalBarrierColor,
     bool bounce = true,
     bool isDismissible = true,
     bool enableDrag = true,
     @required bool expanded,
     RouteSettings settings,
+    this.previousRouteAnimationCurve,
   })  : assert(expanded != null),
         assert(isDismissible != null),
         assert(enableDrag != null),
@@ -140,6 +148,7 @@ class CupertinoModalBottomSheetRoute<T> extends ModalBottomSheetRoute<T> {
           enableDrag: enableDrag,
           expanded: expanded,
           settings: settings,
+          animationCurve: animationCurve,
         );
 
   @override
@@ -172,18 +181,25 @@ class CupertinoModalBottomSheetRoute<T> extends ModalBottomSheetRoute<T> {
   Widget getPreviousRouteTransition(BuildContext context,
       Animation<double> secondaryAnimation, Widget child) {
     return _CupertinoModalTransition(
-        secondaryAnimation: secondaryAnimation, body: child);
+      secondaryAnimation: secondaryAnimation,
+      body: child,
+      animationCurve: previousRouteAnimationCurve,
+    );
   }
 }
 
 class _CupertinoModalTransition extends StatelessWidget {
   final Animation<double> secondaryAnimation;
+  final Curve animationCurve;
 
   final Widget body;
 
-  const _CupertinoModalTransition(
-      {Key key, @required this.secondaryAnimation, @required this.body})
-      : super(key: key);
+  const _CupertinoModalTransition({
+    Key key,
+    @required this.secondaryAnimation,
+    @required this.body,
+    this.animationCurve,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -196,7 +212,7 @@ class _CupertinoModalTransition extends StatelessWidget {
 
     final curvedAnimation = CurvedAnimation(
       parent: secondaryAnimation,
-      curve: Curves.easeOut,
+      curve: animationCurve ?? Curves.easeOut,
     );
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
@@ -261,6 +277,8 @@ class CupertinoScaffold extends StatefulWidget {
   static Future<T> showCupertinoModalBottomSheet<T>({
     @required BuildContext context,
     @required ScrollWidgetBuilder builder,
+    Curve animationCurve,
+    Curve previousRouteAnimationCurve,
     Color backgroundColor,
     Color barrierColor,
     bool expand = false,
@@ -295,6 +313,8 @@ class CupertinoScaffold extends StatefulWidget {
       isDismissible: isDismissible ?? expand == false ? true : false,
       modalBarrierColor: barrierColor ?? Colors.black12,
       enableDrag: enableDrag,
+      animationCurve: animationCurve,
+      previousRouteAnimationCurve: previousRouteAnimationCurve,
     ));
     return result;
   }
