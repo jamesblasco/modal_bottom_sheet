@@ -13,7 +13,7 @@ import 'package:flutter/widgets.dart';
 
 const Duration _bottomSheetDuration = Duration(milliseconds: 400);
 const double _minFlingVelocity = 500.0;
-const double _closeProgressThreshold = 0.5;
+const double _closeProgressThreshold = 0.6;
 const double _willPopThreshold = 0.8;
 
 typedef ScrollWidgetBuilder = Widget Function(
