@@ -179,6 +179,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             expand: true,
                             context: context,
                             backgroundColor: Colors.transparent,
+                            animationCurve: Curves.easeInExpo,
                             builder: (context, scrollController) =>
                                 ModalInsideModal(
                                     scrollController: scrollController),

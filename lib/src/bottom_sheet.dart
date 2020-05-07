@@ -282,7 +282,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
   Widget build(BuildContext context) {
     final bounceAnimation = CurvedAnimation(
       parent: _bounceDragController,
-      curve: widget.animationCurve ?? Curves.easeOutSine,
+      curve:  Curves.easeOutSine,
     );
 
     var child = widget.builder(context, _scrollController);
@@ -296,17 +296,17 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
     }
 
     // Todo: Add curved Animation when push and pop without gesture
-    /* final Animation<double> containerAnimation = CurvedAnimation(
-      parent: widget.animationController,
-      curve: Curves.easeOut,
-    );*/
+     final Animation<double> containerAnimation = CurvedAnimation(
+      parent:  widget.animationController,
+      curve: widget.animationCurve ?? Curves.linear,
+    );
 
     return AnimatedBuilder(
       animation: widget.animationController,
       builder: (context, _) => ClipRect(
         child: CustomSingleChildLayout(
           delegate: _ModalBottomSheetLayout(
-              widget.animationController.value, widget.expanded),
+              containerAnimation.value, widget.expanded),
           child: !widget.enableDrag
               ? child
               : KeyedSubtree(
