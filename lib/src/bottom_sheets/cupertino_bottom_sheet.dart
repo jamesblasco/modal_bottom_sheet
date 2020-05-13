@@ -78,6 +78,7 @@ Future<T> showCupertinoModalBottomSheet<T>({
   bool bounce = true,
   bool isDismissible,
   bool enableDrag = true,
+  Duration duration,
 }) async {
   assert(context != null);
   assert(builder != null);
@@ -111,6 +112,7 @@ Future<T> showCupertinoModalBottomSheet<T>({
     enableDrag: enableDrag,
     animationCurve: animationCurve,
     previousRouteAnimationCurve: previousRouteAnimationCurve,
+    duration: duration,
   ));
   return result;
 }
@@ -132,6 +134,7 @@ class CupertinoModalBottomSheetRoute<T> extends ModalBottomSheetRoute<T> {
     bool isDismissible = true,
     bool enableDrag = true,
     @required bool expanded,
+    Duration duration,
     RouteSettings settings,
     this.previousRouteAnimationCurve,
   })  : assert(expanded != null),
@@ -149,6 +152,7 @@ class CupertinoModalBottomSheetRoute<T> extends ModalBottomSheetRoute<T> {
           expanded: expanded,
           settings: settings,
           animationCurve: animationCurve,
+          duration: duration,
         );
 
   @override
@@ -286,6 +290,7 @@ class CupertinoScaffold extends StatefulWidget {
     bool bounce = true,
     bool isDismissible,
     bool enableDrag = true,
+    Duration duration,
   }) async {
     assert(context != null);
     assert(builder != null);
@@ -315,6 +320,7 @@ class CupertinoScaffold extends StatefulWidget {
       enableDrag: enableDrag,
       animationCurve: animationCurve,
       previousRouteAnimationCurve: previousRouteAnimationCurve,
+      duration: duration,
     ));
     return result;
   }

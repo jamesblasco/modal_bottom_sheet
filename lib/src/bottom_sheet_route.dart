@@ -120,6 +120,7 @@ class ModalBottomSheetRoute<T> extends PopupRoute<T> {
     @required this.expanded,
     this.bounce = false,
     this.animationCurve,
+    this.duration,
     RouteSettings settings,
   })  : assert(expanded != null),
         assert(isDismissible != null),
@@ -135,11 +136,13 @@ class ModalBottomSheetRoute<T> extends PopupRoute<T> {
   final bool enableDrag;
   final ScrollController scrollController;
 
+  final Duration duration;
+
   final AnimationController secondAnimationController;
   final Curve animationCurve;
 
   @override
-  Duration get transitionDuration => _bottomSheetDuration;
+  Duration get transitionDuration => duration ?? _bottomSheetDuration;
 
   @override
   bool get barrierDismissible => isDismissible;
@@ -155,8 +158,10 @@ class ModalBottomSheetRoute<T> extends PopupRoute<T> {
   @override
   AnimationController createAnimationController() {
     assert(_animationController == null);
-    _animationController =
-        ModalBottomSheet.createAnimationController(navigator.overlay);
+    _animationController = ModalBottomSheet.createAnimationController(
+      navigator.overlay,
+      duration: duration,
+    );
     return _animationController;
   }
 
@@ -218,6 +223,7 @@ Future<T> showCustomModalBottomSheet<T>({
   bool isDismissible = true,
   bool enableDrag = true,
   ScrollController scrollController,
+  Duration duration,
 }) async {
   assert(context != null);
   assert(builder != null);
@@ -240,6 +246,7 @@ Future<T> showCustomModalBottomSheet<T>({
     modalBarrierColor: barrierColor,
     enableDrag: enableDrag,
     animationCurve: animationCurve,
+    duration: duration,
   ));
   return result;
 }

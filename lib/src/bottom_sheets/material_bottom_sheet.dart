@@ -18,6 +18,7 @@ Future<T> showMaterialModalBottomSheet<T>({
   bool useRootNavigator = false,
   bool isDismissible = true,
   bool enableDrag = true,
+  Duration duration,
 }) async {
   assert(context != null);
   assert(builder != null);
@@ -46,6 +47,7 @@ Future<T> showMaterialModalBottomSheet<T>({
     modalBarrierColor: barrierColor,
     enableDrag: enableDrag,
     animationCurve: animationCurve,
+    duration: duration,
   ));
   return result;
 }
