@@ -81,6 +81,7 @@ Future<T> showAvatarModalBottomSheet<T>({
   bool useRootNavigator = false,
   bool isDismissible = true,
   bool enableDrag = true,
+  Duration duration,
 }) async {
   assert(context != null);
   assert(builder != null);
@@ -104,6 +105,7 @@ Future<T> showAvatarModalBottomSheet<T>({
     isDismissible: isDismissible,
     modalBarrierColor: barrierColor,
     enableDrag: enableDrag,
+    duration: duration,
   ));
   return result;
 }

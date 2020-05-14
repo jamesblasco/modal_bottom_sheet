@@ -60,7 +60,7 @@ class ModalBottomSheet extends StatefulWidget {
   final AnimationController animationController;
 
   /// The curve used by the animation showing and dismissing the bottom sheet.
-  /// 
+  ///
   /// If no curve is provided it falls back to `Curves.easeOutSine`.
   final Curve animationCurve;
 
@@ -108,9 +108,12 @@ class ModalBottomSheet extends StatefulWidget {
   /// This API available as a convenience for a Material compliant bottom sheet
   /// animation. If alternative animation durations are required, a different
   /// animation controller could be provided.
-  static AnimationController createAnimationController(TickerProvider vsync) {
+  static AnimationController createAnimationController(
+    TickerProvider vsync, {
+    Duration duration,
+  }) {
     return AnimationController(
-      duration: _bottomSheetDuration,
+      duration: duration ?? _bottomSheetDuration,
       debugLabel: 'BottomSheet',
       vsync: vsync,
     );
