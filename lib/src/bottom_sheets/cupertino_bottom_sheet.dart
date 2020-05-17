@@ -264,11 +264,13 @@ class _CupertinoModalTransition extends StatelessWidget {
 
 class _CupertinoScaffold extends InheritedWidget {
   final AnimationController animation;
+  final Radius topRadius;
 
   @override
   final Widget child;
 
-  const _CupertinoScaffold({Key key, this.animation, this.child})
+  const _CupertinoScaffold(
+      {Key key, this.animation, this.child, this.topRadius})
       : super(key: key, child: child);
 
   @override
@@ -304,7 +306,6 @@ class CupertinoScaffold extends StatefulWidget {
     bool bounce = true,
     bool isDismissible,
     bool enableDrag = true,
-    Radius topRadius = _default_top_radius,
     Duration duration,
   }) async {
     assert(context != null);
@@ -319,6 +320,7 @@ class CupertinoScaffold extends StatefulWidget {
       assert(debugCheckHasMaterialLocalizations(context));
       barrierLabel = MaterialLocalizations.of(context).modalBarrierDismissLabel;
     }
+    final topRadius = CupertinoScaffold.of(context).topRadius;
     final result = await Navigator.of(context, rootNavigator: useRootNavigator)
         .push(CupertinoModalBottomSheetRoute<T>(
       builder: builder,
@@ -365,6 +367,7 @@ class _CupertinoScaffoldState extends State<CupertinoScaffold>
   Widget build(BuildContext context) {
     return _CupertinoScaffold(
       animation: animationController,
+      topRadius: widget.topRadius,
       child: _CupertinoModalTransition(
         secondaryAnimation: animationController,
         body: widget.body,
