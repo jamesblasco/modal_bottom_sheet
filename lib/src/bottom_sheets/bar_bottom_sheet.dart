@@ -1,6 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'dart:async';
 
 import '../../modal_bottom_sheet.dart';
 import '../bottom_sheet_route.dart';
@@ -9,6 +10,7 @@ class BarBottomSheet extends StatelessWidget {
   final Widget child;
 
   const BarBottomSheet({Key key, this.child}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
@@ -66,9 +68,11 @@ Future<T> showBarModalBottomSheet<T>({
   bool bounce = true,
   bool expand = false,
   AnimationController secondAnimation,
+  Curve animationCurve,
   bool useRootNavigator = false,
   bool isDismissible = true,
   bool enableDrag = true,
+  Duration duration,
 }) async {
   assert(context != null);
   assert(builder != null);
@@ -91,6 +95,8 @@ Future<T> showBarModalBottomSheet<T>({
     isDismissible: isDismissible,
     modalBarrierColor: barrierColor,
     enableDrag: enableDrag,
+    animationCurve: animationCurve,
+    duration: duration,
   ));
   return result;
 }

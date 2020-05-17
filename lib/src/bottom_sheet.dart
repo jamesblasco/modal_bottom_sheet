@@ -38,6 +38,7 @@ class ModalBottomSheet extends StatefulWidget {
   const ModalBottomSheet({
     Key key,
     this.animationController,
+    this.animationCurve,
     this.enableDrag = true,
     this.containerBuilder,
     this.bounce = true,
@@ -57,6 +58,11 @@ class ModalBottomSheet extends StatefulWidget {
   /// The BottomSheet widget will manipulate the position of this animation, it
   /// is not just a passive observer.
   final AnimationController animationController;
+
+  /// The curve used by the animation showing and dismissing the bottom sheet.
+  ///
+  /// If no curve is provided it falls back to `Curves.easeOutSine`.
+  final Curve animationCurve;
 
   /// Allows the bottom sheet to  go beyond the top bound of the content,
   /// but then bounce the content back to the edge of
@@ -102,9 +108,12 @@ class ModalBottomSheet extends StatefulWidget {
   /// This API available as a convenience for a Material compliant bottom sheet
   /// animation. If alternative animation durations are required, a different
   /// animation controller could be provided.
-  static AnimationController createAnimationController(TickerProvider vsync) {
+  static AnimationController createAnimationController(
+    TickerProvider vsync, {
+    Duration duration,
+  }) {
     return AnimationController(
-      duration: _bottomSheetDuration,
+      duration: duration ?? _bottomSheetDuration,
       debugLabel: 'BottomSheet',
       vsync: vsync,
     );
@@ -276,7 +285,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
   Widget build(BuildContext context) {
     final bounceAnimation = CurvedAnimation(
       parent: _bounceDragController,
-      curve: Curves.easeOutSine,
+      curve: widget.animationCurve ?? Curves.easeOutSine,
     );
 
     var child = widget.builder(context, _scrollController);
