@@ -8,3 +8,8 @@
 - Support for closing a modal with a scroll view by dragging down fast.
 - Fix assertion in CupertinoBottomSheet and BottomSheetRoute when using the CupetinoApp or WidgetsApp as root
 - Fix assertion when scrollController isn't used by the builder 
+
+## [0.1.6] - New custom params
+- Use `duration` to define the opening duration of the modal
+- Change the top radius of the cupertino bottom sheet 
+Thanks to @bierbaumtim @troyanskiy @rodineijf for the contributions
