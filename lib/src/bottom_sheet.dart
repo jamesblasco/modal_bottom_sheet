@@ -60,7 +60,7 @@ class ModalBottomSheet extends StatefulWidget {
   final AnimationController animationController;
 
   /// The curve used by the animation showing and dismissing the bottom sheet.
-  /// 
+  ///
   /// If no curve is provided it falls back to `Curves.easeOutSine`.
   final Curve animationCurve;
 
@@ -240,14 +240,30 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
 
   void _handleScrollUpdate(ScrollNotification notification) {
     if (notification.metrics.pixels <= notification.metrics.minScrollExtent) {
-      //Check if listener is same from scrollController
       if (!_scrollController.hasClients) return;
 
-      if (_scrollController.position.pixels != notification.metrics.pixels) {
+      // Check if listener is same from scrollController.
+      // TODO: Improve the way it checks if it the same view controller
+      // Use PrimaryScrollController
+      if (_scrollController.position.pixels != notification.metrics.pixels &&
+          !(_scrollController.position.pixels == 0 &&
+              notification.metrics.pixels >= 0)) {
         return;
       }
+      // Clamping Scroll Physics end with a ScrollEndNotification with a DragEndDetail class
+      // while Bouncing Scroll Physics or other physics that Overflow don't return a drag end info
+
+      // We use the velocity from DragEndDetail in case it is available
+      if (notification is ScrollEndNotification &&
+          notification.dragDetails != null) {
+        _handleDragEnd(notification.dragDetails.primaryVelocity);
+        _velocityTracker = null;
+        _startTime = null;
+        return;
+      }
+      // Otherwise the calculate the velocity with a VelocityTracker
       DragUpdateDetails dragDetails;
-      if (notification is ScrollStartNotification) {
+      if (_velocityTracker == null) {
         _velocityTracker = VelocityTracker();
         _startTime = DateTime.now();
       }
@@ -259,11 +275,13 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
       }
       if (dragDetails != null) {
         final duration = _startTime.difference(DateTime.now());
-        final offset = Offset(0, _scrollController.offset);
+        final offset = Offset(0, notification.metrics.pixels);
         _velocityTracker.addPosition(duration, offset);
         _handleDragUpdate(dragDetails.primaryDelta);
       } else if (isDragging) {
         final velocity = _velocityTracker.getVelocity().pixelsPerSecond.dy;
+        _velocityTracker = null;
+        _startTime = null;
         _handleDragEnd(velocity);
       }
     }
@@ -282,7 +300,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
   Widget build(BuildContext context) {
     final bounceAnimation = CurvedAnimation(
       parent: _bounceDragController,
-      curve:  Curves.easeOutSine,
+      curve: Curves.easeOutSine,
     );
 
     var child = widget.builder(context, _scrollController);
@@ -296,8 +314,8 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
     }
 
     // Todo: Add curved Animation when push and pop without gesture
-     final Animation<double> containerAnimation = CurvedAnimation(
-      parent:  widget.animationController,
+    final Animation<double> containerAnimation = CurvedAnimation(
+      parent: widget.animationController,
       curve: widget.animationCurve ?? Curves.linear,
     );
 
