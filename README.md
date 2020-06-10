@@ -168,7 +168,7 @@ It supports native features as bouncing, blurred background, dark mode, stacking
 
 ## Push new views inside the modal bottom sheet
 
-a. If you want to push a new modal bottom sheet just call `showCupertinoModalBottomSheet` again (works with two option)
+a. If you want to push a new modal bottom sheet just call `showCupertinoModalBottomSheet` again (works with both options)
 
 b. For inside navigaton add a new `Navigator` or `CupertinoTabScaffold` inside 
 
