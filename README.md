@@ -78,15 +78,17 @@ Useful if you want a blurred transparent background as the example Cupertino Pho
 > **Why?**
 > `MaterialPageRoute` and `CupertinoPageRoute` do not allow animated translation to/from routes that are not the same type. 
 
-There are two options:
-
-### OPTION 1. Recommended.
 
 Replace your current route class with `MaterialWithModalsPageRoute`.
 
+
 Notice this route type behaves the same as `MaterialPageRoute` and supports custom `PageTransitionsBuilder` and `PageTransitionsTheme`.
 
-How can I change my route class? See cases:
+
+
+<details><summary>
+  How can I replace my current route? </summary>
+
 
 <details><summary> 1. 
  
@@ -145,9 +147,12 @@ Unfortunately this parameter uses `MaterialPageRoute` and `CupertinoPageRoute` r
 You can modify the way you call the previous route with one of the previous methods or try option 2
 
  </details>
-   
+    </details>
 
-### OPTION 2. 
+Is there an alternative in case I can't change my current route? **Yes!**
+<details><summary>
+ Learn how to animate previous route with CupertinoScaffold: </summary>
+
 
 1. Wrap previous route inside a `CupertinoScaffold`.
   Example with `routes` parameter from `MaterialApp` or `CupertinoApp`
@@ -162,7 +167,9 @@ You can modify the way you call the previous route with one of the previous meth
  CupertinoScaffold.showCupertinoModalBottomSheet(context:context, builder: (context) => Container())
  ```
 
-These two options won't work correctly together. 
+Don't use this solution at the same time as `MaterialWithModalsPageRoute`
+
+ </details>
 
 It supports native features as bouncing, blurred background, dark mode, stacking modals and inside navigation.
 
