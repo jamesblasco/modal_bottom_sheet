@@ -139,6 +139,16 @@ class _MyHomePageState extends State<MyHomePage> {
                                     scrollController: scrollController),
                           )),
                   ListTile(
+                      title: Text('Bar Modal reverse list'),
+                      onTap: () => showBarModalBottomSheet(
+                        expand: true,
+                        context: context,
+                        backgroundColor: Colors.transparent,
+                        builder: (context, scrollController) =>
+                            ModalInsideModal(
+                                scrollController: scrollController, reverse: true),
+                      )),
+                  ListTile(
                       title: Text('Avatar Modal'),
                       onTap: () => showAvatarModalBottomSheet(
                             expand: true,

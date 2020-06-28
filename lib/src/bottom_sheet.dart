@@ -242,7 +242,11 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
   DateTime _startTime;
 
   void _handleScrollUpdate(ScrollNotification notification) {
-    if (notification.metrics.pixels <= notification.metrics.minScrollExtent) {
+    double diff = _scrollController.position.axisDirection == AxisDirection.down
+        ? _scrollController.position.pixels
+        : _scrollController.position.maxScrollExtent -
+        _scrollController.position.pixels;
+    if (diff <= 0) {
       //Check if listener is same from scrollController
       if (!_scrollController.hasClients) return;
 
@@ -262,7 +266,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
       }
       if (dragDetails != null) {
         final duration = _startTime.difference(DateTime.now());
-        final offset = Offset(0, _scrollController.offset);
+        final offset = Offset(0, diff);
         _velocityTracker.addPosition(duration, offset);
         _handleDragUpdate(dragDetails.primaryDelta);
       } else if (isDragging) {
