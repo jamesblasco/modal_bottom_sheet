@@ -83,6 +83,7 @@ Future<T> showCupertinoModalBottomSheet<T>({
   bool enableDrag = true,
   Radius topRadius = _default_top_radius,
   Duration duration,
+  RouteSettings settings,
 }) async {
   assert(context != null);
   assert(builder != null);
@@ -119,6 +120,7 @@ Future<T> showCupertinoModalBottomSheet<T>({
     animationCurve: animationCurve,
     previousRouteAnimationCurve: previousRouteAnimationCurve,
     duration: duration,
+    settings: settings,
   ));
   return result;
 }
@@ -307,6 +309,7 @@ class CupertinoScaffold extends StatefulWidget {
     bool isDismissible,
     bool enableDrag = true,
     Duration duration,
+    RouteSettings settings,
   }) async {
     assert(context != null);
     assert(builder != null);
@@ -340,6 +343,7 @@ class CupertinoScaffold extends StatefulWidget {
       animationCurve: animationCurve,
       previousRouteAnimationCurve: previousRouteAnimationCurve,
       duration: duration,
+      settings: settings,
     ));
     return result;
   }
