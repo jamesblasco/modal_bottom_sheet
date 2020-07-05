@@ -69,6 +69,8 @@ class ModalBottomSheet extends StatefulWidget {
   /// the top bound.
   final bool bounce;
 
+  // Force the widget to fill the maximum size of the viewport
+  // or if false it will fit to the content of the widget
   final bool expanded;
 
   final WidgetWithChildBuilder containerBuilder;
@@ -242,22 +244,26 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
   DateTime _startTime;
 
   void _handleScrollUpdate(ScrollNotification notification) {
-    double diff = _scrollController.position.axisDirection == AxisDirection.down
-        ? _scrollController.position.pixels
-        : _scrollController.position.maxScrollExtent -
-        _scrollController.position.pixels;
-    if (diff <= 0) {
-      //Check if listener is same from scrollController
-      if (!_scrollController.hasClients) return;
+    final scrollPosition = _scrollController.position;
 
-      if (_scrollController.position.pixels != notification.metrics.pixels) {
+    final isScrollReversed = scrollPosition.axisDirection == AxisDirection.down;
+    final diff = isScrollReversed
+        ? scrollPosition.pixels
+        : scrollPosition.maxScrollExtent - scrollPosition.pixels;
+
+    if (diff <= 0) {
+      //Check if scrollController is used
+      if (!_scrollController.hasClients) return;
+      //Check if listener is same from scrollController
+      if (scrollPosition.pixels != notification.metrics.pixels) {
         return;
       }
-      DragUpdateDetails dragDetails;
+
       if (notification is ScrollStartNotification) {
         _velocityTracker = VelocityTracker();
         _startTime = DateTime.now();
       }
+      DragUpdateDetails dragDetails;
       if (notification is ScrollUpdateNotification) {
         dragDetails = notification.dragDetails;
       }
