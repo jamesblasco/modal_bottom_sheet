@@ -11,6 +11,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 
+import 'package:modal_bottom_sheet/src/utils/bottom_sheet_suspended_curve.dart';
+import 'package:modal_bottom_sheet/src/utils/primary_scroll_status_bar.dart';
+
+
+const Curve _decelerateEasing = Cubic(0.0, 0.0, 0.2, 1.0);
+const Curve _modalBottomSheetCurve = _decelerateEasing;
 const Duration _bottomSheetDuration = Duration(milliseconds: 400);
 const double _minFlingVelocity = 500.0;
 const double _closeProgressThreshold = 0.6;
@@ -61,7 +67,7 @@ class ModalBottomSheet extends StatefulWidget {
 
   /// The curve used by the animation showing and dismissing the bottom sheet.
   ///
-  /// If no curve is provided it falls back to `Curves.easeOutSine`.
+  /// If no curve is provided it falls back to `decelerateEasing`.
   final Curve animationCurve;
 
   /// Allows the bottom sheet to  go beyond the top bound of the content,
@@ -176,7 +182,10 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
     return result;
   }
 
+  ParametricCurve<double> animationCurve;
+
   void _handleDragUpdate(double primaryDelta) async {
+    animationCurve = Curves.linear;
     assert(widget.enableDrag, 'Dragging is disabled');
 
     if (_dismissUnderway) return;
@@ -209,6 +218,11 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
 
   void _handleDragEnd(double velocity) async {
     assert(widget.enableDrag, 'Dragging is disabled');
+
+    animationCurve = BottomSheetSuspendedCurve(
+      widget.animationController.value,
+      curve: _defaultCurve,
+    );
 
     if (_dismissUnderway || !isDragging) return;
     isDragging = false;
@@ -302,8 +316,12 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
     }
   }
 
+  ParametricCurve<double> get _defaultCurve =>
+      widget.animationCurve ?? _modalBottomSheetCurve;
+
   @override
   void initState() {
+    animationCurve = _defaultCurve;
     _bounceDragController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 300));
     _scrollController = widget.scrollController ?? ScrollController();
@@ -328,45 +346,57 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
       );
     }
 
-    // Todo: Add curved Animation when push and pop without gesture
-    final Animation<double> containerAnimation = CurvedAnimation(
-      parent: widget.animationController,
-      curve: widget.animationCurve ?? Curves.linear,
-    );
+    final mediaQuery = MediaQuery.of(context);
 
-    return AnimatedBuilder(
+    child = AnimatedBuilder(
       animation: widget.animationController,
-      builder: (context, _) => ClipRect(
-        child: CustomSingleChildLayout(
-          delegate: _ModalBottomSheetLayout(
-              containerAnimation.value, widget.expanded),
-          child: !widget.enableDrag
-              ? child
-              : KeyedSubtree(
-                  key: _childKey,
-                  child: AnimatedBuilder(
-                    animation: bounceAnimation,
-                    builder: (context, _) => CustomSingleChildLayout(
-                      delegate: _CustomBottomSheetLayout(bounceAnimation.value),
-                      child: GestureDetector(
-                        onVerticalDragUpdate: (details) =>
-                            _handleDragUpdate(details.primaryDelta),
-                        onVerticalDragEnd: (details) =>
-                            _handleDragEnd(details.primaryVelocity),
-                        child: NotificationListener<ScrollNotification>(
-                          onNotification: (ScrollNotification notification) {
-                            _handleScrollUpdate(notification);
-                            return false;
-                          },
-                          child: child,
-                        ),
+      builder: (context, child) {
+        final animationValue = animationCurve.transform(
+            mediaQuery.accessibleNavigation
+                ? 1.0
+                : widget.animationController.value);
+
+        final draggableChild = !widget.enableDrag
+            ? child
+            : KeyedSubtree(
+                key: _childKey,
+                child: AnimatedBuilder(
+                  animation: bounceAnimation,
+                  builder: (context, _) => CustomSingleChildLayout(
+                    delegate: _CustomBottomSheetLayout(bounceAnimation.value),
+                    child: GestureDetector(
+                      onVerticalDragUpdate: (details) {
+                        _handleDragUpdate(details.primaryDelta);
+                      },
+                      onVerticalDragEnd: (details) {
+                        _handleDragEnd(details.primaryVelocity);
+                      },
+                      child: NotificationListener<ScrollNotification>(
+                        onNotification: (ScrollNotification notification) {
+                          _handleScrollUpdate(notification);
+                          return false;
+                        },
+                        child: child,
                       ),
                     ),
                   ),
                 ),
-        ),
-      ),
+              );
+        return ClipRect(
+          child: CustomSingleChildLayout(
+            delegate: _ModalBottomSheetLayout(
+              animationValue,
+              widget.expanded,
+            ),
+            child: draggableChild,
+          ),
+        );
+      },
+      child: RepaintBoundary(child: child),
     );
+
+    return PrimaryScrollStatusBarHandler(
+        scrollController: _scrollController, child: child);
   }
 }
 

@@ -162,6 +162,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       title: Text('Cupertino Modal fit'),
                       onTap: () => showCupertinoModalBottomSheet(
                             expand: false,
+                    
                             context: context,
                             backgroundColor: Colors.transparent,
                             builder: (context, scrollController) =>
@@ -173,6 +174,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       onTap: () => showCupertinoModalBottomSheet(
                             expand: true,
                             context: context,
+                            animationCurve: Curves.easeInOutCubic,
                             backgroundColor: Colors.transparent,
                             builder: (context, scrollController) =>
                                 ModalFit(scrollController: scrollController),
