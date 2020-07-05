@@ -9,28 +9,29 @@ class NestedScrollModal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return NestedScrollView(
-      
-        physics: ScrollPhysics(parent: PageScrollPhysics()),
-        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-          return <Widget>[
-            SliverList(
-              delegate: SliverChildListDelegate(
-                [
-                  Container(height: 300, color: Colors.blue),
-                ],
-              ),
+      controller: ScrollController(),
+      physics: ScrollPhysics(parent: PageScrollPhysics()),
+      headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+        return <Widget>[
+          SliverList(
+            delegate: SliverChildListDelegate(
+              [
+                Container(height: 300, color: Colors.blue),
+              ],
             ),
-          ];
+          ),
+        ];
+      },
+      body: ListView.builder(
+        controller: scrollController,
+        itemBuilder: (context, index) {
+          return Container(
+            height: 100,
+            color: index.isOdd ? Colors.green : Colors.orange,
+          );
         },
-        body: ListView.builder(
-           controller: scrollController,
-          itemBuilder: (context, index) {
-            return Container(
-              height: 100,
-              color: index.isOdd ? Colors.green : Colors.orange,
-            );
-          },
-          itemCount: 12,
-        ));
+        itemCount: 12,
+      ),
+    );
   }
 }
