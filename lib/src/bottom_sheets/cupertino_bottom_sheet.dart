@@ -84,6 +84,7 @@ Future<T> showCupertinoModalBottomSheet<T>({
   Radius topRadius = _default_top_radius,
   Duration duration,
   RouteSettings settings,
+  Color transitionBackgroundColor,
 }) async {
   assert(context != null);
   assert(builder != null);
@@ -121,6 +122,7 @@ Future<T> showCupertinoModalBottomSheet<T>({
     previousRouteAnimationCurve: previousRouteAnimationCurve,
     duration: duration,
     settings: settings,
+    transitionBackgroundColor: transitionBackgroundColor ?? Colors.black
   ));
   return result;
 }
@@ -128,6 +130,10 @@ Future<T> showCupertinoModalBottomSheet<T>({
 class CupertinoModalBottomSheetRoute<T> extends ModalBottomSheetRoute<T> {
   final Radius topRadius;
   final Curve previousRouteAnimationCurve;
+
+  // Background color behind all routes
+  // Black by default
+  final Color transitionBackgroundColor;
 
   CupertinoModalBottomSheetRoute({
     ScrollWidgetBuilder builder,
@@ -145,6 +151,7 @@ class CupertinoModalBottomSheetRoute<T> extends ModalBottomSheetRoute<T> {
     @required bool expanded,
     Duration duration,
     RouteSettings settings,
+    this.transitionBackgroundColor,
     this.topRadius = _default_top_radius,
     this.previousRouteAnimationCurve,
   })  : assert(expanded != null),
@@ -199,6 +206,7 @@ class CupertinoModalBottomSheetRoute<T> extends ModalBottomSheetRoute<T> {
       body: child,
       animationCurve: previousRouteAnimationCurve,
       topRadius: topRadius,
+      backgroundColor: transitionBackgroundColor ?? Colors.black,
     );
   }
 }
@@ -207,6 +215,7 @@ class _CupertinoModalTransition extends StatelessWidget {
   final Animation<double> secondaryAnimation;
   final Radius topRadius;
   final Curve animationCurve;
+  final Color backgroundColor;
 
   final Widget body;
 
@@ -215,6 +224,7 @@ class _CupertinoModalTransition extends StatelessWidget {
     @required this.secondaryAnimation,
     @required this.body,
     @required this.topRadius,
+    this.backgroundColor = Colors.black,
     this.animationCurve,
   }) : super(key: key);
 
@@ -246,7 +256,7 @@ class _CupertinoModalTransition extends StatelessWidget {
                 : (1 - progress) * startRoundCorner + progress * topRadius.x;
             return Stack(
               children: <Widget>[
-                Container(color: Colors.black),
+                Container(color: backgroundColor),
                 Transform.translate(
                   offset: Offset(0, yOffset),
                   child: Transform.scale(
@@ -266,6 +276,7 @@ class _CupertinoModalTransition extends StatelessWidget {
 
 class _CupertinoScaffold extends InheritedWidget {
   final AnimationController animation;
+
   final Radius topRadius;
 
   @override
@@ -288,10 +299,14 @@ class CupertinoScaffold extends StatefulWidget {
 
   final Widget body;
   final Radius topRadius;
+  final Color transitionBackgroundColor;
 
-  const CupertinoScaffold(
-      {Key key, this.body, this.topRadius = _default_top_radius})
-      : super(key: key);
+  const CupertinoScaffold({
+    Key key,
+    this.body,
+    this.topRadius = _default_top_radius,
+    this.transitionBackgroundColor = Colors.black,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _CupertinoScaffoldState();
@@ -376,6 +391,7 @@ class _CupertinoScaffoldState extends State<CupertinoScaffold>
         secondaryAnimation: animationController,
         body: widget.body,
         topRadius: widget.topRadius,
+        backgroundColor: widget.transitionBackgroundColor,
       ),
     );
   }

@@ -11,6 +11,7 @@ import 'modals/modal_fit.dart';
 import 'modals/modal_inside_modal.dart';
 import 'modals/modal_will_scope.dart';
 import 'modals/modal_with_navigator.dart';
+import 'modals/modal_with_nested_scroll.dart';
 import 'modals/modal_with_scroll.dart';
 
 import 'examples/cupertino_share.dart';
@@ -219,13 +220,22 @@ class _MyHomePageState extends State<MyHomePage> {
                                     scrollController: scrollController),
                           )),
                   ListTile(
-                      title: Text('Cupertino Modal with WillPopScope'),
+                      title: Text('Modal with WillPopScope'),
                       onTap: () => showCupertinoModalBottomSheet(
                             expand: true,
                             context: context,
                             backgroundColor: Colors.transparent,
                             builder: (context, scrollController) =>
                                 ModalWillScope(
+                                    scrollController: scrollController),
+                          )),
+                  ListTile(
+                      title: Text('Modal with Nested Scroll'),
+                      onTap: () => showCupertinoModalBottomSheet(
+                            expand: true,
+                            context: context,
+                            builder: (context, scrollController) =>
+                                NestedScrollModal(
                                     scrollController: scrollController),
                           )),
                 ],

@@ -244,8 +244,12 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
   DateTime _startTime;
 
   void _handleScrollUpdate(ScrollNotification notification) {
-
     final scrollPosition = _scrollController.position;
+
+    if (scrollPosition.axis == Axis.horizontal) return;
+
+    //Check if scrollController is used
+      if (!_scrollController.hasClients) return;
 
     final isScrollReversed = scrollPosition.axisDirection == AxisDirection.down;
     final offset = isScrollReversed
@@ -253,8 +257,6 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
         : scrollPosition.maxScrollExtent - scrollPosition.pixels;
 
     if (offset <= 0) {
-      //Check if scrollController is used
-      if (!_scrollController.hasClients) return;
       // Check if listener is same from scrollController.
       // TODO: Improve the way it checks if it the same view controller
       // Use PrimaryScrollController
@@ -274,9 +276,9 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
         _startTime = null;
         return;
       }
-      
+
 // Otherwise the calculate the velocity with a VelocityTracker
- if (_velocityTracker == null) {
+      if (_velocityTracker == null) {
         _velocityTracker = VelocityTracker();
         _startTime = DateTime.now();
       }
