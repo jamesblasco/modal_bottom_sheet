@@ -69,6 +69,8 @@ class ModalBottomSheet extends StatefulWidget {
   /// the top bound.
   final bool bounce;
 
+  // Force the widget to fill the maximum size of the viewport
+  // or if false it will fit to the content of the widget
   final bool expanded;
 
   final WidgetWithChildBuilder containerBuilder;
@@ -242,9 +244,17 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
   DateTime _startTime;
 
   void _handleScrollUpdate(ScrollNotification notification) {
-    if (notification.metrics.pixels <= notification.metrics.minScrollExtent) {
-      if (!_scrollController.hasClients) return;
 
+    final scrollPosition = _scrollController.position;
+
+    final isScrollReversed = scrollPosition.axisDirection == AxisDirection.down;
+    final offset = isScrollReversed
+        ? scrollPosition.pixels
+        : scrollPosition.maxScrollExtent - scrollPosition.pixels;
+
+    if (offset <= 0) {
+      //Check if scrollController is used
+      if (!_scrollController.hasClients) return;
       // Check if listener is same from scrollController.
       // TODO: Improve the way it checks if it the same view controller
       // Use PrimaryScrollController
@@ -264,12 +274,13 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
         _startTime = null;
         return;
       }
-      // Otherwise the calculate the velocity with a VelocityTracker
-      DragUpdateDetails dragDetails;
-      if (_velocityTracker == null) {
+      
+// Otherwise the calculate the velocity with a VelocityTracker
+ if (_velocityTracker == null) {
         _velocityTracker = VelocityTracker();
         _startTime = DateTime.now();
       }
+      DragUpdateDetails dragDetails;
       if (notification is ScrollUpdateNotification) {
         dragDetails = notification.dragDetails;
       }
@@ -278,8 +289,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
       }
       if (dragDetails != null) {
         final duration = _startTime.difference(DateTime.now());
-        final offset = Offset(0, notification.metrics.pixels);
-        _velocityTracker.addPosition(duration, offset);
+        _velocityTracker.addPosition(duration, Offset(0, offset));
         _handleDragUpdate(dragDetails.primaryDelta);
       } else if (isDragging) {
         final velocity = _velocityTracker.getVelocity().pixelsPerSecond.dy;

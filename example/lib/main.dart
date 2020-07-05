@@ -112,6 +112,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: SafeArea(
               bottom: false,
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   ListTile(
@@ -119,6 +120,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       onTap: () => Navigator.of(context).push(
                           MaterialWithModalsPageRoute(
                               builder: (context) => CupertinoSharePage()))),
+                  section('STYLES'),
                   ListTile(
                       title: Text('Material fit'),
                       onTap: () => showMaterialModalBottomSheet(
@@ -164,6 +166,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             builder: (context, scrollController) =>
                                 ModalFit(scrollController: scrollController),
                           )),
+                  section('COMPLEX CASES'),
                   ListTile(
                       title: Text('Cupertino Small Modal forced to expand'),
                       onTap: () => showCupertinoModalBottomSheet(
@@ -172,6 +175,17 @@ class _MyHomePageState extends State<MyHomePage> {
                             backgroundColor: Colors.transparent,
                             builder: (context, scrollController) =>
                                 ModalFit(scrollController: scrollController),
+                          )),
+                  ListTile(
+                      title: Text('Reverse list'),
+                      onTap: () => showBarModalBottomSheet(
+                            expand: true,
+                            context: context,
+                            backgroundColor: Colors.transparent,
+                            builder: (context, scrollController) =>
+                                ModalInsideModal(
+                                    scrollController: scrollController,
+                                    reverse: true),
                           )),
                   ListTile(
                       title: Text('Cupertino Modal inside modal'),
@@ -221,5 +235,14 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
     );
+  }
+
+  Widget section(String title) {
+    return Padding(
+        padding: EdgeInsets.fromLTRB(16, 20, 16, 8),
+        child: Text(
+          title,
+          style: Theme.of(context).textTheme.caption,
+        ));
   }
 }
