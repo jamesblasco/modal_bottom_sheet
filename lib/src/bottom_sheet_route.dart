@@ -99,6 +99,7 @@ class _ModalBottomSheetState<T> extends State<_ModalBottomSheet<T>> {
             builder: widget.route.builder,
             enableDrag: widget.enableDrag,
             bounce: widget.bounce,
+            scrollController: widget.scrollController,
             animationCurve: widget.animationCurve,
           ),
         );

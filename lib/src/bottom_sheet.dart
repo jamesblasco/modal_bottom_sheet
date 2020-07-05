@@ -10,6 +10,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
+import 'package:modal_bottom_sheet/src/utils/primary_scroll_status_bar.dart';
 
 const Duration _bottomSheetDuration = Duration(milliseconds: 400);
 const double _minFlingVelocity = 500.0;
@@ -249,7 +250,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
     if (scrollPosition.axis == Axis.horizontal) return;
 
     //Check if scrollController is used
-      if (!_scrollController.hasClients) return;
+    if (!_scrollController.hasClients) return;
 
     final isScrollReversed = scrollPosition.axisDirection == AxisDirection.down;
     final offset = isScrollReversed
@@ -334,36 +335,40 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
       curve: widget.animationCurve ?? Curves.linear,
     );
 
-    return AnimatedBuilder(
-      animation: widget.animationController,
-      builder: (context, _) => ClipRect(
-        child: CustomSingleChildLayout(
-          delegate: _ModalBottomSheetLayout(
-              containerAnimation.value, widget.expanded),
-          child: !widget.enableDrag
-              ? child
-              : KeyedSubtree(
-                  key: _childKey,
-                  child: AnimatedBuilder(
-                    animation: bounceAnimation,
-                    builder: (context, _) => CustomSingleChildLayout(
-                      delegate: _CustomBottomSheetLayout(bounceAnimation.value),
-                      child: GestureDetector(
-                        onVerticalDragUpdate: (details) =>
-                            _handleDragUpdate(details.primaryDelta),
-                        onVerticalDragEnd: (details) =>
-                            _handleDragEnd(details.primaryVelocity),
-                        child: NotificationListener<ScrollNotification>(
-                          onNotification: (ScrollNotification notification) {
-                            _handleScrollUpdate(notification);
-                            return false;
-                          },
-                          child: child,
-                        ),
+    return PrimaryScrollStatusBarHandler(
+      scrollController: _scrollController,
+      child: AnimatedBuilder(
+        animation: widget.animationController,
+        builder: (context, _) => ClipRect(
+          child: CustomSingleChildLayout(
+            delegate: _ModalBottomSheetLayout(
+                containerAnimation.value, widget.expanded),
+            child: !widget.enableDrag
+                ? child
+                : KeyedSubtree(
+                    key: _childKey,
+                    child: AnimatedBuilder(
+                      animation: bounceAnimation,
+                      builder: (context, _) => CustomSingleChildLayout(
+                        delegate:
+                            _CustomBottomSheetLayout(bounceAnimation.value),
+                        child: GestureDetector(
+                            onVerticalDragUpdate: (details) =>
+                                _handleDragUpdate(details.primaryDelta),
+                            onVerticalDragEnd: (details) =>
+                                _handleDragEnd(details.primaryVelocity),
+                            child: NotificationListener<ScrollNotification>(
+                              onNotification:
+                                  (ScrollNotification notification) {
+                                _handleScrollUpdate(notification);
+                                return false;
+                              },
+                              child: RepaintBoundary(child: child),
+                            )),
                       ),
                     ),
                   ),
-                ),
+          ),
         ),
       ),
     );
