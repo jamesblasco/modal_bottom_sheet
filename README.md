@@ -15,10 +15,16 @@ Create awesome and powerful modal bottom sheets.
 
 Explore the [Web Demo](https://jamesblasco.github.io/modal_bottom_sheet/#/) or clone the repository. 
 
-Known problems on web demo:
-- Web demo can run very slow on mobile devides.
+Why not `showModalBottomSheet`?
 
-- Fake status bar doesn't change color as the iOS, Android app
+Inspired by `showModalBottomSheet`, it completes with some must-need features:
+
+- Support for inside scrollview + dragging down to close (`showModalBottomSheet` won't work correctly with scrollviews. 
+- Support for `WillPopScope` to prevent closing the dialog.
+- Support for scroll to top when tapping status bar (iOS only)
+- Cupertino modal bottom sheet
+- Create custom modal bottom sheet
+
 
 ## First Steps
 
@@ -33,11 +39,6 @@ showMaterialModalBottomSheet(
   builder: (context, scrollController) => Container(),
 )
 ```
-What to use this over flutter `showModalBottomSheet`?
-
-`showMaterialModalBottomSheet` supports closing bottoms sheets by dragging down even if there is a scrollview inside.
-`showModalBottomSheet` won't work correctly with scrollviews. 
-Also it supports `WillPopScope` to prevent closing the dialog
 
 #### Generic params for all modal bottom sheets
 
