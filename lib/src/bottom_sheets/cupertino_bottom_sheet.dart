@@ -187,18 +187,17 @@ class CupertinoModalBottomSheetRoute<T> extends ModalBottomSheetRoute<T> {
         (paddingTop + _behind_widget_visible_height) * 0.9;
     final offsetY = secondaryAnimation.value * (paddingTop - distanceWithScale);
     final scale = 1 - secondaryAnimation.value / 10;
-    return  AnimatedBuilder(
-        builder: (context, child) => Transform.translate(
-          offset: Offset(0, offsetY),
-          child: Transform.scale(
-            scale: scale,
-            child: child,
-            alignment: Alignment.topCenter,
-          ),
+    return AnimatedBuilder(
+      builder: (context, child) => Transform.translate(
+        offset: Offset(0, offsetY),
+        child: Transform.scale(
+          scale: scale,
+          child: child,
+          alignment: Alignment.topCenter,
         ),
-        child: child,
-        animation: secondaryAnimation,
-
+      ),
+      child: child,
+      animation: secondaryAnimation,
     );
   }
 
@@ -279,7 +278,6 @@ class _CupertinoModalTransition extends StatelessWidget {
   }
 }
 
-
 class _CupertinoScaffold extends InheritedWidget {
   final AnimationController animation;
 
@@ -339,7 +337,7 @@ class CupertinoScaffold extends StatefulWidget {
     assert(enableDrag != null);
     assert(debugCheckHasMediaQuery(context));
     final isCupertinoApp = Theme.of(context, shadowThemeOnly: true) == null;
-    String barrierLabel = '';
+    var barrierLabel = '';
     if (!isCupertinoApp) {
       assert(debugCheckHasMaterialLocalizations(context));
       barrierLabel = MaterialLocalizations.of(context).modalBarrierDismissLabel;

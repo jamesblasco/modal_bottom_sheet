@@ -39,6 +39,9 @@ class _ModalBottomSheetState<T> extends State<_ModalBottomSheet<T>> {
     final platform = Theme.of(context)?.platform ?? defaultTargetPlatform;
     switch (platform) {
       case TargetPlatform.iOS:
+      case TargetPlatform.linux:
+      case TargetPlatform.macOS:
+      case TargetPlatform.windows:
         return '';
       case TargetPlatform.android:
       case TargetPlatform.fuchsia:

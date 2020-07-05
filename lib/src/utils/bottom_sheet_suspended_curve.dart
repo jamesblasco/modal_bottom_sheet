@@ -54,8 +54,8 @@ class BottomSheetSuspendedCurve extends ParametricCurve<double> {
       return t;
     }
 
-    final double curveProgress = (t - startingPoint) / (1 - startingPoint);
-    final double transformed = curve.transform(curveProgress);
+    final curveProgress = (t - startingPoint) / (1 - startingPoint);
+    final transformed = curve.transform(curveProgress);
     return lerpDouble(startingPoint, 1, transformed);
   }
 
