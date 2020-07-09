@@ -258,12 +258,13 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
   DateTime _startTime;
 
   void _handleScrollUpdate(ScrollNotification notification) {
+    //Check if scrollController is used
+    if (!_scrollController.hasClients) return;
+    
     final scrollPosition = _scrollController.position;
 
     if (scrollPosition.axis == Axis.horizontal) return;
 
-    //Check if scrollController is used
-    if (!_scrollController.hasClients) return;
 
     final isScrollReversed = scrollPosition.axisDirection == AxisDirection.down;
     final offset = isScrollReversed

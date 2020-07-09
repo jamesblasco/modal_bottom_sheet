@@ -238,6 +238,13 @@ Future<T> showCustomModalBottomSheet<T>({
   assert(enableDrag != null);
   assert(debugCheckHasMediaQuery(context));
   assert(debugCheckHasMaterialLocalizations(context));
+  final hasMaterialLocalizations =
+      Localizations.of<MaterialLocalizations>(context, MaterialLocalizations) !=
+          null;
+  final barrierLabel = hasMaterialLocalizations
+      ? MaterialLocalizations.of(context).modalBarrierDismissLabel
+      : '';
+
   final result = await Navigator.of(context, rootNavigator: useRootNavigator)
       .push(ModalBottomSheetRoute<T>(
     builder: builder,
@@ -245,7 +252,7 @@ Future<T> showCustomModalBottomSheet<T>({
     containerBuilder: containerWidget,
     secondAnimationController: secondAnimation,
     expanded: expand,
-    barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+    barrierLabel: barrierLabel,
     isDismissible: isDismissible,
     modalBarrierColor: barrierColor,
     enableDrag: enableDrag,
