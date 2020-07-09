@@ -4,7 +4,7 @@
 
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart' show CupertinoTheme;
+import 'package:flutter/cupertino.dart' show CupertinoColors, CupertinoTheme;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart'
@@ -234,11 +234,17 @@ class _CupertinoModalTransition extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var startRoundCorner = 0.0;
+    // var isDark = false;
     final paddingTop = MediaQuery.of(context).padding.top;
     if (Theme.of(context).platform == TargetPlatform.iOS && paddingTop > 20) {
       startRoundCorner = 38.5;
       //https://kylebashour.com/posts/finding-the-real-iphone-x-corner-radius
     }
+    // if (defaultTargetPlatform == TargetPlatform.iOS) {
+    //   isDark = CupertinoTheme.of(context).brightness == Brightness.dark;
+    // } else {
+    //   isDark = Theme.of(context).brightness == Brightness.dark;
+    // }
 
     final curvedAnimation = CurvedAnimation(
       parent: secondaryAnimation,
@@ -257,6 +263,7 @@ class _CupertinoModalTransition extends StatelessWidget {
           final radius = progress == 0
               ? 0.0
               : (1 - progress) * startRoundCorner + progress * topRadius.x;
+
           return Stack(
             children: <Widget>[
               Container(color: backgroundColor),
@@ -266,8 +273,22 @@ class _CupertinoModalTransition extends StatelessWidget {
                   scale: scale,
                   alignment: Alignment.topCenter,
                   child: ClipRRect(
-                      borderRadius: BorderRadius.circular(radius),
-                      child: child),
+                    borderRadius: BorderRadius.circular(radius),
+                    child: ColorFiltered(
+                      colorFilter: ColorFilter.mode(
+                        ColorTween(
+                          begin: CupertinoColors.systemBackground
+                              .resolveFrom(context),
+                          end: CupertinoColors.secondarySystemBackground
+                              .resolveFrom(context),
+                        ).transform(curvedAnimation.value),
+                        // Colors.black26,
+                        // isDark ? BlendMode.lighten : BlendMode.darken,
+                        BlendMode.modulate,
+                      ),
+                      child: child,
+                    ),
+                  ),
                 ),
               ),
             ],
