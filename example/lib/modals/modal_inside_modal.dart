@@ -4,8 +4,10 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class ModalInsideModal extends StatelessWidget {
   final ScrollController scrollController;
+  final bool reverse;
 
-  const ModalInsideModal({Key key, this.scrollController}) : super(key: key);
+  const ModalInsideModal({Key key, this.scrollController, this.reverse = false})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,15 +18,16 @@ class ModalInsideModal extends StatelessWidget {
       child: SafeArea(
         bottom: false,
         child: ListView(
+          reverse: reverse,
           shrinkWrap: true,
           controller: scrollController,
-          physics: BouncingScrollPhysics(),
+          physics: ClampingScrollPhysics(),
           children: ListTile.divideTiles(
               context: context,
               tiles: List.generate(
                 100,
                 (index) => ListTile(
-                    title: Text('Item'),
+                    title: Text('Item $index'),
                     onTap: () => showCupertinoModalBottomSheet(
                           expand: true,
                           isDismissible: false,
@@ -32,7 +35,8 @@ class ModalInsideModal extends StatelessWidget {
                           backgroundColor: Colors.transparent,
                           builder: (context, scrollController) =>
                               ModalInsideModal(
-                                  scrollController: scrollController),
+                                  scrollController: scrollController,
+                                  reverse: reverse),
                         )),
               )).toList(),
         ),

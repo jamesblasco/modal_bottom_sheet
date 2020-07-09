@@ -10,10 +10,16 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
+import 'package:modal_bottom_sheet/src/utils/primary_scroll_status_bar.dart';
 
+import 'package:modal_bottom_sheet/src/utils/bottom_sheet_suspended_curve.dart';
+
+
+const Curve _decelerateEasing = Cubic(0.0, 0.0, 0.2, 1.0);
+const Curve _modalBottomSheetCurve = _decelerateEasing;
 const Duration _bottomSheetDuration = Duration(milliseconds: 400);
 const double _minFlingVelocity = 500.0;
-const double _closeProgressThreshold = 0.5;
+const double _closeProgressThreshold = 0.6;
 const double _willPopThreshold = 0.8;
 
 typedef ScrollWidgetBuilder = Widget Function(
@@ -61,7 +67,7 @@ class ModalBottomSheet extends StatefulWidget {
 
   /// The curve used by the animation showing and dismissing the bottom sheet.
   ///
-  /// If no curve is provided it falls back to `Curves.easeOutSine`.
+  /// If no curve is provided it falls back to `decelerateEasing`.
   final Curve animationCurve;
 
   /// Allows the bottom sheet to  go beyond the top bound of the content,
@@ -69,6 +75,8 @@ class ModalBottomSheet extends StatefulWidget {
   /// the top bound.
   final bool bounce;
 
+  // Force the widget to fill the maximum size of the viewport
+  // or if false it will fit to the content of the widget
   final bool expanded;
 
   final WidgetWithChildBuilder containerBuilder;
@@ -174,7 +182,10 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
     return result;
   }
 
+  ParametricCurve<double> animationCurve;
+
   void _handleDragUpdate(double primaryDelta) async {
+    animationCurve = Curves.linear;
     assert(widget.enableDrag, 'Dragging is disabled');
 
     if (_dismissUnderway) return;
@@ -207,6 +218,11 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
 
   void _handleDragEnd(double velocity) async {
     assert(widget.enableDrag, 'Dragging is disabled');
+
+    animationCurve = BottomSheetSuspendedCurve(
+      widget.animationController.value,
+      curve: _defaultCurve,
+    );
 
     if (_dismissUnderway || !isDragging) return;
     isDragging = false;
@@ -242,18 +258,45 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
   DateTime _startTime;
 
   void _handleScrollUpdate(ScrollNotification notification) {
-    if (notification.metrics.pixels <= notification.metrics.minScrollExtent) {
-      //Check if listener is same from scrollController
-      if (!_scrollController.hasClients) return;
+    final scrollPosition = _scrollController.position;
 
-      if (_scrollController.position.pixels != notification.metrics.pixels) {
+    if (scrollPosition.axis == Axis.horizontal) return;
+
+    //Check if scrollController is used
+    if (!_scrollController.hasClients) return;
+
+    final isScrollReversed = scrollPosition.axisDirection == AxisDirection.down;
+    final offset = isScrollReversed
+        ? scrollPosition.pixels
+        : scrollPosition.maxScrollExtent - scrollPosition.pixels;
+
+    if (offset <= 0) {
+      // Check if listener is same from scrollController.
+      // TODO: Improve the way it checks if it the same view controller
+      // Use PrimaryScrollController
+      if (_scrollController.position.pixels != notification.metrics.pixels &&
+          !(_scrollController.position.pixels == 0 &&
+              notification.metrics.pixels >= 0)) {
         return;
       }
-      DragUpdateDetails dragDetails;
-      if (notification is ScrollStartNotification) {
+      // Clamping Scroll Physics end with a ScrollEndNotification with a DragEndDetail class
+      // while Bouncing Scroll Physics or other physics that Overflow don't return a drag end info
+
+      // We use the velocity from DragEndDetail in case it is available
+      if (notification is ScrollEndNotification &&
+          notification.dragDetails != null) {
+        _handleDragEnd(notification.dragDetails.primaryVelocity);
+        _velocityTracker = null;
+        _startTime = null;
+        return;
+      }
+
+// Otherwise the calculate the velocity with a VelocityTracker
+      if (_velocityTracker == null) {
         _velocityTracker = VelocityTracker();
         _startTime = DateTime.now();
       }
+      DragUpdateDetails dragDetails;
       if (notification is ScrollUpdateNotification) {
         dragDetails = notification.dragDetails;
       }
@@ -262,18 +305,23 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
       }
       if (dragDetails != null) {
         final duration = _startTime.difference(DateTime.now());
-        final offset = Offset(0, _scrollController.offset);
-        _velocityTracker.addPosition(duration, offset);
+        _velocityTracker.addPosition(duration, Offset(0, offset));
         _handleDragUpdate(dragDetails.primaryDelta);
       } else if (isDragging) {
         final velocity = _velocityTracker.getVelocity().pixelsPerSecond.dy;
+        _velocityTracker = null;
+        _startTime = null;
         _handleDragEnd(velocity);
       }
     }
   }
 
+  ParametricCurve<double> get _defaultCurve =>
+      widget.animationCurve ?? _modalBottomSheetCurve;
+
   @override
   void initState() {
+    animationCurve = _defaultCurve;
     _bounceDragController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 300));
     _scrollController = widget.scrollController ?? ScrollController();
@@ -285,7 +333,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
   Widget build(BuildContext context) {
     final bounceAnimation = CurvedAnimation(
       parent: _bounceDragController,
-      curve: widget.animationCurve ?? Curves.easeOutSine,
+      curve: Curves.easeOutSine,
     );
 
     var child = widget.builder(context, _scrollController);
@@ -298,45 +346,57 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
       );
     }
 
-    // Todo: Add curved Animation when push and pop without gesture
-    /* final Animation<double> containerAnimation = CurvedAnimation(
-      parent: widget.animationController,
-      curve: Curves.easeOut,
-    );*/
+    final mediaQuery = MediaQuery.of(context);
 
-    return AnimatedBuilder(
+    child = AnimatedBuilder(
       animation: widget.animationController,
-      builder: (context, _) => ClipRect(
-        child: CustomSingleChildLayout(
-          delegate: _ModalBottomSheetLayout(
-              widget.animationController.value, widget.expanded),
-          child: !widget.enableDrag
-              ? child
-              : KeyedSubtree(
-                  key: _childKey,
-                  child: AnimatedBuilder(
-                    animation: bounceAnimation,
-                    builder: (context, _) => CustomSingleChildLayout(
-                      delegate: _CustomBottomSheetLayout(bounceAnimation.value),
-                      child: GestureDetector(
-                        onVerticalDragUpdate: (details) =>
-                            _handleDragUpdate(details.primaryDelta),
-                        onVerticalDragEnd: (details) =>
-                            _handleDragEnd(details.primaryVelocity),
-                        child: NotificationListener<ScrollNotification>(
-                          onNotification: (ScrollNotification notification) {
-                            _handleScrollUpdate(notification);
-                            return false;
-                          },
-                          child: child,
-                        ),
+      builder: (context, child) {
+        final animationValue = animationCurve.transform(
+            mediaQuery.accessibleNavigation
+                ? 1.0
+                : widget.animationController.value);
+
+        final draggableChild = !widget.enableDrag
+            ? child
+            : KeyedSubtree(
+                key: _childKey,
+                child: AnimatedBuilder(
+                  animation: bounceAnimation,
+                  builder: (context, _) => CustomSingleChildLayout(
+                    delegate: _CustomBottomSheetLayout(bounceAnimation.value),
+                    child: GestureDetector(
+                      onVerticalDragUpdate: (details) {
+                        _handleDragUpdate(details.primaryDelta);
+                      },
+                      onVerticalDragEnd: (details) {
+                        _handleDragEnd(details.primaryVelocity);
+                      },
+                      child: NotificationListener<ScrollNotification>(
+                        onNotification: (ScrollNotification notification) {
+                          _handleScrollUpdate(notification);
+                          return false;
+                        },
+                        child: child,
                       ),
                     ),
                   ),
                 ),
-        ),
-      ),
+              );
+        return ClipRect(
+          child: CustomSingleChildLayout(
+            delegate: _ModalBottomSheetLayout(
+              animationValue,
+              widget.expanded,
+            ),
+            child: draggableChild,
+          ),
+        );
+      },
+      child: RepaintBoundary(child: child),
     );
+
+    return PrimaryScrollStatusBarHandler(
+        scrollController: _scrollController, child: child);
   }
 }
 

@@ -13,3 +13,9 @@
 - Use `duration` to define the opening duration of the modal
 - Change the top radius of the cupertino bottom sheet 
 Thanks to @bierbaumtim @troyanskiy @rodineijf for the contributions
+
+
+## [0.2.0] - New Cool Features
+- Added support for scroll-to-top by tapping the status bar on iOS devices.
+- Use `curveAnimation` to define a custom curve animation for the modal transition
+- Bug fixes releated to horizontal scroll, clamping physics and othes.

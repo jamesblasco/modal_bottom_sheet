@@ -11,6 +11,7 @@ import 'modals/modal_fit.dart';
 import 'modals/modal_inside_modal.dart';
 import 'modals/modal_will_scope.dart';
 import 'modals/modal_with_navigator.dart';
+import 'modals/modal_with_nested_scroll.dart';
 import 'modals/modal_with_scroll.dart';
 
 import 'examples/cupertino_share.dart';
@@ -97,129 +98,167 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     print(MediaQuery.of(context).size.height);
     return Material(
-      child: CupertinoPageScaffold(
-        backgroundColor: Colors.white,
-        navigationBar: CupertinoNavigationBar(
-          transitionBetweenRoutes: false,
-          middle: Text('iOS13 Modal Presentation'),
-          trailing: GestureDetector(
-            child: Icon(Icons.arrow_forward),
-            onTap: () => Navigator.of(context).pushNamed('ss'),
+      child: Scaffold(
+        body: CupertinoPageScaffold(
+          backgroundColor: Colors.white,
+          navigationBar: CupertinoNavigationBar(
+            transitionBetweenRoutes: false,
+            middle: Text('iOS13 Modal Presentation'),
+            trailing: GestureDetector(
+              child: Icon(Icons.arrow_forward),
+              onTap: () => Navigator.of(context).pushNamed('ss'),
+            ),
           ),
-        ),
-        child: SizedBox.expand(
-          child: SingleChildScrollView(
-            child: SafeArea(
-              bottom: false,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  ListTile(
-                      title: Text('Cupertino Photo Share Example'),
-                      onTap: () => Navigator.of(context).push(
-                          MaterialWithModalsPageRoute(
-                              builder: (context) => CupertinoSharePage()))),
-                  ListTile(
-                      title: Text('Material fit'),
-                      onTap: () => showMaterialModalBottomSheet(
-                            expand: false,
-                            context: context,
-                            backgroundColor: Colors.transparent,
-                            builder: (context, scrollController) =>
-                                ModalFit(scrollController: scrollController),
-                          )),
-                  ListTile(
-                      title: Text('Bar Modal'),
-                      onTap: () => showBarModalBottomSheet(
-                            expand: true,
-                            context: context,
-                            backgroundColor: Colors.transparent,
-                            builder: (context, scrollController) =>
-                                ModalInsideModal(
-                                    scrollController: scrollController),
-                          )),
-                  ListTile(
-                      title: Text('Avatar Modal'),
-                      onTap: () => showAvatarModalBottomSheet(
-                            expand: true,
-                            context: context,
-                            backgroundColor: Colors.transparent,
-                            builder: (context, scrollController) =>
-                                ModalInsideModal(
-                                    scrollController: scrollController),
-                          )),
-                  ListTile(
-                      title: Text('Float Modal'),
-                      onTap: () => showFloatingModalBottomSheet(
-                            context: context,
-                            builder: (context, scrollController) =>
-                                ModalFit(scrollController: scrollController),
-                          )),
-                  ListTile(
-                      title: Text('Cupertino Modal fit'),
-                      onTap: () => showCupertinoModalBottomSheet(
-                            expand: false,
-                            context: context,
-                            backgroundColor: Colors.transparent,
-                            builder: (context, scrollController) =>
-                                ModalFit(scrollController: scrollController),
-                          )),
-                  ListTile(
-                      title: Text('Cupertino Small Modal forced to expand'),
-                      onTap: () => showCupertinoModalBottomSheet(
-                            expand: true,
-                            context: context,
-                            backgroundColor: Colors.transparent,
-                            builder: (context, scrollController) =>
-                                ModalFit(scrollController: scrollController),
-                          )),
-                  ListTile(
-                      title: Text('Cupertino Modal inside modal'),
-                      onTap: () => showCupertinoModalBottomSheet(
-                            expand: true,
-                            context: context,
-                            backgroundColor: Colors.transparent,
-                            builder: (context, scrollController) =>
-                                ModalInsideModal(
-                                    scrollController: scrollController),
-                          )),
-                  ListTile(
-                      title: Text('Cupertino Modal with inside navigation'),
-                      onTap: () => showCupertinoModalBottomSheet(
-                            expand: true,
-                            context: context,
-                            backgroundColor: Colors.transparent,
-                            builder: (context, scrollController) =>
-                                ModalWithNavigator(
-                                    scrollController: scrollController),
-                          )),
-                  ListTile(
-                      title:
-                          Text('Cupertino Navigator + Scroll + WillPopScope'),
-                      onTap: () => showCupertinoModalBottomSheet(
-                            expand: true,
-                            context: context,
-                            backgroundColor: Colors.transparent,
-                            builder: (context, scrollController) =>
-                                ComplexModal(
-                                    scrollController: scrollController),
-                          )),
-                  ListTile(
-                      title: Text('Cupertino Modal with WillPopScope'),
-                      onTap: () => showCupertinoModalBottomSheet(
-                            expand: true,
-                            context: context,
-                            backgroundColor: Colors.transparent,
-                            builder: (context, scrollController) =>
-                                ModalWillScope(
-                                    scrollController: scrollController),
-                          )),
-                ],
+          child: SizedBox.expand(
+            child: SingleChildScrollView(
+              primary: true,
+              child: SafeArea(
+                bottom: false,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    ListTile(
+                        title: Text('Cupertino Photo Share Example'),
+                        onTap: () => Navigator.of(context).push(
+                            MaterialWithModalsPageRoute(
+                                builder: (context) => CupertinoSharePage()))),
+                    section('STYLES'),
+                    ListTile(
+                        title: Text('Material fit'),
+                        onTap: () => showMaterialModalBottomSheet(
+                              expand: false,
+                              context: context,
+                              backgroundColor: Colors.transparent,
+                              builder: (context, scrollController) =>
+                                  ModalFit(scrollController: scrollController),
+                            )),
+                    ListTile(
+                        title: Text('Bar Modal'),
+                        onTap: () => showBarModalBottomSheet(
+                              expand: true,
+                              context: context,
+                              backgroundColor: Colors.transparent,
+                              builder: (context, scrollController) =>
+                                  ModalInsideModal(
+                                      scrollController: scrollController),
+                            )),
+                    ListTile(
+                        title: Text('Avatar Modal'),
+                        onTap: () => showAvatarModalBottomSheet(
+                              expand: true,
+                              context: context,
+                              backgroundColor: Colors.transparent,
+                              builder: (context, scrollController) =>
+                                  ModalInsideModal(
+                                      scrollController: scrollController),
+                            )),
+                    ListTile(
+                        title: Text('Float Modal'),
+                        onTap: () => showFloatingModalBottomSheet(
+                              context: context,
+                              builder: (context, scrollController) =>
+                                  ModalFit(scrollController: scrollController),
+                            )),
+                    ListTile(
+                        title: Text('Cupertino Modal fit'),
+                        onTap: () => showCupertinoModalBottomSheet(
+                              expand: false,
+                              context: context,
+                              backgroundColor: Colors.transparent,
+                              builder: (context, scrollController) =>
+                                  ModalFit(scrollController: scrollController),
+                            )),
+                    section('COMPLEX CASES'),
+                    ListTile(
+                        title: Text('Cupertino Small Modal forced to expand'),
+                        onTap: () => showCupertinoModalBottomSheet(
+                              expand: true,
+                              context: context,
+                              backgroundColor: Colors.transparent,
+                              builder: (context, scrollController) =>
+                                  ModalFit(scrollController: scrollController),
+                            )),
+                    ListTile(
+                        title: Text('Reverse list'),
+                        onTap: () => showBarModalBottomSheet(
+                              expand: true,
+                              context: context,
+                              backgroundColor: Colors.transparent,
+                              builder: (context, scrollController) =>
+                                  ModalInsideModal(
+                                      scrollController: scrollController,
+                                      reverse: true),
+                            )),
+                    ListTile(
+                        title: Text('Cupertino Modal inside modal'),
+                        onTap: () => showCupertinoModalBottomSheet(
+                              expand: true,
+                              context: context,
+                              backgroundColor: Colors.transparent,
+                              builder: (context, scrollController) =>
+                                  ModalInsideModal(
+                                      scrollController: scrollController),
+                            )),
+                    ListTile(
+                        title: Text('Cupertino Modal with inside navigation'),
+                        onTap: () => showCupertinoModalBottomSheet(
+                              expand: true,
+                              context: context,
+                              backgroundColor: Colors.transparent,
+                              builder: (context, scrollController) =>
+                                  ModalWithNavigator(
+                                      scrollController: scrollController),
+                            )),
+                    ListTile(
+                        title:
+                            Text('Cupertino Navigator + Scroll + WillPopScope'),
+                        onTap: () => showCupertinoModalBottomSheet(
+                              expand: true,
+                              context: context,
+                              backgroundColor: Colors.transparent,
+                              builder: (context, scrollController) =>
+                                  ComplexModal(
+                                      scrollController: scrollController),
+                            )),
+                    ListTile(
+                        title: Text('Modal with WillPopScope'),
+                        onTap: () => showCupertinoModalBottomSheet(
+                              expand: true,
+                              context: context,
+                              backgroundColor: Colors.transparent,
+                              builder: (context, scrollController) =>
+                                  ModalWillScope(
+                                      scrollController: scrollController),
+                            )),
+                    ListTile(
+                        title: Text('Modal with Nested Scroll'),
+                        onTap: () => showCupertinoModalBottomSheet(
+                              expand: true,
+                              context: context,
+                              builder: (context, scrollController) =>
+                                  NestedScrollModal(
+                                      scrollController: scrollController),
+                            )),
+                    SizedBox(
+                      height: 60,
+                    )
+                  ],
+                ),
               ),
             ),
           ),
         ),
       ),
     );
+  }
+
+  Widget section(String title) {
+    return Padding(
+        padding: EdgeInsets.fromLTRB(16, 20, 16, 8),
+        child: Text(
+          title,
+          style: Theme.of(context).textTheme.caption,
+        ));
   }
 }

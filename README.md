@@ -1,4 +1,4 @@
-<a href="https://jamesblasco.github.io/modal_bottom_sheet/#/"><img src="https://github.com/jamesblasco/modal_bottom_sheet/blob/master/screenshots/preview.png?raw=true"></a>
+<a href="https://jamesblasco.github.io/modal_bottom_sheet/#/"><img src="https://github.com/jamesblasco/modal_bottom_sheet/blob/screenshots/preview.png?raw=true"></a>
 
 # Flutter Modal Bottom Sheet
 
@@ -9,16 +9,22 @@ Create awesome and powerful modal bottom sheets.
 
 |  Cupertino Modal |  Multiple Modals |  Material Modal | Bar Modal  |  Create your own |
 |---|---|---|---|---|
-|<img height="300" src="https://github.com/jamesblasco/modal_bottom_sheet/blob/master/screenshots/cupertino_shared_view.gif?raw=true">| <img  height="300" src="https://github.com/jamesblasco/modal_bottom_sheet/blob/master/screenshots/modal_inside_modal.gif?raw=true">| <img   height="300" src="https://github.com/jamesblasco/modal_bottom_sheet/blob/master/screenshots/material_fit.png?raw=true">|<img   height="300" src="https://github.com/jamesblasco/modal_bottom_sheet/blob/master/screenshots/bar_modal.png?raw=true">| <img height="300" src="https://github.com/jamesblasco/modal_bottom_sheet/blob/master/screenshots/avatar_modal.png?raw=true">|
+|<img height="300" src="https://github.com/jamesblasco/modal_bottom_sheet/blob/screenshots/cupertino_shared_view.gif?raw=true">| <img  height="300" src="https://github.com/jamesblasco/modal_bottom_sheet/blob/screenshots/modal_inside_modal.gif?raw=true">| <img   height="300" src="https://github.com/jamesblasco/modal_bottom_sheet/blob/screenshots/material_fit.png?raw=true">|<img   height="300" src="https://github.com/jamesblasco/modal_bottom_sheet/blob/screenshots/bar_modal.png?raw=true">| <img height="300" src="https://github.com/jamesblasco/modal_bottom_sheet/blob/screenshots/avatar_modal.png?raw=true">|
 
 ## Try it
 
 Explore the [Web Demo](https://jamesblasco.github.io/modal_bottom_sheet/#/) or clone the repository. 
 
-Known problems on web demo:
-- Web demo can run very slow on mobile devides.
+Why not `showModalBottomSheet`?
 
-- Fake status bar doesn't change color as the iOS, Android app
+Inspired by `showModalBottomSheet`, it completes with some must-need features:
+
+- Support for inside scrollview + dragging down to close (`showModalBottomSheet` won't work correctly with scrollviews. 
+- Support for `WillPopScope` to prevent closing the dialog.
+- Support for scroll to top when tapping status bar (iOS only)
+- Cupertino modal bottom sheet
+- Create custom modal bottom sheet
+
 
 ## First Steps
 
@@ -33,11 +39,6 @@ showMaterialModalBottomSheet(
   builder: (context, scrollController) => Container(),
 )
 ```
-What to use this over flutter `showModalBottomSheet`?
-
-`showMaterialModalBottomSheet` supports closing bottoms sheets by dragging down even if there is a scrollview inside.
-`showModalBottomSheet` won't work correctly with scrollviews. 
-Also it supports `WillPopScope` to prevent closing the dialog
 
 #### Generic params for all modal bottom sheets
 
@@ -78,15 +79,17 @@ Useful if you want a blurred transparent background as the example Cupertino Pho
 > **Why?**
 > `MaterialPageRoute` and `CupertinoPageRoute` do not allow animated translation to/from routes that are not the same type. 
 
-There are two options:
-
-### OPTION 1. Recommended.
 
 Replace your current route class with `MaterialWithModalsPageRoute`.
 
+
 Notice this route type behaves the same as `MaterialPageRoute` and supports custom `PageTransitionsBuilder` and `PageTransitionsTheme`.
 
-How can I change my route class? See cases:
+
+
+<details><summary>
+  How can I replace my current route? </summary>
+
 
 <details><summary> 1. 
  
@@ -145,9 +148,12 @@ Unfortunately this parameter uses `MaterialPageRoute` and `CupertinoPageRoute` r
 You can modify the way you call the previous route with one of the previous methods or try option 2
 
  </details>
-   
+    </details>
 
-### OPTION 2. 
+Is there an alternative in case I can't change my current route? **Yes!**
+<details><summary>
+ Learn how to animate previous route with CupertinoScaffold: </summary>
+
 
 1. Wrap previous route inside a `CupertinoScaffold`.
   Example with `routes` parameter from `MaterialApp` or `CupertinoApp`
@@ -162,13 +168,15 @@ You can modify the way you call the previous route with one of the previous meth
  CupertinoScaffold.showCupertinoModalBottomSheet(context:context, builder: (context) => Container())
  ```
 
-These two options won't work correctly together. 
+Don't use this solution at the same time as `MaterialWithModalsPageRoute`
+
+ </details>
 
 It supports native features as bouncing, blurred background, dark mode, stacking modals and inside navigation.
 
 ## Push new views inside the modal bottom sheet
 
-a. If you want to push a new modal bottom sheet just call `showCupertinoModalBottomSheet` again (works with two option)
+a. If you want to push a new modal bottom sheet just call `showCupertinoModalBottomSheet` again (works with both options)
 
 b. For inside navigaton add a new `Navigator` or `CupertinoTabScaffold` inside 
 
@@ -193,7 +201,7 @@ Check in the example project `showAvatarModalBottomSheet` for how to create your
 
 - [X] Support closing by dragging fast on a modal with a scroll view.
 
-- [ ] Improve animation curves when user is not dragging.
+- [X] Improve animation curves when user is not dragging.
 
 - [ ] Allow to set the initial size of the bottom sheet
 
