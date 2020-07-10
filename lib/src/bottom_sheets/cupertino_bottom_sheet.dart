@@ -274,20 +274,22 @@ class _CupertinoModalTransition extends StatelessWidget {
                   alignment: Alignment.topCenter,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(radius),
-                    child: ColorFiltered(
-                      colorFilter: ColorFilter.mode(
-                        ColorTween(
-                          begin: CupertinoColors.systemBackground
-                              .resolveFrom(context),
-                          end: CupertinoColors.secondarySystemBackground
-                              .resolveFrom(context),
-                        ).transform(curvedAnimation.value),
-                        // Colors.black26,
-                        // isDark ? BlendMode.lighten : BlendMode.darken,
-                        BlendMode.modulate,
-                      ),
-                      child: child,
-                    ),
+                    child: progress <= 0.6
+                        ? child
+                        : ColorFiltered(
+                            colorFilter: ColorFilter.mode(
+                              ColorTween(
+                                begin: CupertinoColors.systemBackground
+                                    .resolveFrom(context),
+                                end: CupertinoColors.secondarySystemBackground
+                                    .resolveFrom(context),
+                              ).transform(curvedAnimation.value),
+                              // Colors.black26,
+                              // isDark ? BlendMode.lighten : BlendMode.darken,
+                              BlendMode.modulate,
+                            ),
+                            child: child,
+                          ),
                   ),
                 ),
               ),
