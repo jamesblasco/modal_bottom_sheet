@@ -19,3 +19,6 @@ Thanks to @bierbaumtim @troyanskiy @rodineijf for the contributions
 - Added support for scroll-to-top by tapping the status bar on iOS devices.
 - Use `curveAnimation` to define a custom curve animation for the modal transition
 - Bug fixes releated to horizontal scroll, clamping physics and othes.
+
+## [0.2.0+1] - ScrollView bug fix
+- Fix bug when scrollview was not used 

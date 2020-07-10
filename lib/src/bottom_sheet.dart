@@ -14,7 +14,6 @@ import 'package:modal_bottom_sheet/src/utils/primary_scroll_status_bar.dart';
 
 import 'package:modal_bottom_sheet/src/utils/bottom_sheet_suspended_curve.dart';
 
-
 const Curve _decelerateEasing = Cubic(0.0, 0.0, 0.2, 1.0);
 const Curve _modalBottomSheetCurve = _decelerateEasing;
 const Duration _bottomSheetDuration = Duration(milliseconds: 400);
@@ -260,11 +259,10 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
   void _handleScrollUpdate(ScrollNotification notification) {
     //Check if scrollController is used
     if (!_scrollController.hasClients) return;
-    
+
     final scrollPosition = _scrollController.position;
 
     if (scrollPosition.axis == Axis.horizontal) return;
-
 
     final isScrollReversed = scrollPosition.axisDirection == AxisDirection.down;
     final offset = isScrollReversed
