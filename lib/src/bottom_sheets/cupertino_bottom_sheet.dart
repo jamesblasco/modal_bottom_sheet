@@ -286,7 +286,7 @@ class _CupertinoModalTransition extends StatelessWidget {
                               ).transform(curvedAnimation.value),
                               // Colors.black26,
                               // isDark ? BlendMode.lighten : BlendMode.darken,
-                              BlendMode.modulate,
+                              BlendMode.lighten,
                             ),
                             child: child,
                           ),
