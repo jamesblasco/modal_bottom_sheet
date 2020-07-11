@@ -4,7 +4,12 @@
 
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart' show CupertinoColors, CupertinoTheme;
+import 'package:flutter/cupertino.dart'
+    show
+        CupertinoColors,
+        CupertinoTheme,
+        CupertinoUserInterfaceLevel,
+        CupertinoUserInterfaceLevelData;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart'
@@ -51,13 +56,18 @@ class _CupertinoBottomSheetContainer extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.vertical(top: topRadius),
         child: Container(
-          decoration:
-              BoxDecoration(color: _backgroundColor, boxShadow: [shadow]),
+          decoration: BoxDecoration(
+            color: _backgroundColor,
+            boxShadow: [shadow],
+          ),
           width: double.infinity,
           child: MediaQuery.removePadding(
             context: context,
             removeTop: true, //Remove top Safe Area
-            child: child,
+            child: CupertinoUserInterfaceLevel(
+              data: CupertinoUserInterfaceLevelData.elevated,
+              child: child,
+            ),
           ),
         ),
       ),
@@ -234,17 +244,11 @@ class _CupertinoModalTransition extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var startRoundCorner = 0.0;
-    // var isDark = false;
     final paddingTop = MediaQuery.of(context).padding.top;
     if (Theme.of(context).platform == TargetPlatform.iOS && paddingTop > 20) {
       startRoundCorner = 38.5;
       //https://kylebashour.com/posts/finding-the-real-iphone-x-corner-radius
     }
-    // if (defaultTargetPlatform == TargetPlatform.iOS) {
-    //   isDark = CupertinoTheme.of(context).brightness == Brightness.dark;
-    // } else {
-    //   isDark = Theme.of(context).brightness == Brightness.dark;
-    // }
 
     final curvedAnimation = CurvedAnimation(
       parent: secondaryAnimation,
@@ -267,32 +271,34 @@ class _CupertinoModalTransition extends StatelessWidget {
           return Stack(
             children: <Widget>[
               Container(color: backgroundColor),
-              Transform.translate(
-                offset: Offset(0, yOffset),
-                child: Transform.scale(
-                  scale: scale,
-                  alignment: Alignment.topCenter,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(radius),
-                    child: progress <= 0.6
-                        ? child
-                        : ColorFiltered(
+              if (progress == 0)
+                child
+              else
+                Transform.translate(
+                  offset: Offset(0, yOffset),
+                  child: Transform.scale(
+                    scale: scale,
+                    alignment: Alignment.topCenter,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(radius),
+                      child: CupertinoUserInterfaceLevel(
+                        data: CupertinoUserInterfaceLevelData.elevated,
+                        child: Builder(
+                          builder: (context) => ColorFiltered(
                             colorFilter: ColorFilter.mode(
-                              ColorTween(
-                                begin: CupertinoColors.systemBackground
-                                    .resolveFrom(context),
-                                end: CupertinoColors.secondarySystemBackground
-                                    .resolveFrom(context),
-                              ).transform(curvedAnimation.value),
-                              // Colors.black26,
-                              // isDark ? BlendMode.lighten : BlendMode.darken,
-                              BlendMode.lighten,
+                              CupertinoColors.systemBackground.resolveFrom(
+                                context,
+                                nullOk: true,
+                              ),
+                              BlendMode.saturation,
                             ),
                             child: child,
                           ),
+                        ),
+                      ),
+                    ),
                   ),
                 ),
-              ),
             ],
           );
         },
