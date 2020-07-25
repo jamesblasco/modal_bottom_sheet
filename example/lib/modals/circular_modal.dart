@@ -104,7 +104,13 @@ Future<T> showAvatarModalBottomSheet<T>({
   assert(isDismissible != null);
   assert(enableDrag != null);
   assert(debugCheckHasMediaQuery(context));
-  assert(debugCheckHasMaterialLocalizations(context));
+  final isCupertinoApp = Theme.of(context, shadowThemeOnly: true) == null;
+  var barrierLabel = '';
+  if (!isCupertinoApp) {
+    assert(debugCheckHasMaterialLocalizations(context));
+    barrierLabel = MaterialLocalizations.of(context).modalBarrierDismissLabel;
+  }
+
   final result =
       await Navigator.of(context, rootNavigator: useRootNavigator).push(
     ModalBottomSheetRoute<T>(
@@ -116,7 +122,7 @@ Future<T> showAvatarModalBottomSheet<T>({
       bounce: bounce,
       secondAnimationController: secondAnimation,
       expanded: expand,
-      barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+      barrierLabel: barrierLabel,
       isDismissible: isDismissible,
       modalBarrierColor: barrierColor,
       enableDrag: enableDrag,
