@@ -23,21 +23,26 @@ class ModalWithNavigator extends StatelessWidget {
                 children: ListTile.divideTiles(
                   context: context,
                   tiles: List.generate(
-                      100,
-                      (index) => ListTile(
-                            title: Text('Item'),
-                            onTap: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => CupertinoPageScaffold(
-                                      navigationBar: CupertinoNavigationBar(
-                                        middle: Text('New Page'),
-                                      ),
-                                      child: Stack(
-                                        fit: StackFit.expand,
-                                        children: <Widget>[],
-                                      ))));
-                            },
-                          )),
+                    100,
+                    (index) => ListTile(
+                      title: Text('Item'),
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => CupertinoPageScaffold(
+                              navigationBar: CupertinoNavigationBar(
+                                middle: Text('New Page'),
+                              ),
+                              child: Stack(
+                                fit: StackFit.expand,
+                                children: <Widget>[],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
                 ).toList(),
               ),
             ),
