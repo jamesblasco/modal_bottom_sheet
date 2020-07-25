@@ -6,8 +6,11 @@ class FloatingModal extends StatelessWidget {
   final Widget child;
   final Color backgroundColor;
 
-  const FloatingModal({Key key, this.child, this.backgroundColor})
-      : super(key: key);
+  const FloatingModal({
+    Key key,
+    this.child,
+    this.backgroundColor,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,13 +33,14 @@ Future<T> showFloatingModalBottomSheet<T>({
   @required ScrollWidgetBuilder builder,
   Color backgroundColor,
 }) async {
-  final result = await showCustomModalBottomSheet(
-      context: context,
-      builder: builder,
-      containerWidget: (_, animation, child) => FloatingModal(
-            child: child,
-          ),
-      expand: false);
+  final result = await showCustomModalBottomSheet<T>(
+    context: context,
+    builder: builder,
+    containerWidget: (_, animation, child) => FloatingModal(
+      child: child,
+    ),
+    expand: false,
+  );
 
   return result;
 }
