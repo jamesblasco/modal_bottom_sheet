@@ -38,17 +38,23 @@ class _CupertinoBottomSheetContainer extends StatelessWidget {
   final Color backgroundColor;
   final Radius topRadius;
 
-  const _CupertinoBottomSheetContainer(
-      {Key key, this.child, this.backgroundColor, @required this.topRadius})
-      : super(key: key);
+  const _CupertinoBottomSheetContainer({
+    Key key,
+    this.child,
+    this.backgroundColor,
+    @required this.topRadius,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final topSafeAreaPadding = MediaQuery.of(context).padding.top;
     final topPadding = _behind_widget_visible_height + topSafeAreaPadding;
 
-    final shadow =
-        BoxShadow(blurRadius: 10, color: Colors.black12, spreadRadius: 5);
+    final shadow = BoxShadow(
+      blurRadius: 10,
+      color: Colors.black12,
+      spreadRadius: 5,
+    );
     final _backgroundColor =
         backgroundColor ?? CupertinoTheme.of(context).scaffoldBackgroundColor;
     return Padding(
@@ -109,31 +115,34 @@ Future<T> showCupertinoModalBottomSheet<T>({
       ? MaterialLocalizations.of(context).modalBarrierDismissLabel
       : '';
 
-  final result =
-      await Navigator.of(context, rootNavigator: useRootNavigator).push(
+  final result = await Navigator.of(
+    context,
+    rootNavigator: useRootNavigator,
+  ).push(
     CupertinoModalBottomSheetRoute<T>(
-        builder: builder,
-        containerBuilder: (context, _, child) => _CupertinoBottomSheetContainer(
-              child: child,
-              backgroundColor: backgroundColor,
-              topRadius: topRadius,
-            ),
-        secondAnimationController: secondAnimation,
-        expanded: expand,
-        barrierLabel: barrierLabel,
-        elevation: elevation,
-        bounce: bounce,
-        shape: shape,
-        clipBehavior: clipBehavior,
-        isDismissible: isDismissible ?? expand == false ? true : false,
-        modalBarrierColor: barrierColor ?? Colors.black12,
-        enableDrag: enableDrag,
+      builder: builder,
+      containerBuilder: (context, _, child) => _CupertinoBottomSheetContainer(
+        backgroundColor: backgroundColor,
         topRadius: topRadius,
-        animationCurve: animationCurve,
-        previousRouteAnimationCurve: previousRouteAnimationCurve,
-        duration: duration,
-        settings: settings,
-        transitionBackgroundColor: transitionBackgroundColor ?? Colors.black),
+        child: child,
+      ),
+      secondAnimationController: secondAnimation,
+      expanded: expand,
+      barrierLabel: barrierLabel,
+      elevation: elevation,
+      bounce: bounce,
+      shape: shape,
+      clipBehavior: clipBehavior,
+      isDismissible: isDismissible ?? !expand,
+      modalBarrierColor: barrierColor ?? Colors.black12,
+      enableDrag: enableDrag,
+      topRadius: topRadius,
+      animationCurve: animationCurve,
+      previousRouteAnimationCurve: previousRouteAnimationCurve,
+      duration: duration,
+      settings: settings,
+      transitionBackgroundColor: transitionBackgroundColor ?? Colors.black,
+    ),
   );
   return result;
 }
@@ -202,18 +211,21 @@ class CupertinoModalBottomSheetRoute<T> extends ModalBottomSheetRoute<T> {
         offset: Offset(0, offsetY),
         child: Transform.scale(
           scale: scale,
-          child: child,
           alignment: Alignment.topCenter,
+          child: child,
         ),
       ),
-      child: child,
       animation: secondaryAnimation,
+      child: child,
     );
   }
 
   @override
-  Widget getPreviousRouteTransition(BuildContext context,
-      Animation<double> secondaryAnimation, Widget child) {
+  Widget getPreviousRouteTransition(
+    BuildContext context,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
     return _CupertinoModalTransition(
       secondaryAnimation: secondaryAnimation,
       body: child,
@@ -255,6 +267,11 @@ class _CupertinoModalTransition extends StatelessWidget {
       curve: animationCurve ?? Curves.easeOut,
     );
 
+    final systemBackground = CupertinoColors.systemBackground.resolveFrom(
+      context,
+      nullOk: true,
+    );
+
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light,
       child: AnimatedBuilder(
@@ -286,13 +303,22 @@ class _CupertinoModalTransition extends StatelessWidget {
                         child: Builder(
                           builder: (context) => ColorFiltered(
                             colorFilter: ColorFilter.mode(
-                              CupertinoColors.systemBackground.resolveFrom(
-                                context,
-                                nullOk: true,
-                              ),
-                              BlendMode.saturation,
+                              ColorTween(
+                                begin: systemBackground,
+                                end: CupertinoColors.systemBackground
+                                    .resolveFrom(
+                                  context,
+                                  nullOk: true,
+                                ),
+                              ).evaluate(curvedAnimation),
+                              BlendMode.color,
                             ),
-                            child: child,
+                            child: CupertinoUserInterfaceLevel(
+                              data: CupertinoUserInterfaceLevelData.base,
+                              child: Builder(
+                                builder: (context) => child,
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -312,12 +338,15 @@ class _CupertinoScaffold extends InheritedWidget {
 
   final Radius topRadius;
 
-  @override
-  final Widget child;
-
-  const _CupertinoScaffold(
-      {Key key, this.animation, this.child, this.topRadius})
-      : super(key: key, child: child);
+  const _CupertinoScaffold({
+    Key key,
+    Widget child,
+    this.animation,
+    this.topRadius,
+  }) : super(
+          key: key,
+          child: child,
+        );
 
   @override
   bool updateShouldNotify(InheritedWidget oldWidget) {
@@ -377,14 +406,14 @@ class CupertinoScaffold extends StatefulWidget {
       builder: builder,
       secondAnimationController: CupertinoScaffold.of(context).animation,
       containerBuilder: (context, _, child) => _CupertinoBottomSheetContainer(
-        child: child,
         backgroundColor: backgroundColor,
         topRadius: topRadius,
+        child: child,
       ),
       expanded: expand,
       barrierLabel: barrierLabel,
       bounce: bounce,
-      isDismissible: isDismissible ?? expand == false ? true : false,
+      isDismissible: isDismissible ?? !expand,
       modalBarrierColor: barrierColor ?? Colors.black12,
       enableDrag: enableDrag,
       topRadius: topRadius,
@@ -405,13 +434,16 @@ class _CupertinoScaffoldState extends State<CupertinoScaffold>
 
   @override
   void initState() {
-    animationController =
-        AnimationController(duration: Duration(milliseconds: 350), vsync: this);
+    animationController = AnimationController(
+      duration: const Duration(milliseconds: 350),
+      vsync: this,
+    );
     super.initState();
   }
 
   @override
   void dispose() {
+    animationController.dispose();
     super.dispose();
   }
 
