@@ -104,14 +104,14 @@ class MyCupertinoHomePage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              // CupertinoListTile(
-              //   title: Text('Cupertino Photo Share Example'),
-              //   onTap: () => Navigator.of(context).push(
-              //     MaterialWithModalsPageRoute(
-              //       builder: (context) => CupertinoSharePage(),
-              //     ),
-              //   ),
-              // ),
+              CupertinoListTile(
+                title: Text('Cupertino Photo Share Example'),
+                onTap: () => Navigator.of(context).push(
+                  MaterialWithModalsPageRoute(
+                    builder: (context) => CupertinoSharePage(),
+                  ),
+                ),
+              ),
               section('STYLES'),
 
               CupertinoListTile(
@@ -144,15 +144,15 @@ class MyCupertinoHomePage extends StatelessWidget {
                   ),
                 ),
               ),
-              // CupertinoListTile(
-              //   title: Text('Float Modal'),
-              //   onTap: () => showFloatingModalBottomSheet(
-              //     context: context,
-              //     builder: (context, scrollController) => ModalFit(
-              //       scrollController: scrollController,
-              //     ),
-              //   ),
-              // ),
+              CupertinoListTile(
+                title: Text('Float Modal'),
+                onTap: () => showFloatingModalBottomSheet(
+                  context: context,
+                  builder: (context, scrollController) => ModalFit(
+                    scrollController: scrollController,
+                  ),
+                ),
+              ),
               CupertinoListTile(
                 title: Text('Cupertino Modal fit'),
                 onTap: () => showCupertinoModalBottomSheet(

@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 class ModalFit extends StatelessWidget {
   final ScrollController scrollController;
 
-  const ModalFit({Key key, this.scrollController}) : super(key: key);
+  const ModalFit({
+    Key key,
+    this.scrollController,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
