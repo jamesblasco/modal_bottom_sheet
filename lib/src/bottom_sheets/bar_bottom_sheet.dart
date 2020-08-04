@@ -6,10 +6,16 @@ import 'package:flutter/services.dart';
 import '../../modal_bottom_sheet.dart';
 import '../bottom_sheet_route.dart';
 
+const Radius _default_bar_top_radius = Radius.circular(15);
+
 class BarBottomSheet extends StatelessWidget {
   final Widget child;
+  final Widget topControl;
+  final Radius topRadius;
 
-  const BarBottomSheet({Key key, this.child}) : super(key: key);
+  const BarBottomSheet(
+      {Key key, this.child, this.topControl, @required this.topRadius})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,22 +28,22 @@ class BarBottomSheet extends StatelessWidget {
             SizedBox(height: 12),
             SafeArea(
               bottom: false,
-              child: Container(
-                height: 6,
-                width: 40,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(6)),
-              ),
+              child: topControl ??
+                  Container(
+                    height: 6,
+                    width: 40,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(6)),
+                  ),
             ),
             SizedBox(height: 8),
             Flexible(
               flex: 1,
               fit: FlexFit.loose,
               child: ClipRRect(
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(15),
-                    topRight: Radius.circular(15)),
+                borderRadius:
+                    BorderRadius.only(topLeft: topRadius, topRight: topRadius),
                 child: Container(
                     decoration: BoxDecoration(
                         color: Theme.of(context).scaffoldBackgroundColor,
@@ -72,6 +78,8 @@ Future<T> showBarModalBottomSheet<T>({
   bool useRootNavigator = false,
   bool isDismissible = true,
   bool enableDrag = true,
+  Radius topRadius = _default_bar_top_radius,
+  Widget topControl,
   Duration duration,
 }) async {
   assert(context != null);
@@ -88,6 +96,8 @@ Future<T> showBarModalBottomSheet<T>({
     bounce: bounce,
     containerBuilder: (_, __, child) => BarBottomSheet(
       child: child,
+      topRadius: topRadius,
+      topControl: topControl,
     ),
     secondAnimationController: secondAnimation,
     expanded: expand,
