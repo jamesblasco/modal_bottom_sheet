@@ -2,12 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ModalWithNavigator extends StatelessWidget {
-  final ScrollController scrollController;
 
-  const ModalWithNavigator({Key key, this.scrollController}) : super(key: key);
+
+  const ModalWithNavigator({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final scrollController = PrimaryScrollController.of(context);
     return Material(
         child: Navigator(
       onGenerateRoute: (_) => MaterialPageRoute(

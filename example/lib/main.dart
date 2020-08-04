@@ -50,11 +50,9 @@ class MyApp extends StatelessWidget {
                                     expand: true,
                                     context: context,
                                     backgroundColor: Colors.transparent,
-                                    builder: (context, scrollController) =>
-                                        Stack(
+                                    builder: (context) => Stack(
                                       children: <Widget>[
-                                        ModalWithScroll(
-                                            scrollController: scrollController),
+                                        ModalWithScroll(),
                                         Positioned(
                                           height: 40,
                                           left: 40,
@@ -130,8 +128,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               expand: false,
                               context: context,
                               backgroundColor: Colors.transparent,
-                              builder: (context, scrollController) =>
-                                  ModalFit(scrollController: scrollController),
+                              builder: (context) => ModalFit(),
                             )),
                     ListTile(
                         title: Text('Bar Modal'),
@@ -139,9 +136,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               expand: true,
                               context: context,
                               backgroundColor: Colors.transparent,
-                              builder: (context, scrollController) =>
-                                  ModalInsideModal(
-                                      scrollController: scrollController),
+                              builder: (context) => ModalInsideModal(),
                             )),
                     ListTile(
                         title: Text('Avatar Modal'),
@@ -149,16 +144,13 @@ class _MyHomePageState extends State<MyHomePage> {
                               expand: true,
                               context: context,
                               backgroundColor: Colors.transparent,
-                              builder: (context, scrollController) =>
-                                  ModalInsideModal(
-                                      scrollController: scrollController),
+                              builder: (context) => ModalInsideModal(),
                             )),
                     ListTile(
                         title: Text('Float Modal'),
                         onTap: () => showFloatingModalBottomSheet(
                               context: context,
-                              builder: (context, scrollController) =>
-                                  ModalFit(scrollController: scrollController),
+                              builder: (context) => ModalFit(),
                             )),
                     ListTile(
                         title: Text('Cupertino Modal fit'),
@@ -166,8 +158,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               expand: false,
                               context: context,
                               backgroundColor: Colors.transparent,
-                              builder: (context, scrollController) =>
-                                  ModalFit(scrollController: scrollController),
+                              builder: (context) => ModalFit(),
                             )),
                     section('COMPLEX CASES'),
                     ListTile(
@@ -176,8 +167,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               expand: true,
                               context: context,
                               backgroundColor: Colors.transparent,
-                              builder: (context, scrollController) =>
-                                  ModalFit(scrollController: scrollController),
+                              builder: (context) => ModalFit(),
                             )),
                     ListTile(
                         title: Text('Reverse list'),
@@ -185,10 +175,8 @@ class _MyHomePageState extends State<MyHomePage> {
                               expand: true,
                               context: context,
                               backgroundColor: Colors.transparent,
-                              builder: (context, scrollController) =>
-                                  ModalInsideModal(
-                                      scrollController: scrollController,
-                                      reverse: true),
+                              builder: (context) =>
+                                  ModalInsideModal(reverse: true),
                             )),
                     ListTile(
                         title: Text('Cupertino Modal inside modal'),
@@ -196,9 +184,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               expand: true,
                               context: context,
                               backgroundColor: Colors.transparent,
-                              builder: (context, scrollController) =>
-                                  ModalInsideModal(
-                                      scrollController: scrollController),
+                              builder: (context) => ModalInsideModal(),
                             )),
                     ListTile(
                         title: Text('Cupertino Modal with inside navigation'),
@@ -206,9 +192,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               expand: true,
                               context: context,
                               backgroundColor: Colors.transparent,
-                              builder: (context, scrollController) =>
-                                  ModalWithNavigator(
-                                      scrollController: scrollController),
+                              builder: (context) => ModalWithNavigator(),
                             )),
                     ListTile(
                         title:
@@ -217,9 +201,8 @@ class _MyHomePageState extends State<MyHomePage> {
                               expand: true,
                               context: context,
                               backgroundColor: Colors.transparent,
-                              builder: (context, scrollController) =>
-                                  ComplexModal(
-                                      scrollController: scrollController),
+                              builder: (context) =>
+                                  ComplexModal(),
                             )),
                     ListTile(
                         title: Text('Modal with WillPopScope'),
@@ -227,18 +210,16 @@ class _MyHomePageState extends State<MyHomePage> {
                               expand: true,
                               context: context,
                               backgroundColor: Colors.transparent,
-                              builder: (context, scrollController) =>
-                                  ModalWillScope(
-                                      scrollController: scrollController),
+                              builder: (context) =>
+                                  ModalWillScope(),
                             )),
                     ListTile(
                         title: Text('Modal with Nested Scroll'),
                         onTap: () => showCupertinoModalBottomSheet(
                               expand: true,
                               context: context,
-                              builder: (context, scrollController) =>
-                                  NestedScrollModal(
-                                      scrollController: scrollController),
+                              builder: (context) =>
+                                  NestedScrollModal(),
                             )),
                     SizedBox(
                       height: 60,

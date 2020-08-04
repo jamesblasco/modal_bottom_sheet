@@ -2,12 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ComplexModal extends StatelessWidget {
-  final ScrollController scrollController;
 
-  const ComplexModal({Key key, this.scrollController}) : super(key: key);
+
+  const ComplexModal({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final scrollController = PrimaryScrollController.of(context);
     return Material(
       child: WillPopScope(
         onWillPop: () async {
@@ -46,6 +47,7 @@ class ComplexModal extends StatelessWidget {
                   bottom: false,
                   child: ListView(
                     shrinkWrap: true,
+
                     controller: scrollController,
                     children: ListTile.divideTiles(
                       context: context,

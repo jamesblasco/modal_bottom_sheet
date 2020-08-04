@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ModalWillScope extends StatelessWidget {
-  final ScrollController scrollController;
 
-  const ModalWillScope({Key key, this.scrollController}) : super(key: key);
+
+  const ModalWillScope({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

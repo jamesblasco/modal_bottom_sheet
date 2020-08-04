@@ -71,7 +71,7 @@ class BarBottomSheet extends StatelessWidget {
 
 Future<T> showBarModalBottomSheet<T>({
   @required BuildContext context,
-  @required ScrollWidgetBuilder builder,
+  @required WidgetBuilder builder,
   Color backgroundColor,
   double elevation,
   ShapeBorder shape,

@@ -21,9 +21,6 @@ const double _minFlingVelocity = 500.0;
 const double _closeProgressThreshold = 0.6;
 const double _willPopThreshold = 0.8;
 
-typedef ScrollWidgetBuilder = Widget Function(
-    BuildContext context, ScrollController controller);
-
 typedef WidgetWithChildBuilder = Widget Function(
     BuildContext context, Animation<double> animation, Widget child);
 
@@ -51,10 +48,10 @@ class ModalBottomSheet extends StatefulWidget {
     this.scrollController,
     this.expanded,
     @required this.onClosing,
-    @required this.builder,
+    @required this.child,
   })  : assert(enableDrag != null),
         assert(onClosing != null),
-        assert(builder != null),
+        assert(child != null),
         super(key: key);
 
   /// The animation controller that controls the bottom sheet's entrance and
@@ -96,7 +93,7 @@ class ModalBottomSheet extends StatefulWidget {
 
   /// A builder for the contents of the sheet.
   ///
-  final ScrollWidgetBuilder builder;
+  final Widget child;
 
   /// If true, the bottom sheet can be dragged up and down and dismissed by
   /// swiping downwards.
@@ -131,7 +128,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
     with TickerProviderStateMixin {
   final GlobalKey _childKey = GlobalKey(debugLabel: 'BottomSheet child');
 
-  ScrollController _scrollController;
+  ScrollController get _scrollController => widget.scrollController;
 
   AnimationController _bounceDragController;
 
@@ -260,6 +257,9 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
     //Check if scrollController is used
     if (!_scrollController.hasClients) return;
 
+    if (_scrollController !=
+        Scrollable.of(notification.context).widget.controller) return;
+
     final scrollPosition = _scrollController.position;
 
     if (scrollPosition.axis == Axis.horizontal) return;
@@ -270,14 +270,6 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
         : scrollPosition.maxScrollExtent - scrollPosition.pixels;
 
     if (offset <= 0) {
-      // Check if listener is same from scrollController.
-      // TODO: Improve the way it checks if it the same view controller
-      // Use PrimaryScrollController
-      if (_scrollController.position.pixels != notification.metrics.pixels &&
-          !(_scrollController.position.pixels == 0 &&
-              notification.metrics.pixels >= 0)) {
-        return;
-      }
       // Clamping Scroll Physics end with a ScrollEndNotification with a DragEndDetail class
       // while Bouncing Scroll Physics or other physics that Overflow don't return a drag end info
 
@@ -323,7 +315,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
     animationCurve = _defaultCurve;
     _bounceDragController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 300));
-    _scrollController = widget.scrollController ?? ScrollController();
+
     // Todo: Check if we can remove scroll Controller
     super.initState();
   }
@@ -335,8 +327,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
       curve: Curves.easeOutSine,
     );
 
-    var child = widget.builder(context, _scrollController);
-
+    var child = widget.child;
     if (widget.containerBuilder != null) {
       child = widget.containerBuilder(
         context,
@@ -394,8 +385,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
       child: RepaintBoundary(child: child),
     );
 
-    return PrimaryScrollStatusBarHandler(
-        scrollController: _scrollController, child: child);
+    return PrimaryScrollStatusBarHandler(child: child);
   }
 }
 
