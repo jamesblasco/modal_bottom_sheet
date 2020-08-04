@@ -48,7 +48,7 @@ class _ModalBottomSheetState<T> extends State<_ModalBottomSheet<T>> {
         if (Localizations.of(context, MaterialLocalizations) != null) {
           return MaterialLocalizations.of(context).dialogLabel;
         } else {
-          return DefaultMaterialLocalizations().dialogLabel;
+          return const DefaultMaterialLocalizations().dialogLabel;
         }
     }
     return null;
@@ -76,7 +76,7 @@ class _ModalBottomSheetState<T> extends State<_ModalBottomSheet<T>> {
 
     return AnimatedBuilder(
       animation: widget.route._animationController,
-      builder: (BuildContext context, Widget child) {
+      builder: (context, child) {
         // Disable the initial animation when accessible navigation is on so
         // that the semantics are added to the tree at the correct time.
         return Semantics(
@@ -172,11 +172,14 @@ class ModalBottomSheetRoute<T> extends PopupRoute<T> {
   bool get _hasScopedWillPopCallback => hasScopedWillPopCallback;
 
   @override
-  Widget buildPage(BuildContext context, Animation<double> animation,
-      Animation<double> secondaryAnimation) {
+  Widget buildPage(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+  ) {
     // By definition, the bottom sheet is aligned to the bottom of the page
     // and isn't exposed to the top padding of the MediaQuery.
-    Widget bottomSheet = MediaQuery.removePadding(
+    final Widget bottomSheet = MediaQuery.removePadding(
       context: context,
       // removeTop: true,
       child: _ModalBottomSheet<T>(
@@ -237,7 +240,7 @@ Future<T> showCustomModalBottomSheet<T>({
   assert(isDismissible != null);
   assert(enableDrag != null);
   assert(debugCheckHasMediaQuery(context));
-  assert(debugCheckHasMaterialLocalizations(context));
+  
   final hasMaterialLocalizations =
       Localizations.of<MaterialLocalizations>(context, MaterialLocalizations) !=
           null;
@@ -245,19 +248,23 @@ Future<T> showCustomModalBottomSheet<T>({
       ? MaterialLocalizations.of(context).modalBarrierDismissLabel
       : '';
 
-  final result = await Navigator.of(context, rootNavigator: useRootNavigator)
-      .push(ModalBottomSheetRoute<T>(
-    builder: builder,
-    bounce: bounce,
-    containerBuilder: containerWidget,
-    secondAnimationController: secondAnimation,
-    expanded: expand,
-    barrierLabel: barrierLabel,
-    isDismissible: isDismissible,
-    modalBarrierColor: barrierColor,
-    enableDrag: enableDrag,
-    animationCurve: animationCurve,
-    duration: duration,
-  ));
+  final result = await Navigator.of(
+    context,
+    rootNavigator: useRootNavigator,
+  ).push(
+    ModalBottomSheetRoute<T>(
+      builder: builder,
+      bounce: bounce,
+      containerBuilder: containerWidget,
+      secondAnimationController: secondAnimation,
+      expanded: expand,
+      barrierLabel: barrierLabel,
+      isDismissible: isDismissible,
+      modalBarrierColor: barrierColor,
+      enableDrag: enableDrag,
+      animationCurve: animationCurve,
+      duration: duration,
+    ),
+  );
   return result;
 }
