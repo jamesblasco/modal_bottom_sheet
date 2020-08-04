@@ -20,7 +20,7 @@ class CupertinoModalWithNavigator extends StatelessWidget {
             child: SafeArea(
               bottom: false,
               child: Theme(
-                data: ThemeData.dark(),
+                data: ThemeData(brightness: CupertinoTheme.of(context).brightness),
                 child: Material(
                   color: Colors.transparent,
                   child: ListView(
