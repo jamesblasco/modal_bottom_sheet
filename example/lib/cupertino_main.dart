@@ -108,12 +108,13 @@ class MyCupertinoHomePage extends StatelessWidget {
                 title: Text('Cupertino Photo Share Example'),
                 onTap: () => Navigator.of(context).push(
                   MaterialWithModalsPageRoute(
-                    builder: (context) => CupertinoSharePage(),
+                    builder: (context) => CupertinoSharePage(
+                      useMaterial: false,
+                    ),
                   ),
                 ),
               ),
               section('STYLES'),
-
               CupertinoListTile(
                 title: Text('Bar Modal'),
                 onTap: () => showBarModalBottomSheet(
