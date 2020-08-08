@@ -70,6 +70,7 @@ Future<T> showCupertinoModalBottomSheet<T>({
   @required ScrollWidgetBuilder builder,
   Color backgroundColor,
   double elevation,
+  double closeProgressThreshold,
   ShapeBorder shape,
   Clip clipBehavior,
   Color barrierColor,
@@ -110,6 +111,7 @@ Future<T> showCupertinoModalBottomSheet<T>({
             ),
         secondAnimationController: secondAnimation,
         expanded: expand,
+        closeProgressThreshold: closeProgressThreshold,
         barrierLabel: barrierLabel,
         elevation: elevation,
         bounce: bounce,
@@ -139,6 +141,7 @@ class CupertinoModalBottomSheetRoute<T> extends ModalBottomSheetRoute<T> {
   CupertinoModalBottomSheetRoute({
     ScrollWidgetBuilder builder,
     WidgetWithChildBuilder containerBuilder,
+    double closeProgressThreshold,
     String barrierLabel,
     double elevation,
     ShapeBorder shape,
@@ -160,6 +163,7 @@ class CupertinoModalBottomSheetRoute<T> extends ModalBottomSheetRoute<T> {
         assert(isDismissible != null),
         assert(enableDrag != null),
         super(
+          closeProgressThreshold: closeProgressThreshold,
           scrollController: scrollController,
           containerBuilder: containerBuilder,
           builder: builder,
