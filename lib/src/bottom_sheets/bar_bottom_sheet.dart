@@ -75,6 +75,7 @@ Future<T> showBarModalBottomSheet<T>({
   Color backgroundColor,
   double elevation,
   ShapeBorder shape,
+  double closeProgressThreshold,
   Clip clipBehavior,
   Color barrierColor = Colors.black87,
   bool bounce = true,
@@ -99,6 +100,7 @@ Future<T> showBarModalBottomSheet<T>({
       .push(ModalBottomSheetRoute<T>(
     builder: builder,
     bounce: bounce,
+    closeProgressThreshold: closeProgressThreshold,
     containerBuilder: (_, __, child) => BarBottomSheet(
       child: child,
       control: topControl,

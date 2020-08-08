@@ -18,8 +18,8 @@ const Curve _decelerateEasing = Cubic(0.0, 0.0, 0.2, 1.0);
 const Curve _modalBottomSheetCurve = _decelerateEasing;
 const Duration _bottomSheetDuration = Duration(milliseconds: 400);
 const double _minFlingVelocity = 500.0;
-const double _closeProgressThreshold = 0.6;
-const double _willPopThreshold = 2;
+const double _closeProgressThreshold = 0.8;
+const double _willPopThreshold = 0.8;
 
 typedef ScrollWidgetBuilder = Widget Function(
     BuildContext context, ScrollController controller);
@@ -42,6 +42,7 @@ class ModalBottomSheet extends StatefulWidget {
   /// Creates a bottom sheet.
   const ModalBottomSheet({
     Key key,
+    this.closeProgressThreshold = _closeProgressThreshold,
     this.animationController,
     this.animationCurve,
     this.enableDrag = true,
@@ -56,6 +57,8 @@ class ModalBottomSheet extends StatefulWidget {
         assert(onClosing != null),
         assert(builder != null),
         super(key: key);
+
+  final double closeProgressThreshold;
 
   /// The animation controller that controls the bottom sheet's entrance and
   /// exit animations.
@@ -152,7 +155,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
       widget.animationController.value < _willPopThreshold;
 
   bool get hasReachedCloseThreshold =>
-      widget.animationController.value < _closeProgressThreshold;
+      widget.animationController.value < widget.closeProgressThreshold;
 
   void _close() {
     isDragging = false;
