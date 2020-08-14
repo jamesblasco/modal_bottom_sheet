@@ -259,6 +259,8 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
   void _handleScrollUpdate(ScrollNotification notification) {
     //Check if scrollController is used
     if (!_scrollController.hasClients) return;
+    //Check if there is more than 1 attached ScrollController e.g. swiping page in PageView
+    if (_scrollController.positions.length > 1) return;
 
     final scrollPosition = _scrollController.position;
 
@@ -305,7 +307,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
       if (dragDetails != null) {
         final duration = _startTime.difference(DateTime.now());
         _velocityTracker.addPosition(duration, Offset(0, offset));
-        _handleDragUpdate(dragDetails.primaryDelta);
+        _handleDragUpdate(dragDetails.delta.dy);
       } else if (isDragging) {
         final velocity = _velocityTracker.getVelocity().pixelsPerSecond.dy;
         _velocityTracker = null;
@@ -365,7 +367,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
                     delegate: _CustomBottomSheetLayout(bounceAnimation.value),
                     child: GestureDetector(
                       onVerticalDragUpdate: (details) {
-                        _handleDragUpdate(details.primaryDelta);
+                        _handleDragUpdate(details.delta.dy);
                       },
                       onVerticalDragEnd: (details) {
                         _handleDragEnd(details.primaryVelocity);
