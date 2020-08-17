@@ -6,6 +6,7 @@ import 'dart:async';
 Future<T> showMaterialModalBottomSheet<T>({
   @required BuildContext context,
   @required ScrollWidgetBuilder builder,
+  double closeProgressThreshold,
   Color backgroundColor,
   double elevation,
   ShapeBorder shape,
@@ -31,6 +32,7 @@ Future<T> showMaterialModalBottomSheet<T>({
   final result = await Navigator.of(context, rootNavigator: useRootNavigator)
       .push(ModalBottomSheetRoute<T>(
     builder: builder,
+    closeProgressThreshold: closeProgressThreshold,
     containerBuilder: _materialContainerBuilder(
       context,
       backgroundColor: backgroundColor,
