@@ -92,7 +92,7 @@ class PhotoShareBottomSheet extends StatelessWidget {
               appBar: appBar(context),
               body: CustomScrollView(
                 physics: ClampingScrollPhysics(),
-                primary: true,
+                  controller: ModalScrollController.of(context),
                 slivers: <Widget>[
                   SliverSafeArea(
                     bottom: false,

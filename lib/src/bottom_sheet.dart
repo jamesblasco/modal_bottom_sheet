@@ -10,7 +10,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
-import 'package:modal_bottom_sheet/src/utils/primary_scroll_status_bar.dart';
+import 'package:modal_bottom_sheet/src/utils/scroll_to_top_status_bar.dart';
 
 import 'package:modal_bottom_sheet/src/utils/bottom_sheet_suspended_curve.dart';
 
@@ -282,7 +282,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
         return;
       }
 
-// Otherwise the calculate the velocity with a VelocityTracker
+      // Otherwise the calculate the velocity with a VelocityTracker
       if (_velocityTracker == null) {
         _velocityTracker = VelocityTracker();
         _startTime = DateTime.now();
@@ -385,7 +385,10 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
       child: RepaintBoundary(child: child),
     );
 
-    return PrimaryScrollStatusBarHandler(child: child);
+    return ScrollToTopStatusBarHandler(
+      child: child,
+      scrollController: _scrollController,
+    );
   }
 }
 

@@ -1,12 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class ModalWithScroll extends StatelessWidget {
   const ModalWithScroll({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final scrollController = PrimaryScrollController.of(context);
+  
     return Material(
       child: CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
@@ -15,7 +16,7 @@ class ModalWithScroll extends StatelessWidget {
           bottom: false,
           child: ListView(
             shrinkWrap: true,
-            controller: scrollController,
+            controller: ModalScrollController.of(context),
             children: ListTile.divideTiles(
               context: context,
               tiles: List.generate(

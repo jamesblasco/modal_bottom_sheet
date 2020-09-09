@@ -1,18 +1,23 @@
 import 'package:flutter/widgets.dart';
 
-/// Creates a primary scroll controller that will
-/// scroll to the top when tapped on the status bar
+/// Widget that that will scroll to the top the ScrollController
+/// when tapped on the status bar
 ///
-class PrimaryScrollStatusBarHandler extends StatefulWidget {
+class ScrollToTopStatusBarHandler extends StatefulWidget {
   final Widget child;
+  final ScrollController scrollController;
 
-  const PrimaryScrollStatusBarHandler({Key key, this.child}) : super(key: key);
+  const ScrollToTopStatusBarHandler({
+    Key key,
+    @required this.child,
+    @required this.scrollController,
+  }) : super(key: key);
 
   @override
-  _PrimaryScrollWidgetState createState() => _PrimaryScrollWidgetState();
+  _ScrollToTopStatusBarState createState() => _ScrollToTopStatusBarState();
 }
 
-class _PrimaryScrollWidgetState extends State<PrimaryScrollStatusBarHandler> {
+class _ScrollToTopStatusBarState extends State<ScrollToTopStatusBarHandler> {
   @override
   void initState() {
     super.initState();
@@ -43,7 +48,7 @@ class _PrimaryScrollWidgetState extends State<PrimaryScrollStatusBarHandler> {
   }
 
   void _handleStatusBarTap(BuildContext context) {
-    final controller = PrimaryScrollController.of(context);
+    final controller = widget.scrollController;
     if (controller != null && controller.hasClients) {
       controller.animateTo(
         0.0,

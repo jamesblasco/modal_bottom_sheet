@@ -9,7 +9,6 @@ class ModalInsideModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scrollController = PrimaryScrollController.of(context);
     return Material(
         child: CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
@@ -19,7 +18,7 @@ class ModalInsideModal extends StatelessWidget {
         child: ListView(
           reverse: reverse,
           shrinkWrap: true,
-            controller: scrollController,
+          controller: ModalScrollController.of(context),
           physics: ClampingScrollPhysics(),
           children: ListTile.divideTiles(
               context: context,
