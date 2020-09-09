@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class ModalWithScroll extends StatelessWidget {
   final ScrollController scrollController;
@@ -16,6 +17,7 @@ class ModalWithScroll extends StatelessWidget {
           bottom: false,
           child: ListView(
             shrinkWrap: true,
+            physics: BottomModalScrollPhysics(),
             controller: scrollController,
             children: ListTile.divideTiles(
               context: context,

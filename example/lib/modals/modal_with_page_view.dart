@@ -14,6 +14,7 @@ class ModalWithPageView extends StatelessWidget {
         body: SafeArea(
           bottom: false,
           child: PageView(
+            
             children: List.generate(2, (index) => ListView(
               shrinkWrap: true,
               controller: scrollController,

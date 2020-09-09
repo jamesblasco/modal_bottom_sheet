@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class NestedScrollModal extends StatelessWidget {
   final ScrollController scrollController;
@@ -23,6 +24,7 @@ class NestedScrollModal extends StatelessWidget {
         ];
       },
       body: ListView.builder(
+        physics: BottomModalScrollPhysics(),
         controller: scrollController,
         itemBuilder: (context, index) {
           return Container(
