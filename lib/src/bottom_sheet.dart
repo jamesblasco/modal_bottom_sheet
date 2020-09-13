@@ -176,14 +176,16 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
     _bounceDragController.reverse();
   }
 
-  bool _isCheckingShouldClose = false;
+  bool verifingShouldClose = false;
+
+  bool get needsVerifyShouldClose =>
+      widget.shouldClose != null && hasReachedWillPopThreshold;
 
   FutureOr<bool> shouldClose() async {
-    if (_isCheckingShouldClose) return false;
-    if (widget.shouldClose == null) return null;
-    _isCheckingShouldClose = true;
+    if (verifingShouldClose) return false;
+    verifingShouldClose = true;
     final result = await widget.shouldClose();
-    _isCheckingShouldClose = false;
+    verifingShouldClose = false;
     return result;
   }
 
@@ -198,15 +200,15 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
 
     final progress = primaryDelta / (_childHeight ?? primaryDelta);
 
-    if (widget.shouldClose != null && hasReachedWillPopThreshold) {
+    if (needsVerifyShouldClose) {
       _cancelClose();
-      final canClose = await shouldClose();
-      if (canClose) {
+
+      if (await shouldClose()) {
         _close();
-        return;
       } else {
         _cancelClose();
       }
+      return;
     }
 
     // Bounce top
@@ -233,25 +235,24 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
     isDragging = false;
     _bounceDragController.reverse();
 
-    var canClose = true;
-    if (widget.shouldClose != null && hasReachedWillPopThreshold) {
+    if (needsVerifyShouldClose) {
       _cancelClose();
-      canClose = await shouldClose();
-    }
-    if (canClose) {
-      // If speed is bigger than _minFlingVelocity try to close it
-      if (velocity > _minFlingVelocity) {
-        _close();
-      } else if (hasReachedCloseThreshold) {
-        if (widget.animationController.value > 0.0) {
-          widget.animationController.fling(velocity: -1.0);
-        }
+
+      if (await shouldClose()) {
         _close();
       } else {
         _cancelClose();
       }
+      return;
     } else {
-      _cancelClose();
+      // If speed is bigger than _minFlingVelocity try to close it
+      if (velocity > _minFlingVelocity) {
+        _close();
+      } else if (hasReachedCloseThreshold) {
+        _close();
+      } else {
+        _cancelClose();
+      }
     }
   }
 
@@ -298,7 +299,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
         return;
       }
 
-// Otherwise the calculate the velocity with a VelocityTracker
+      // Otherwise the calculate the velocity with a VelocityTracker
       if (_velocityTracker == null) {
         _velocityTracker = VelocityTracker();
         _startTime = DateTime.now();
@@ -306,14 +307,17 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
       DragUpdateDetails dragDetails;
       if (notification is ScrollUpdateNotification) {
         dragDetails = notification.dragDetails;
-      }
-      if (notification is OverscrollNotification) {
+      } else if (notification is OverscrollNotification) {
         dragDetails = notification.dragDetails;
+      } else if (notification is UserScrollNotification) {
+        return;
       }
+
       if (dragDetails != null) {
         final duration = _startTime.difference(DateTime.now());
         _velocityTracker.addPosition(duration, Offset(0, offset));
         _handleDragUpdate(dragDetails.delta.dy);
+        return;
       } else if (isDragging) {
         final velocity = _velocityTracker.getVelocity().pixelsPerSecond.dy;
         _velocityTracker = null;
@@ -321,6 +325,8 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
         _handleDragEnd(velocity);
       }
     }
+
+    _handleDragEnd(0);
   }
 
   ParametricCurve<double> get _defaultCurve =>
