@@ -3,7 +3,7 @@
 // found in the LICENSE file.
 
 import 'dart:async';
-
+import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -307,10 +307,9 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
               ? PointerDeviceKind.touch
               : // PCs or desktops or Laptops devices has mouse pointers
               (Platform.isLinux || Platform.isWindows || Platform.isMacOS)
-                  ? VelocityTracker(PointerDeviceKind.mouse)
+                  ? PointerDeviceKind.mouse
                   : // Some unknown devices
-                  VelocityTracker(PointerDeviceKind.unknown),
-        );
+                  PointerDeviceKind.unknown);
         _startTime = DateTime.now();
       }
       DragUpdateDetails dragDetails;
