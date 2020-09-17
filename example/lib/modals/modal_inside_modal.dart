@@ -21,7 +21,7 @@ class ModalInsideModal extends StatelessWidget {
           reverse: reverse,
           shrinkWrap: true,
           controller: scrollController,
-          physics: ClampingScrollPhysics(),
+          physics: BottomModalScrollPhysics(),
           children: ListTile.divideTiles(
               context: context,
               tiles: List.generate(
