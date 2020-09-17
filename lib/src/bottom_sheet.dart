@@ -299,7 +299,6 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
 
 // Otherwise the calculate the velocity with a VelocityTracker
       if (_velocityTracker == null) {
-        // Checking the device type as per the OS installed in it
         final pointerKind = defaultPointerDeviceKind(context);
         _velocityTracker = VelocityTracker(pointerKind);
         _startTime = DateTime.now();
@@ -467,7 +466,9 @@ class _CustomBottomSheetLayout extends SingleChildLayoutDelegate {
   }
 }
 
-// Used by VelocityTracker
+// Checks the device input type as per the OS installed in it
+// Mobile platforms will be default to `touch` while desktop will do to `mouse`
+// Used with VelocityTracker
 // https://github.com/flutter/flutter/pull/64267#issuecomment-694196304
 PointerDeviceKind defaultPointerDeviceKind(BuildContext context) {
   final platform = Theme.of(context)?.platform ?? defaultTargetPlatform;
