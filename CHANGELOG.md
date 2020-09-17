@@ -22,3 +22,6 @@ Thanks to @bierbaumtim @troyanskiy @rodineijf for the contributions
 
 ## [0.2.0+1] - ScrollView bug fix
 - Fix bug when scrollview was not used 
+
+## [0.2.1-dev] - Fix Flutter 22 breaking change
+- https://github.com/jamesblasco/modal_bottom_sheet/issues/69
