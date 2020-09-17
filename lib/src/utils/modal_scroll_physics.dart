@@ -19,7 +19,7 @@ class BottomModalScrollPhysics extends ScrollPhysics {
       if (value == position.pixels) {
         throw FlutterError.fromParts(<DiagnosticsNode>[
           ErrorSummary(
-              '$runtimeType.applyBoundaryConditions() was called redundantly.'),
+              '$runtimeType.applyPhysicsToUserOffset() was called redundantly.'),
           ErrorDescription(
               'The proposed new position, $value, is exactly equal to the current position of the '
               'given ${position.runtimeType}, ${position.pixels}.\n'
