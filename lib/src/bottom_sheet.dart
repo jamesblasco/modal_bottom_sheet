@@ -3,7 +3,6 @@
 // found in the LICENSE file.
 
 import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -300,7 +299,8 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
 
 // Otherwise the calculate the velocity with a VelocityTracker
       if (_velocityTracker == null) {
-        _velocityTracker = VelocityTracker();
+        final pointerKind = defaultPointerDeviceKind(context);
+        _velocityTracker = VelocityTracker(pointerKind);
         _startTime = DateTime.now();
       }
       DragUpdateDetails dragDetails;
@@ -464,4 +464,24 @@ class _CustomBottomSheetLayout extends SingleChildLayoutDelegate {
     }
     return false;
   }
+}
+
+// Checks the device input type as per the OS installed in it
+// Mobile platforms will be default to `touch` while desktop will do to `mouse`
+// Used with VelocityTracker
+// https://github.com/flutter/flutter/pull/64267#issuecomment-694196304
+PointerDeviceKind defaultPointerDeviceKind(BuildContext context) {
+  final platform = Theme.of(context)?.platform ?? defaultTargetPlatform;
+  switch (platform) {
+    case TargetPlatform.iOS:
+    case TargetPlatform.android:
+      return PointerDeviceKind.touch;
+    case TargetPlatform.linux:
+    case TargetPlatform.macOS:
+    case TargetPlatform.windows:
+      return PointerDeviceKind.mouse;
+    case TargetPlatform.fuchsia:
+      return PointerDeviceKind.unknown;
+  }
+  return PointerDeviceKind.unknown;
 }
