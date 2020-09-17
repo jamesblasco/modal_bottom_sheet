@@ -3,7 +3,6 @@
 // found in the LICENSE file.
 
 import 'dart:async';
-import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -301,15 +300,8 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
 // Otherwise the calculate the velocity with a VelocityTracker
       if (_velocityTracker == null) {
         // Checking the device type as per the OS installed in it
-        _velocityTracker = VelocityTracker(
-          // SmartPhone Devices
-          (Platform.isAndroid || Platform.isIOS)
-              ? PointerDeviceKind.touch
-              : // PCs or desktops or Laptops devices has mouse pointers
-              (Platform.isLinux || Platform.isWindows || Platform.isMacOS)
-                  ? PointerDeviceKind.mouse
-                  : // Some unknown devices
-                  PointerDeviceKind.unknown);
+        final pointerKind = defaultPointerDeviceKind(context);
+        _velocityTracker = VelocityTracker(pointerKind);
         _startTime = DateTime.now();
       }
       DragUpdateDetails dragDetails;
@@ -473,4 +465,22 @@ class _CustomBottomSheetLayout extends SingleChildLayoutDelegate {
     }
     return false;
   }
+}
+
+// Used by VelocityTracker
+// https://github.com/flutter/flutter/pull/64267#issuecomment-694196304
+PointerDeviceKind defaultPointerDeviceKind(BuildContext context) {
+  final platform = Theme.of(context)?.platform ?? defaultTargetPlatform;
+  switch (platform) {
+    case TargetPlatform.iOS:
+    case TargetPlatform.android:
+      return PointerDeviceKind.touch;
+    case TargetPlatform.linux:
+    case TargetPlatform.macOS:
+    case TargetPlatform.windows:
+      return PointerDeviceKind.mouse;
+    case TargetPlatform.fuchsia:
+      return PointerDeviceKind.unknown;
+  }
+  return PointerDeviceKind.unknown;
 }
