@@ -300,7 +300,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
 // Otherwise the calculate the velocity with a VelocityTracker
       if (_velocityTracker == null) {
         final pointerKind = defaultPointerDeviceKind(context);
-        _velocityTracker = VelocityTracker(pointerKind);
+        _velocityTracker = VelocityTracker();
         _startTime = DateTime.now();
       }
       DragUpdateDetails dragDetails;

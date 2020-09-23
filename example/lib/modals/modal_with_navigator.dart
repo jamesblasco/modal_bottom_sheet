@@ -8,6 +8,7 @@ class ModalWithNavigator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Material(
         child: Navigator(
       onGenerateRoute: (_) => MaterialPageRoute(
@@ -27,15 +28,22 @@ class ModalWithNavigator extends StatelessWidget {
                       (index) => ListTile(
                             title: Text('Item'),
                             onTap: () {
-                              Navigator.of(context).push(MaterialPageRoute(
+                             Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
                                   builder: (context) => CupertinoPageScaffold(
                                       navigationBar: CupertinoNavigationBar(
                                         middle: Text('New Page'),
                                       ),
                                       child: Stack(
                                         fit: StackFit.expand,
-                                        children: <Widget>[],
-                                      ))));
+                                        children: <Widget>[
+                                          MaterialButton(
+                                            onPressed: () => Navigator.of(context).pop(),
+                                            child: Text('touch here'),
+                                          )
+                                        ],
+                                      )
+                                  )
+                              ), ModalRoute.withName('/'));
                             },
                           )),
                 ).toList(),

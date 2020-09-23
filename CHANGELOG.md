@@ -1,4 +1,7 @@
-## [0.2.1+1-dev] - Fix Flutter 22 breaking change
+## [0.2.1+2] - Reverse fix Flutter 22 beta breaking change
+- https://github.com/jamesblasco/modal_bottom_sheet/issues/69
+
+## [0.2.1+1-dev] - Fix Flutter 22 beta breaking change
 - https://github.com/jamesblasco/modal_bottom_sheet/issues/69
 
 ## [0.2.0+1] - ScrollView bug fix
