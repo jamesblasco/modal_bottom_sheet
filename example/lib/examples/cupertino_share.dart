@@ -53,8 +53,8 @@ class CupertinoSharePage extends StatelessWidget {
                 expand: true,
                 context: context,
                 backgroundColor: Colors.transparent,
-                builder: (context, scrollController) =>
-                    PhotoShareBottomSheet(scrollController: scrollController),
+                builder: (context) =>
+                    PhotoShareBottomSheet(),
               );
             },
           ),
@@ -73,9 +73,9 @@ class CupertinoSharePage extends StatelessWidget {
 }
 
 class PhotoShareBottomSheet extends StatelessWidget {
-  final ScrollController scrollController;
 
-  const PhotoShareBottomSheet({Key key, this.scrollController})
+
+  const PhotoShareBottomSheet({Key key})
       : super(key: key);
 
   @override
@@ -92,7 +92,7 @@ class PhotoShareBottomSheet extends StatelessWidget {
               appBar: appBar(context),
               body: CustomScrollView(
                 physics: ClampingScrollPhysics(),
-                controller: scrollController,
+                  controller: ModalScrollController.of(context),
                 slivers: <Widget>[
                   SliverSafeArea(
                     bottom: false,

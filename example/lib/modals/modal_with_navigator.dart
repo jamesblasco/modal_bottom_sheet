@@ -1,10 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class ModalWithNavigator extends StatelessWidget {
-  final ScrollController scrollController;
 
-  const ModalWithNavigator({Key key, this.scrollController}) : super(key: key);
+
+  const ModalWithNavigator({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +21,7 @@ class ModalWithNavigator extends StatelessWidget {
               bottom: false,
               child: ListView(
                 shrinkWrap: true,
-                controller: scrollController,
+                controller: ModalScrollController.of(context),
                 children: ListTile.divideTiles(
                   context: context,
                   tiles: List.generate(

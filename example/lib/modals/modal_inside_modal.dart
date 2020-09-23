@@ -3,11 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class ModalInsideModal extends StatelessWidget {
-  final ScrollController scrollController;
   final bool reverse;
 
-  const ModalInsideModal({Key key, this.scrollController, this.reverse = false})
-      : super(key: key);
+  const ModalInsideModal({Key key, this.reverse = false}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +18,7 @@ class ModalInsideModal extends StatelessWidget {
         child: ListView(
           reverse: reverse,
           shrinkWrap: true,
-          controller: scrollController,
+          controller: ModalScrollController.of(context),
           physics: ClampingScrollPhysics(),
           children: ListTile.divideTiles(
               context: context,
@@ -33,10 +31,8 @@ class ModalInsideModal extends StatelessWidget {
                           isDismissible: false,
                           context: context,
                           backgroundColor: Colors.transparent,
-                          builder: (context, scrollController) =>
-                              ModalInsideModal(
-                                  scrollController: scrollController,
-                                  reverse: reverse),
+                          builder: (context) =>
+                              ModalInsideModal(reverse: reverse),
                         )),
               )).toList(),
         ),
