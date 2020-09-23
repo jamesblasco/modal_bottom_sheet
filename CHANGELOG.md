@@ -1,3 +1,31 @@
+## [1.0.0-dev] - Improved performance and breaking change
+- The `builder` param has changed from:
+```dart
+showMaterialModalBottomSheet(
+  context: context,
+  builder: (context, scrollController) {
+       return SingleChildScrollView(
+        controller: scrollController,
+        child: Container()
+      )
+  },
+)
+```
+to 
+
+```dart
+showMaterialModalBottomSheet(
+  context: context,
+  builder: (context) {
+      return SingleChildScrollView(
+        controller: ModalScrollController.of(context),
+        child: Container()
+      )
+  },
+)
+```
+- Appart from the visual change, with this changes you can access the controller from every inner widget without having to pass it to every constructor. Also now the builder method will be called only once as before it was calling multiple times while the modal was being animated.
+
 ## [0.2.1+2] - Reverse fix Flutter 22 beta breaking change
 - https://github.com/jamesblasco/modal_bottom_sheet/issues/69
 
