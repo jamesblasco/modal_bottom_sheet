@@ -262,6 +262,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
     //Check if scrollController is used
     if (!_scrollController.hasClients) return;
     //Check if there is more than 1 attached ScrollController e.g. swiping page in PageView
+    // ignore: invalid_use_of_protected_member
     if (_scrollController.positions.length > 1) return;
 
     if (_scrollController !=
@@ -291,7 +292,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
 
       // Otherwise the calculate the velocity with a VelocityTracker
       if (_velocityTracker == null) {
-        final pointerKind = defaultPointerDeviceKind(context);
+        //final pointerKind = defaultPointerDeviceKind(context);
         _velocityTracker = VelocityTracker();
         _startTime = DateTime.now();
       }

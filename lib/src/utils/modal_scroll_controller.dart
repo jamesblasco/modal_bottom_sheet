@@ -39,7 +39,7 @@ class ModalScrollController extends InheritedWidget {
   /// Returns null if there is no [ScrollController] associated with the given
   /// context.
   static ScrollController of(BuildContext context) {
-    final ModalScrollController result =
+    final result =
         context.dependOnInheritedWidgetOfExactType<ModalScrollController>();
     return result?.controller;
   }

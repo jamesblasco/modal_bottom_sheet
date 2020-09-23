@@ -49,12 +49,13 @@ class BarBottomSheet extends StatelessWidget {
               flex: 1,
               fit: FlexFit.loose,
               child: Material(
-                shape: shape ?? RoundedRectangleBorder(
-                  side: BorderSide(),
-                  borderRadius: BorderRadius.only(
-                      topLeft: _default_bar_top_radius,
-                      topRight: _default_bar_top_radius),
-                ),
+                shape: shape ??
+                    RoundedRectangleBorder(
+                      side: BorderSide(),
+                      borderRadius: BorderRadius.only(
+                          topLeft: _default_bar_top_radius,
+                          topRight: _default_bar_top_radius),
+                    ),
                 clipBehavior: clipBehavior ?? Clip.hardEdge,
                 elevation: elevation ?? 2,
                 child: SizedBox(

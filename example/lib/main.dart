@@ -95,7 +95,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    print(MediaQuery.of(context).size.height);
     return Material(
       child: Scaffold(
         body: CupertinoPageScaffold(
@@ -202,8 +201,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               expand: true,
                               context: context,
                               backgroundColor: Colors.transparent,
-                              builder: (context) =>
-                                  ComplexModal(),
+                              builder: (context) => ComplexModal(),
                             )),
                     ListTile(
                         title: Text('Modal with WillPopScope'),
@@ -211,26 +209,22 @@ class _MyHomePageState extends State<MyHomePage> {
                               expand: true,
                               context: context,
                               backgroundColor: Colors.transparent,
-                              builder: (context) =>
-                                  ModalWillScope(),
+                              builder: (context) => ModalWillScope(),
                             )),
                     ListTile(
                         title: Text('Modal with Nested Scroll'),
                         onTap: () => showCupertinoModalBottomSheet(
                               expand: true,
                               context: context,
-                              builder: (context) =>
-                                  NestedScrollModal(),
+                              builder: (context) => NestedScrollModal(),
                             )),
                     ListTile(
                         title: Text('Modal with PageView'),
                         onTap: () => showBarModalBottomSheet(
-                          expand: true,
-                          context: context,
-                          builder: (context, scrollController) =>
-                              ModalWithPageView(
-                                  scrollController: scrollController),
-                        )),
+                              expand: true,
+                              context: context,
+                              builder: (context) => ModalWithPageView(),
+                            )),
                     SizedBox(
                       height: 60,
                     )
