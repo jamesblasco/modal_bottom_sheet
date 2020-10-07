@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 /// Widget that that will scroll to the top the ScrollController
 /// when tapped on the status bar
 ///
+/// Extracted from Scaffold and used in modal bottom sheet
 class ScrollToTopStatusBarHandler extends StatefulWidget {
   final Widget child;
   final ScrollController scrollController;

@@ -24,7 +24,7 @@ showMaterialModalBottomSheet(
   },
 )
 ```
-- Appart from the visual change, with this changes you can access the controller from every inner widget without having to pass it to every constructor. Also now the builder method will be called only once as before it was calling multiple times while the modal was being animated.
+- Appart from the visual change, with this changes you can access the controller from every inner widget without having to pass the controller to every constructor. Also now the builder method will be called only once. Before it was calling multiple times while the modal was being animated.
 
 ## [0.2.1+2] - Reverse fix Flutter 22 beta breaking change
 - https://github.com/jamesblasco/modal_bottom_sheet/issues/69
