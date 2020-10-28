@@ -1,3 +1,6 @@
+## [1.0.1-dev] - Fix instance member 'opaque' can't accessed in an initalizer.
+- https://github.com/jamesblasco/modal_bottom_sheet/issues/98
+
 ## [1.0.0-dev] - Improved performance and breaking change
 - The `builder` param has changed from:
 ```dart
