@@ -48,11 +48,9 @@ class MyCApp extends StatelessWidget {
                           expand: true,
                           context: context,
                           backgroundColor: Color(0x00000000),
-                          builder: (context, scrollController) => Stack(
+                          builder: (context) => Stack(
                             children: <Widget>[
-                              CupertinoModalWithScroll(
-                                scrollController: scrollController,
-                              ),
+                              CupertinoModalWithScroll(),
                               Positioned(
                                 left: 40,
                                 right: 40,
@@ -120,12 +118,9 @@ class MyCupertinoHomePage extends StatelessWidget {
                   expand: true,
                   context: context,
                   backgroundColor: Colors.transparent,
-                  builder: (context, scrollController) =>
-                      CupertinoUserInterfaceLevel(
+                  builder: (context) => CupertinoUserInterfaceLevel(
                     data: CupertinoUserInterfaceLevelData.elevated,
-                    child: CupertinoModalInsideModal(
-                      scrollController: scrollController,
-                    ),
+                    child: CupertinoModalInsideModal(),
                   ),
                 ),
               ),
@@ -135,12 +130,9 @@ class MyCupertinoHomePage extends StatelessWidget {
                   expand: true,
                   context: context,
                   backgroundColor: Colors.transparent,
-                  builder: (context, scrollController) =>
-                      CupertinoUserInterfaceLevel(
+                  builder: (context) => CupertinoUserInterfaceLevel(
                     data: CupertinoUserInterfaceLevelData.elevated,
-                    child: CupertinoModalInsideModal(
-                      scrollController: scrollController,
-                    ),
+                    child: CupertinoModalInsideModal(),
                   ),
                 ),
               ),
@@ -148,9 +140,10 @@ class MyCupertinoHomePage extends StatelessWidget {
                 title: Text('Float Modal'),
                 onTap: () => showFloatingModalBottomSheet(
                   context: context,
-                  builder: (context, scrollController) => ModalFit(
-                    scrollController: scrollController,
-                  ),
+                  builder: (
+                    context,
+                  ) =>
+                      ModalFit(),
                 ),
               ),
               CupertinoListTile(
@@ -159,9 +152,10 @@ class MyCupertinoHomePage extends StatelessWidget {
                   expand: false,
                   context: context,
                   backgroundColor: Colors.transparent,
-                  builder: (context, scrollController) => ModalFit(
-                    scrollController: scrollController,
-                  ),
+                  builder: (
+                    context,
+                  ) =>
+                      ModalFit(),
                 ),
               ),
               section('COMPLEX CASES'),
@@ -171,9 +165,7 @@ class MyCupertinoHomePage extends StatelessWidget {
                   expand: true,
                   context: context,
                   backgroundColor: Colors.transparent,
-                  builder: (context, scrollController) => ModalFit(
-                    scrollController: scrollController,
-                  ),
+                  builder: (context) => ModalFit(),
                 ),
               ),
               CupertinoListTile(
@@ -182,11 +174,9 @@ class MyCupertinoHomePage extends StatelessWidget {
                   expand: true,
                   context: context,
                   backgroundColor: Colors.transparent,
-                  builder: (context, scrollController) =>
-                      CupertinoUserInterfaceLevel(
+                  builder: (context) => CupertinoUserInterfaceLevel(
                     data: CupertinoUserInterfaceLevelData.elevated,
                     child: CupertinoModalInsideModal(
-                      scrollController: scrollController,
                       reverse: true,
                     ),
                   ),
@@ -198,10 +188,7 @@ class MyCupertinoHomePage extends StatelessWidget {
                   expand: true,
                   context: context,
                   backgroundColor: Colors.transparent,
-                  builder: (context, scrollController) =>
-                      CupertinoModalInsideModal(
-                    scrollController: scrollController,
-                  ),
+                  builder: (context) => CupertinoModalInsideModal(),
                 ),
               ),
               CupertinoListTile(
@@ -210,10 +197,7 @@ class MyCupertinoHomePage extends StatelessWidget {
                   expand: true,
                   context: context,
                   backgroundColor: Colors.transparent,
-                  builder: (context, scrollController) =>
-                      CupertinoModalWithNavigator(
-                    scrollController: scrollController,
-                  ),
+                  builder: (context) => CupertinoModalWithNavigator(),
                 ),
               ),
               CupertinoListTile(
@@ -222,9 +206,7 @@ class MyCupertinoHomePage extends StatelessWidget {
                   expand: true,
                   context: context,
                   backgroundColor: Colors.transparent,
-                  builder: (context, scrollController) => CupertinoComplexModal(
-                    scrollController: scrollController,
-                  ),
+                  builder: (context) => CupertinoComplexModal(),
                 ),
               ),
               CupertinoListTile(
@@ -233,10 +215,7 @@ class MyCupertinoHomePage extends StatelessWidget {
                   expand: true,
                   context: context,
                   backgroundColor: Colors.transparent,
-                  builder: (context, scrollController) =>
-                      CupertinoModalWillScope(
-                    scrollController: scrollController,
-                  ),
+                  builder: (context) => CupertinoModalWillScope(),
                 ),
               ),
               CupertinoListTile(
@@ -244,9 +223,7 @@ class MyCupertinoHomePage extends StatelessWidget {
                 onTap: () => showCupertinoModalBottomSheet(
                   expand: true,
                   context: context,
-                  builder: (context, scrollController) => NestedScrollModal(
-                    scrollController: scrollController,
-                  ),
+                  builder: (context) => NestedScrollModal(),
                 ),
               ),
               SizedBox(

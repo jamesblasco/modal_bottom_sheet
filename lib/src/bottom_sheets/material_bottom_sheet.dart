@@ -5,7 +5,8 @@ import 'dart:async';
 /// Shows a modal material design bottom sheet.
 Future<T> showMaterialModalBottomSheet<T>({
   @required BuildContext context,
-  @required ScrollWidgetBuilder builder,
+  double closeProgressThreshold,
+  @required WidgetBuilder builder,
   Color backgroundColor,
   double elevation,
   ShapeBorder shape,
@@ -31,6 +32,7 @@ Future<T> showMaterialModalBottomSheet<T>({
   final result = await Navigator.of(context, rootNavigator: useRootNavigator)
       .push(ModalBottomSheetRoute<T>(
     builder: builder,
+    closeProgressThreshold: closeProgressThreshold,
     containerBuilder: _materialContainerBuilder(
       context,
       backgroundColor: backgroundColor,

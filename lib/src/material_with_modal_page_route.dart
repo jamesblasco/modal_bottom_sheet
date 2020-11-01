@@ -18,7 +18,6 @@ class MaterialWithModalsPageRoute<T> extends MaterialPageRoute<T> {
   })  : assert(builder != null),
         assert(maintainState != null),
         assert(fullscreenDialog != null),
-        assert(opaque),
         super(
             settings: settings,
             fullscreenDialog: fullscreenDialog,

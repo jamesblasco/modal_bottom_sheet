@@ -52,6 +52,7 @@ showMaterialModalBottomSheet(
 |AnimationController secondAnimation| The `secondAnimation` parameter allows you to provide an animation controller that will be used to animate  push/pop of the modal route. Using this param is advised against and will be probably removed in future versions |
 |bool bounce = false| The `bounce` parameter specifies if the bottom sheet can go beyond the top boundary while dragging |
 |Duration duration = const Duration(milliseconds: 400)| The `duration` of modal opening |
+|double closeProgressThreshold = 0.6| The `closeProgressThreshold` specifies when the bottom sheet will be dismissed when user drags it. |
 
 
 #### Material params

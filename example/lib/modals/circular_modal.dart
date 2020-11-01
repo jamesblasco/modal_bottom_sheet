@@ -83,7 +83,7 @@ class AvatarBottomSheet extends StatelessWidget {
 
 Future<T> showAvatarModalBottomSheet<T>({
   @required BuildContext context,
-  @required ScrollWidgetBuilder builder,
+  @required WidgetBuilder builder,
   Color backgroundColor,
   double elevation,
   ShapeBorder shape,

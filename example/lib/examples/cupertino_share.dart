@@ -62,9 +62,7 @@ class CupertinoSharePage extends StatelessWidget {
                     expand: true,
                     context: context,
                     backgroundColor: Colors.transparent,
-                    builder: (context, scrollController) =>
-                        PhotoShareBottomSheet(
-                      scrollController: scrollController,
+                    builder: (context) => PhotoShareBottomSheet(
                       useMaterial: useMaterial,
                     ),
                   );
@@ -87,12 +85,10 @@ class CupertinoSharePage extends StatelessWidget {
 }
 
 class PhotoShareBottomSheet extends StatelessWidget {
-  final ScrollController scrollController;
   final bool useMaterial;
 
   const PhotoShareBottomSheet({
     Key key,
-    this.scrollController,
     this.useMaterial,
   }) : super(key: key);
 
@@ -110,7 +106,7 @@ class PhotoShareBottomSheet extends StatelessWidget {
           appBar: appBar(context),
           body: CustomScrollView(
             physics: ClampingScrollPhysics(),
-            controller: scrollController,
+            controller: ModalScrollController.of(context),
             slivers: <Widget>[
               SliverSafeArea(
                 bottom: false,
@@ -317,7 +313,7 @@ class PhotoShareBottomSheet extends StatelessWidget {
                     bottom: 20,
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),
@@ -431,7 +427,7 @@ class PhotoShareBottomSheet extends StatelessWidget {
                                   size: 14,
                                   color:
                                       CupertinoTheme.of(context).primaryColor,
-                                )
+                                ),
                               ],
                             ),
                           ],
@@ -468,13 +464,6 @@ class PhotoShareBottomSheet extends StatelessWidget {
       ),
     );
   }
-}
-
-extension ListUtils<T> on List<T> {
-  List<T> addItemInBetween<T>(T item) => this.length == 0
-      ? this
-      : (this.fold([], (r, element) => [...r, element as T, item])
-        ..removeLast());
 }
 
 class Item {
@@ -524,6 +513,13 @@ final actions2 = [
   Item('Asign to Contact', null),
   Item('Print', null),
 ];
+
+extension ListUtils<T> on List<T> {
+  List<T> addItemInBetween<T>(T item) => this.length == 0
+      ? this
+      : (this.fold([], (r, element) => [...r, element as T, item])
+        ..removeLast());
+}
 
 class SimpleSliverDelegate extends SliverPersistentHeaderDelegate {
   final Widget child;

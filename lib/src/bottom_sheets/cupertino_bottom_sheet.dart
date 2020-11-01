@@ -85,9 +85,10 @@ class _CupertinoBottomSheetContainer extends StatelessWidget {
 
 Future<T> showCupertinoModalBottomSheet<T>({
   @required BuildContext context,
-  @required ScrollWidgetBuilder builder,
+  @required WidgetBuilder builder,
   Color backgroundColor,
   double elevation,
+  double closeProgressThreshold,
   ShapeBorder shape,
   Clip clipBehavior,
   Color barrierColor,
@@ -117,19 +118,18 @@ Future<T> showCupertinoModalBottomSheet<T>({
       ? MaterialLocalizations.of(context).modalBarrierDismissLabel
       : '';
 
-  final result = await Navigator.of(
-    context,
-    rootNavigator: useRootNavigator,
-  ).push(
+  final result =
+      await Navigator.of(context, rootNavigator: useRootNavigator).push(
     CupertinoModalBottomSheetRoute<T>(
       builder: builder,
       containerBuilder: (context, _, child) => _CupertinoBottomSheetContainer(
+        child: child,
         backgroundColor: backgroundColor,
         topRadius: topRadius,
-        child: child,
       ),
       secondAnimationController: secondAnimation,
       expanded: expand,
+      closeProgressThreshold: closeProgressThreshold,
       barrierLabel: barrierLabel,
       elevation: elevation,
       bounce: bounce,
@@ -158,8 +158,9 @@ class CupertinoModalBottomSheetRoute<T> extends ModalBottomSheetRoute<T> {
   final Color transitionBackgroundColor;
 
   CupertinoModalBottomSheetRoute({
-    ScrollWidgetBuilder builder,
+    WidgetBuilder builder,
     WidgetWithChildBuilder containerBuilder,
+    double closeProgressThreshold,
     String barrierLabel,
     double elevation,
     ShapeBorder shape,
@@ -181,6 +182,7 @@ class CupertinoModalBottomSheetRoute<T> extends ModalBottomSheetRoute<T> {
         assert(isDismissible != null),
         assert(enableDrag != null),
         super(
+          closeProgressThreshold: closeProgressThreshold,
           scrollController: scrollController,
           containerBuilder: containerBuilder,
           builder: builder,
@@ -244,17 +246,19 @@ class CupertinoModalBottomSheetRoute<T> extends ModalBottomSheetRoute<T> {
     final paddingTop = MediaQuery.of(context).padding.top;
     final distanceWithScale =
         (paddingTop + _behind_widget_visible_height) * 0.9;
-
     final offsetY = secondaryAnimation.value * (paddingTop - distanceWithScale);
     final scale = 1 - secondaryAnimation.value / 10;
-
-    return Transform.translate(
-      offset: Offset(0, offsetY),
-      child: Transform.scale(
-        scale: scale,
-        alignment: Alignment.topCenter,
-        child: child,
+    return AnimatedBuilder(
+      builder: (context, child) => Transform.translate(
+        offset: Offset(0, offsetY),
+        child: Transform.scale(
+          scale: scale,
+          child: child,
+          alignment: Alignment.topCenter,
+        ),
       ),
+      child: child,
+      animation: secondaryAnimation,
     );
   }
 
@@ -336,10 +340,9 @@ class _CupertinoModalTransition extends StatelessWidget {
               : (1 - progress) * startRoundCorner + progress * topRadius.x;
 
           debugPrint('Scale: $scale, Offset: $yOffset, Progress: $progress');
-
           return Stack(
             children: <Widget>[
-              // Container(color: backgroundColor),
+              Container(color: backgroundColor),
               if (progress == 0)
                 child
               else
@@ -460,10 +463,13 @@ class _CupertinoScaffold extends InheritedWidget {
 
   final Radius topRadius;
 
+  @override
+  final Widget child;
+
   const _CupertinoScaffold({
     Key key,
-    Widget child,
     this.animation,
+    this.child,
     this.topRadius,
   }) : super(
           key: key,
@@ -497,7 +503,8 @@ class CupertinoScaffold extends StatefulWidget {
 
   static Future<T> showCupertinoModalBottomSheet<T>({
     @required BuildContext context,
-    @required ScrollWidgetBuilder builder,
+    double closeProgressThreshold,
+    @required WidgetBuilder builder,
     Curve animationCurve,
     Curve previousRouteAnimationCurve,
     Color backgroundColor,
@@ -525,12 +532,13 @@ class CupertinoScaffold extends StatefulWidget {
     final topRadius = CupertinoScaffold.of(context).topRadius;
     final result = await Navigator.of(context, rootNavigator: useRootNavigator)
         .push(CupertinoModalBottomSheetRoute<T>(
+      closeProgressThreshold: closeProgressThreshold,
       builder: builder,
       secondAnimationController: CupertinoScaffold.of(context).animation,
       containerBuilder: (context, _, child) => _CupertinoBottomSheetContainer(
+        child: child,
         backgroundColor: backgroundColor,
         topRadius: topRadius,
-        child: child,
       ),
       expanded: expand,
       barrierLabel: barrierLabel,
@@ -557,7 +565,7 @@ class _CupertinoScaffoldState extends State<CupertinoScaffold>
   @override
   void initState() {
     animationController = AnimationController(
-      duration: const Duration(milliseconds: 350),
+      duration: Duration(milliseconds: 350),
       vsync: this,
     );
     super.initState();

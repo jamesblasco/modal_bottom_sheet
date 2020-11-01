@@ -50,12 +50,13 @@ class BarBottomSheet extends StatelessWidget {
               flex: 1,
               fit: FlexFit.loose,
               child: Material(
-                shape: shape ?? RoundedRectangleBorder(
-                  side: BorderSide(),
-                  borderRadius: BorderRadius.only(
-                      topLeft: _default_bar_top_radius,
-                      topRight: _default_bar_top_radius),
-                ),
+                shape: shape ??
+                    RoundedRectangleBorder(
+                      side: BorderSide(),
+                      borderRadius: BorderRadius.only(
+                          topLeft: _default_bar_top_radius,
+                          topRight: _default_bar_top_radius),
+                    ),
                 clipBehavior: clipBehavior ?? Clip.hardEdge,
                 elevation: elevation ?? 2,
                 child: SizedBox(
@@ -72,10 +73,11 @@ class BarBottomSheet extends StatelessWidget {
 
 Future<T> showBarModalBottomSheet<T>({
   @required BuildContext context,
-  @required ScrollWidgetBuilder builder,
+  @required WidgetBuilder builder,
   Color backgroundColor,
   double elevation,
   ShapeBorder shape,
+  double closeProgressThreshold,
   Clip clipBehavior,
   Color barrierColor = Colors.black87,
   bool bounce = true,
@@ -107,6 +109,7 @@ Future<T> showBarModalBottomSheet<T>({
       .push(ModalBottomSheetRoute<T>(
     builder: builder,
     bounce: bounce,
+    closeProgressThreshold: closeProgressThreshold,
     containerBuilder: (_, __, child) => BarBottomSheet(
       child: child,
       control: topControl,

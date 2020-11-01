@@ -3,14 +3,13 @@
 // found in the LICENSE file.
 
 import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
-import 'package:modal_bottom_sheet/src/utils/primary_scroll_status_bar.dart';
+import 'package:modal_bottom_sheet/src/utils/scroll_to_top_status_bar.dart';
 
 import 'package:modal_bottom_sheet/src/utils/bottom_sheet_suspended_curve.dart';
 
@@ -20,9 +19,6 @@ const Duration _bottomSheetDuration = Duration(milliseconds: 400);
 const double _minFlingVelocity = 500.0;
 const double _closeProgressThreshold = 0.6;
 const double _willPopThreshold = 0.8;
-
-typedef ScrollWidgetBuilder = Widget Function(
-    BuildContext context, ScrollController controller);
 
 typedef WidgetWithChildBuilder = Widget Function(
     BuildContext context, Animation<double> animation, Widget child);
@@ -42,6 +38,7 @@ class ModalBottomSheet extends StatefulWidget {
   /// Creates a bottom sheet.
   const ModalBottomSheet({
     Key key,
+    this.closeProgressThreshold,
     this.animationController,
     this.animationCurve,
     this.enableDrag = true,
@@ -51,11 +48,15 @@ class ModalBottomSheet extends StatefulWidget {
     this.scrollController,
     this.expanded,
     @required this.onClosing,
-    @required this.builder,
+    @required this.child,
   })  : assert(enableDrag != null),
         assert(onClosing != null),
-        assert(builder != null),
+        assert(child != null),
         super(key: key);
+
+  /// The closeProgressThreshold parameter
+  /// specifies when the bottom sheet will be dismissed when user drags it.
+  final double closeProgressThreshold;
 
   /// The animation controller that controls the bottom sheet's entrance and
   /// exit animations.
@@ -96,7 +97,7 @@ class ModalBottomSheet extends StatefulWidget {
 
   /// A builder for the contents of the sheet.
   ///
-  final ScrollWidgetBuilder builder;
+  final Widget child;
 
   /// If true, the bottom sheet can be dragged up and down and dismissed by
   /// swiping downwards.
@@ -131,7 +132,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
     with TickerProviderStateMixin {
   final GlobalKey _childKey = GlobalKey(debugLabel: 'BottomSheet child');
 
-  ScrollController _scrollController;
+  ScrollController get _scrollController => widget.scrollController;
 
   AnimationController _bounceDragController;
 
@@ -152,7 +153,8 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
       widget.animationController.value < _willPopThreshold;
 
   bool get hasReachedCloseThreshold =>
-      widget.animationController.value < _closeProgressThreshold;
+      widget.animationController.value <
+      (widget.closeProgressThreshold ?? _closeProgressThreshold);
 
   void _close() {
     isDragging = false;
@@ -259,6 +261,12 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
   void _handleScrollUpdate(ScrollNotification notification) {
     //Check if scrollController is used
     if (!_scrollController.hasClients) return;
+    //Check if there is more than 1 attached ScrollController e.g. swiping page in PageView
+    // ignore: invalid_use_of_protected_member
+    if (_scrollController.positions.length > 1) return;
+
+    if (_scrollController !=
+        Scrollable.of(notification.context).widget.controller) return;
 
     final scrollPosition = _scrollController.position;
 
@@ -270,14 +278,6 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
         : scrollPosition.maxScrollExtent - scrollPosition.pixels;
 
     if (offset <= 0) {
-      // Check if listener is same from scrollController.
-      // TODO: Improve the way it checks if it the same view controller
-      // Use PrimaryScrollController
-      if (_scrollController.position.pixels != notification.metrics.pixels &&
-          !(_scrollController.position.pixels == 0 &&
-              notification.metrics.pixels >= 0)) {
-        return;
-      }
       // Clamping Scroll Physics end with a ScrollEndNotification with a DragEndDetail class
       // while Bouncing Scroll Physics or other physics that Overflow don't return a drag end info
 
@@ -290,8 +290,9 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
         return;
       }
 
-// Otherwise the calculate the velocity with a VelocityTracker
+      // Otherwise the calculate the velocity with a VelocityTracker
       if (_velocityTracker == null) {
+        //final pointerKind = defaultPointerDeviceKind(context);
         _velocityTracker = VelocityTracker();
         _startTime = DateTime.now();
       }
@@ -305,7 +306,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
       if (dragDetails != null) {
         final duration = _startTime.difference(DateTime.now());
         _velocityTracker.addPosition(duration, Offset(0, offset));
-        _handleDragUpdate(dragDetails.primaryDelta);
+        _handleDragUpdate(dragDetails.delta.dy);
       } else if (isDragging) {
         final velocity = _velocityTracker.getVelocity().pixelsPerSecond.dy;
         _velocityTracker = null;
@@ -323,7 +324,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
     animationCurve = _defaultCurve;
     _bounceDragController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 300));
-    _scrollController = widget.scrollController ?? ScrollController();
+
     // Todo: Check if we can remove scroll Controller
     super.initState();
   }
@@ -335,8 +336,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
       curve: Curves.easeOutSine,
     );
 
-    var child = widget.builder(context, _scrollController);
-
+    var child = widget.child;
     if (widget.containerBuilder != null) {
       child = widget.containerBuilder(
         context,
@@ -365,7 +365,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
                     delegate: _CustomBottomSheetLayout(bounceAnimation.value),
                     child: GestureDetector(
                       onVerticalDragUpdate: (details) {
-                        _handleDragUpdate(details.primaryDelta);
+                        _handleDragUpdate(details.delta.dy);
                       },
                       onVerticalDragEnd: (details) {
                         _handleDragEnd(details.primaryVelocity);
@@ -394,8 +394,10 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
       child: RepaintBoundary(child: child),
     );
 
-    return PrimaryScrollStatusBarHandler(
-        scrollController: _scrollController, child: child);
+    return ScrollToTopStatusBarHandler(
+      child: child,
+      scrollController: _scrollController,
+    );
   }
 }
 
@@ -456,4 +458,24 @@ class _CustomBottomSheetLayout extends SingleChildLayoutDelegate {
     }
     return false;
   }
+}
+
+// Checks the device input type as per the OS installed in it
+// Mobile platforms will be default to `touch` while desktop will do to `mouse`
+// Used with VelocityTracker
+// https://github.com/flutter/flutter/pull/64267#issuecomment-694196304
+PointerDeviceKind defaultPointerDeviceKind(BuildContext context) {
+  final platform = Theme.of(context)?.platform ?? defaultTargetPlatform;
+  switch (platform) {
+    case TargetPlatform.iOS:
+    case TargetPlatform.android:
+      return PointerDeviceKind.touch;
+    case TargetPlatform.linux:
+    case TargetPlatform.macOS:
+    case TargetPlatform.windows:
+      return PointerDeviceKind.mouse;
+    case TargetPlatform.fuchsia:
+      return PointerDeviceKind.unknown;
+  }
+  return PointerDeviceKind.unknown;
 }
