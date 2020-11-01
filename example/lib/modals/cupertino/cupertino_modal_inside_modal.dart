@@ -41,9 +41,7 @@ class CupertinoModalInsideModal extends StatelessWidget {
                       isDismissible: false,
                       context: context,
                       backgroundColor: Colors.transparent,
-                      builder: (context, scrollController) =>
-                          CupertinoModalInsideModal(
-                        scrollController: scrollController,
+                      builder: (context) => CupertinoModalInsideModal(
                         reverse: reverse,
                       ),
                     ),

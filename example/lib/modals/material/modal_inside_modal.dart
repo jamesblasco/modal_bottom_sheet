@@ -35,8 +35,7 @@ class ModalInsideModal extends StatelessWidget {
                     isDismissible: false,
                     context: context,
                     backgroundColor: Colors.transparent,
-                    builder: (context, scrollController) => ModalInsideModal(
-                        scrollController: scrollController, reverse: reverse),
+                    builder: (context) => ModalInsideModal(reverse: reverse),
                   ),
                 ),
               ),
