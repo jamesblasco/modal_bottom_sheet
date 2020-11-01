@@ -22,6 +22,7 @@ class MyCApp extends StatelessWidget {
     return CupertinoApp(
       theme: CupertinoThemeData(
         brightness: Brightness.dark,
+        // scaffoldBackgroundColor: CupertinoColors.activeOrange,
       ),
       title: 'BottomSheet Modals',
       debugShowCheckedModeBanner: false,
@@ -88,8 +89,6 @@ class MyCupertinoHomePage extends StatelessWidget {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,
-        backgroundColor:
-            CupertinoColors.secondarySystemBackground.resolveFrom(context),
         middle: Text('iOS13 Modal Presentation'),
         trailing: GestureDetector(
           child: Icon(CupertinoIcons.forward),
