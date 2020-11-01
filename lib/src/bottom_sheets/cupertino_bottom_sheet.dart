@@ -198,33 +198,6 @@ class CupertinoModalBottomSheetRoute<T> extends ModalBottomSheetRoute<T> {
           duration: duration,
         );
 
-  ModalBottomSheetRoute _nextModalRoute, _previousModalRoute;
-
-  @override
-  void didChangeNext(Route nextRoute) {
-    print('Next Route: $nextRoute');
-    if (nextRoute is ModalBottomSheetRoute) {
-      _nextModalRoute = nextRoute;
-    }
-
-    super.didChangeNext(nextRoute);
-  }
-
-  @override
-  void didChangePrevious(Route previousRoute) {
-    if (previousRoute is ModalBottomSheetRoute) {
-      _previousModalRoute = previousRoute;
-    }
-    super.didChangePrevious(previousRoute);
-  }
-
-  @override
-  bool didPop(T result) {
-    _nextModalRoute = null;
-    _previousModalRoute = null;
-    return super.didPop(result);
-  }
-
   @override
   Widget buildTransitions(
     BuildContext context,
@@ -232,33 +205,18 @@ class CupertinoModalBottomSheetRoute<T> extends ModalBottomSheetRoute<T> {
     Animation<double> secondaryAnimation,
     Widget child,
   ) {
-    if (_nextModalRoute != null) {
-      if (!secondaryAnimation.isDismissed) {
-        return _nextModalRoute.getPreviousRouteTransition(
-          context,
-          secondaryAnimation,
-          child,
-        );
-      } else {
-        _nextModalRoute = null;
-      }
-    }
     final paddingTop = MediaQuery.of(context).padding.top;
     final distanceWithScale =
         (paddingTop + _behind_widget_visible_height) * 0.9;
     final offsetY = secondaryAnimation.value * (paddingTop - distanceWithScale);
     final scale = 1 - secondaryAnimation.value / 10;
-    return AnimatedBuilder(
-      builder: (context, child) => Transform.translate(
-        offset: Offset(0, offsetY),
-        child: Transform.scale(
-          scale: scale,
-          child: child,
-          alignment: Alignment.topCenter,
-        ),
+    return Transform.translate(
+      offset: Offset(0, offsetY),
+      child: Transform.scale(
+        scale: scale,
+        child: child,
+        alignment: Alignment.topCenter,
       ),
-      child: child,
-      animation: secondaryAnimation,
     );
   }
 
@@ -274,7 +232,6 @@ class CupertinoModalBottomSheetRoute<T> extends ModalBottomSheetRoute<T> {
       animationCurve: previousRouteAnimationCurve,
       topRadius: topRadius,
       backgroundColor: transitionBackgroundColor ?? Colors.black,
-      isModalStack: _previousModalRoute != null,
     );
   }
 }
@@ -284,7 +241,6 @@ class _CupertinoModalTransition extends StatelessWidget {
   final Radius topRadius;
   final Curve animationCurve;
   final Color backgroundColor;
-  final bool isModalStack;
 
   final Widget body;
 
@@ -295,7 +251,6 @@ class _CupertinoModalTransition extends StatelessWidget {
     @required this.topRadius,
     this.backgroundColor = Colors.black,
     this.animationCurve,
-    this.isModalStack = false,
   }) : super(key: key);
 
   @override
@@ -321,19 +276,8 @@ class _CupertinoModalTransition extends StatelessWidget {
         child: body,
         builder: (context, child) {
           final progress = curvedAnimation.value;
-          final distanceWithScale =
-              (paddingTop + _behind_widget_visible_height) * 0.9;
+          final yOffset = progress * paddingTop;
 
-          var yOffset = 0.0;
-          if (isModalStack ?? false) {
-            if (progress > 0.5) {
-              yOffset = paddingTop - distanceWithScale;
-            } else {
-              yOffset = 2 * progress * (paddingTop - distanceWithScale);
-            }
-          } else {
-            yOffset = progress * paddingTop;
-          }
           final scale = 1 - progress / 10;
           final radius = progress == 0
               ? 0.0
@@ -343,42 +287,39 @@ class _CupertinoModalTransition extends StatelessWidget {
           return Stack(
             children: <Widget>[
               Container(color: backgroundColor),
-              if (progress == 0)
-                child
-              else
-                Transform.translate(
-                  offset: Offset(0, yOffset),
-                  child: Transform.scale(
-                    scale: scale,
-                    alignment: Alignment.topCenter,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(radius),
-                      child: CupertinoUserInterfaceLevel(
-                        data: CupertinoUserInterfaceLevelData.elevated,
-                        child: Builder(
-                          builder: (context) {
-                            return ColorFiltered(
-                              colorFilter: ColorFilter.mode(
-                                systemBackground,
-                                BlendMode.saturation,
+              Transform.translate(
+                offset: Offset(0, yOffset),
+                child: Transform.scale(
+                  scale: scale,
+                  alignment: Alignment.topCenter,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(radius),
+                    child: CupertinoUserInterfaceLevel(
+                      data: CupertinoUserInterfaceLevelData.elevated,
+                      child: Builder(
+                        builder: (context) {
+                          return ColorFiltered(
+                            colorFilter: ColorFilter.mode(
+                              systemBackground,
+                              BlendMode.saturation,
+                            ),
+                            child: CupertinoTheme(
+                              data: createPreviousRouteTheme(
+                                context,
+                                curvedAnimation,
                               ),
-                              child: CupertinoTheme(
-                                data: createPreviousRouteTheme(
-                                  context,
-                                  curvedAnimation,
-                                ),
-                                child: CupertinoUserInterfaceLevel(
-                                  data: CupertinoUserInterfaceLevelData.base,
-                                  child: child,
-                                ),
+                              child: CupertinoUserInterfaceLevel(
+                                data: CupertinoUserInterfaceLevelData.base,
+                                child: child,
                               ),
-                            );
-                          },
-                        ),
+                            ),
+                          );
+                        },
                       ),
                     ),
                   ),
                 ),
+              ),
             ],
           );
         },
