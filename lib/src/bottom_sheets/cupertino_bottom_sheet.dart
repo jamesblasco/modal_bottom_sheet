@@ -4,7 +4,7 @@
 
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart' show CupertinoTheme;
+import 'package:flutter/cupertino.dart' show CupertinoTheme, CupertinoApp;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart'
