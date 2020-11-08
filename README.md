@@ -36,7 +36,7 @@ https://pub.dev/packages/modal_bottom_sheet#-installing-tab-)
 ```dart
 showMaterialModalBottomSheet(
   context: context,
-  builder: (context, scrollController) => Container(),
+  builder: (context) => Container(),
 )
 ```
 
@@ -67,7 +67,7 @@ iOS 13 came with an amazing new modal navigation and now it is available to use 
 ```dart
 showCupertinoModalBottomSheet(
   context: context,
-  builder: (context, scrollController) => Container(),
+  builder: (context) => Container(),
 )
 ```
 See generic paramameter in the Material section above
