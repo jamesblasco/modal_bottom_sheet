@@ -6,11 +6,11 @@ class ModalWithNavigator extends StatelessWidget {
   const ModalWithNavigator({Key key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext rootContext) {
     return Material(
         child: Navigator(
       onGenerateRoute: (_) => MaterialPageRoute(
-        builder: (context) => Builder(
+        builder: (context2) => Builder(
           builder: (context) => CupertinoPageScaffold(
             navigationBar: CupertinoNavigationBar(
                 leading: Container(), middle: Text('Modal Page')),
@@ -26,26 +26,25 @@ class ModalWithNavigator extends StatelessWidget {
                       (index) => ListTile(
                             title: Text('Item'),
                             onTap: () {
-                              Navigator.of(context).pushAndRemoveUntil(
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          CupertinoPageScaffold(
-                                              navigationBar:
-                                                  CupertinoNavigationBar(
-                                                middle: Text('New Page'),
-                                              ),
-                                              child: Stack(
-                                                fit: StackFit.expand,
-                                                children: <Widget>[
-                                                  MaterialButton(
-                                                    onPressed: () =>
-                                                        Navigator.of(context)
-                                                            .pop(),
-                                                    child: Text('touch here'),
-                                                  )
-                                                ],
-                                              ))),
-                                  ModalRoute.withName('/'));
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => CupertinoPageScaffold(
+                                    navigationBar: CupertinoNavigationBar(
+                                      middle: Text('New Page'),
+                                    ),
+                                    child: Stack(
+                                      fit: StackFit.expand,
+                                      children: <Widget>[
+                                        MaterialButton(
+                                          onPressed: () =>
+                                              Navigator.of(rootContext).pop(),
+                                          child: Text('touch here'),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
                             },
                           )),
                 ).toList(),
