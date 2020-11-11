@@ -1,3 +1,33 @@
+## 1.0.0 - An optimized modal + Breaking change
+- An optimized builder function.
+- The `builder` param has changed from:
+```dart
+showMaterialModalBottomSheet(
+  context: context,
+  builder: (context, scrollController) {
+       return SingleChildScrollView(
+        controller: scrollController,
+        child: Container()
+      )
+  },
+)
+```
+to 
+
+```dart
+showMaterialModalBottomSheet(
+  context: context,
+  builder: (context) {
+      return SingleChildScrollView(
+        controller: ModalScrollController.of(context),
+        child: Container()
+      )
+  },
+)
+```
+
+Now you can access the modal's scrollController from any inside widget like `ModalScrollController.of(context)`.
+
 ## [1.0.1-dev] - Fix instance member 'opaque' can't accessed in an initalizer.
 - https://github.com/jamesblasco/modal_bottom_sheet/issues/98
 

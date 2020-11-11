@@ -227,7 +227,8 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
 
     if (_dismissUnderway || !isDragging) return;
     isDragging = false;
-    _bounceDragController.reverse();
+     // ignore: unawaited_futures
+     _bounceDragController.reverse();
 
     var canClose = true;
     if (widget.shouldClose != null && hasReachedWillPopThreshold) {
@@ -240,6 +241,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
         _close();
       } else if (hasReachedCloseThreshold) {
         if (widget.animationController.value > 0.0) {
+             // ignore: unawaited_futures
           widget.animationController.fling(velocity: -1.0);
         }
         _close();
@@ -293,6 +295,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
       // Otherwise the calculate the velocity with a VelocityTracker
       if (_velocityTracker == null) {
         //final pointerKind = defaultPointerDeviceKind(context);
+        // ignore: deprecated_member_use
         _velocityTracker = VelocityTracker();
         _startTime = DateTime.now();
       }
