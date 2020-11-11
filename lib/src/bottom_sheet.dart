@@ -227,8 +227,8 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
 
     if (_dismissUnderway || !isDragging) return;
     isDragging = false;
-     // ignore: unawaited_futures
-     _bounceDragController.reverse();
+    // ignore: unawaited_futures
+    _bounceDragController.reverse();
 
     var canClose = true;
     if (widget.shouldClose != null && hasReachedWillPopThreshold) {
@@ -241,7 +241,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
         _close();
       } else if (hasReachedCloseThreshold) {
         if (widget.animationController.value > 0.0) {
-             // ignore: unawaited_futures
+          // ignore: unawaited_futures
           widget.animationController.fling(velocity: -1.0);
         }
         _close();
