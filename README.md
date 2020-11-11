@@ -4,7 +4,7 @@
 
 **BREAKING CHANGE IN 1.0.0** 
 
-In the `builder` param remove `scrollController` and use `ModalScrollController.of(context)` instead to access the modal's scrollController.
+In the `builder` param remove `scrollController` and use `ModalScrollController.of(context)` instead to access the modal's scrollController. Check the CHANGELOG for more information
 
 [![Awesome Flutter](https://img.shields.io/badge/Awesome-Flutter-blue.svg?longCache=true&style=flat-square)](https://github.com/Solido/awesome-flutter)
 [![Pub](https://img.shields.io/pub/v/modal_bottom_sheet.svg?logo=flutter&color=blue&style=flat-square)](https://pub.dev/packages/modal_bottom_sheet)
