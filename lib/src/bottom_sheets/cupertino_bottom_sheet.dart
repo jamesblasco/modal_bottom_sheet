@@ -22,6 +22,7 @@ import '../bottom_sheet_route.dart';
 const double _behind_widget_visible_height = 10;
 
 const Radius _default_top_radius = Radius.circular(12);
+const BoxShadow _default_box_shadow = BoxShadow(blurRadius: 10, color: Colors.black12, spreadRadius: 5);
 
 /// Cupertino Bottom Sheet Container
 ///
@@ -32,9 +33,10 @@ class _CupertinoBottomSheetContainer extends StatelessWidget {
   final Widget child;
   final Color backgroundColor;
   final Radius topRadius;
+  final BoxShadow shadow;
 
   const _CupertinoBottomSheetContainer(
-      {Key key, this.child, this.backgroundColor, @required this.topRadius})
+      {Key key, this.child, this.backgroundColor, @required this.topRadius, this.shadow})
       : super(key: key);
 
   @override
@@ -42,7 +44,7 @@ class _CupertinoBottomSheetContainer extends StatelessWidget {
     final topSafeAreaPadding = MediaQuery.of(context).padding.top;
     final topPadding = _behind_widget_visible_height + topSafeAreaPadding;
 
-    final shadow =
+    final _shadow = shadow ?? _default_box_shadow;
         BoxShadow(blurRadius: 10, color: Colors.black12, spreadRadius: 5);
     final _backgroundColor =
         backgroundColor ?? CupertinoTheme.of(context).scaffoldBackgroundColor;
@@ -52,7 +54,7 @@ class _CupertinoBottomSheetContainer extends StatelessWidget {
         borderRadius: BorderRadius.vertical(top: topRadius),
         child: Container(
           decoration:
-              BoxDecoration(color: _backgroundColor, boxShadow: [shadow]),
+              BoxDecoration(color: _backgroundColor, boxShadow: [_shadow]),
           width: double.infinity,
           child: MediaQuery.removePadding(
             context: context,
@@ -86,6 +88,7 @@ Future<T> showCupertinoModalBottomSheet<T>({
   Duration duration,
   RouteSettings settings,
   Color transitionBackgroundColor,
+  BoxShadow shadow,
 }) async {
   assert(context != null);
   assert(builder != null);
@@ -108,6 +111,7 @@ Future<T> showCupertinoModalBottomSheet<T>({
               child: child,
               backgroundColor: backgroundColor,
               topRadius: topRadius,
+              shadow: shadow,
             ),
         secondAnimationController: secondAnimation,
         expanded: expand,
@@ -133,6 +137,7 @@ Future<T> showCupertinoModalBottomSheet<T>({
 class CupertinoModalBottomSheetRoute<T> extends ModalBottomSheetRoute<T> {
   final Radius topRadius;
   final Curve previousRouteAnimationCurve;
+  final BoxShadow boxShadow;
 
   // Background color behind all routes
   // Black by default
@@ -156,6 +161,7 @@ class CupertinoModalBottomSheetRoute<T> extends ModalBottomSheetRoute<T> {
     Duration duration,
     RouteSettings settings,
     ScrollController scrollController,
+    this.boxShadow = _default_box_shadow,
     this.transitionBackgroundColor,
     this.topRadius = _default_top_radius,
     this.previousRouteAnimationCurve,
@@ -223,6 +229,7 @@ class _CupertinoModalTransition extends StatelessWidget {
   final Radius topRadius;
   final Curve animationCurve;
   final Color backgroundColor;
+  final BoxShadow boxShadow;
 
   final Widget body;
 
@@ -233,6 +240,7 @@ class _CupertinoModalTransition extends StatelessWidget {
     @required this.topRadius,
     this.backgroundColor = Colors.black,
     this.animationCurve,
+    this.boxShadow,
   }) : super(key: key);
 
   @override
@@ -334,6 +342,7 @@ class CupertinoScaffold extends StatefulWidget {
     bool enableDrag = true,
     Duration duration,
     RouteSettings settings,
+    BoxShadow shadow,
   }) async {
     assert(context != null);
     assert(builder != null);
@@ -358,6 +367,7 @@ class CupertinoScaffold extends StatefulWidget {
         child: child,
         backgroundColor: backgroundColor,
         topRadius: topRadius,
+        shadow: shadow,
       ),
       expanded: expand,
       barrierLabel: barrierLabel,
