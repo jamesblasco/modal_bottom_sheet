@@ -39,7 +39,7 @@ Future<T> showMaterialModalBottomSheet<T>({
       elevation: elevation,
       shape: shape,
       clipBehavior: clipBehavior,
-      theme: Theme.of(context, shadowThemeOnly: true),
+      theme: Theme.of(context),
     ),
     secondAnimationController: secondAnimation,
     bounce: bounce,
