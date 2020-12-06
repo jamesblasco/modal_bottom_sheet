@@ -19,10 +19,11 @@ class MaterialWithModalsPageRoute<T> extends MaterialPageRoute<T> {
         assert(maintainState != null),
         assert(fullscreenDialog != null),
         super(
-            settings: settings,
-            fullscreenDialog: fullscreenDialog,
-            builder: builder,
-            maintainState: maintainState);
+          settings: settings,
+          fullscreenDialog: fullscreenDialog,
+          builder: builder,
+          maintainState: maintainState,
+        );
 
   ModalBottomSheetRoute _nextModalRoute;
 
@@ -67,15 +68,28 @@ class MaterialWithModalsPageRoute<T> extends MaterialPageRoute<T> {
             Tween<double>(begin: 0, end: 0).animate(secondaryAnimation);
 
         final defaultTransition = theme.buildTransitions<T>(
-            this, context, animation, fakeSecondaryAnimation, child);
+          this,
+          context,
+          animation,
+          fakeSecondaryAnimation,
+          child,
+        );
         return _nextModalRoute.getPreviousRouteTransition(
-            context, secondaryAnimation, defaultTransition);
+          context,
+          secondaryAnimation,
+          defaultTransition,
+        );
       } else {
         _nextModalRoute = null;
       }
     }
 
     return theme.buildTransitions<T>(
-        this, context, animation, secondaryAnimation, child);
+      this,
+      context,
+      animation,
+      secondaryAnimation,
+      child,
+    );
   }
 }
