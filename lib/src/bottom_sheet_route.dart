@@ -93,6 +93,7 @@ class _ModalBottomSheetState<T> extends State<_ModalBottomSheet<T>> {
               label: _getRouteLabel(),
               explicitChildNodes: true,
               child: ModalBottomSheet(
+                closeProgressThreshold: widget.closeProgressThreshold,
                 expanded: widget.route.expanded,
                 containerBuilder: widget.route.containerBuilder,
                 animationController: widget.route._animationController,
