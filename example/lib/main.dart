@@ -25,8 +25,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(platform: TargetPlatform.iOS),
       title: 'BottomSheet Modals',
-      builder: (context, child) => WebFrame(
-        child: child,
+      builder: (context, Widget? child) => WebFrame(
+        child: child!,
       ),
       onGenerateRoute: (RouteSettings settings) {
         switch (settings.name) {
@@ -84,7 +84,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  MyHomePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 

@@ -10,19 +10,19 @@ const Radius _default_bar_top_radius = Radius.circular(15);
 
 class BarBottomSheet extends StatelessWidget {
   final Widget child;
-  final Widget control;
-  final Clip clipBehavior;
-  final double elevation;
-  final ShapeBorder shape;
+  final Widget? control;
+  final Clip? clipBehavior;
+  final double? elevation;
+  final ShapeBorder? shape;
 
-  const BarBottomSheet(
-      {Key key,
-      this.child,
-      this.control,
-      this.clipBehavior,
-      this.shape,
-      this.elevation})
-      : super(key: key);
+  const BarBottomSheet({
+    Key? key,
+    required this.child,
+    this.control,
+    this.clipBehavior,
+    this.shape,
+    this.elevation,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -70,24 +70,24 @@ class BarBottomSheet extends StatelessWidget {
   }
 }
 
-Future<T> showBarModalBottomSheet<T>({
-  @required BuildContext context,
-  @required WidgetBuilder builder,
-  Color backgroundColor,
-  double elevation,
-  ShapeBorder shape,
-  double closeProgressThreshold,
-  Clip clipBehavior,
+Future<T?> showBarModalBottomSheet<T>({
+  required BuildContext context,
+  required WidgetBuilder builder,
+  Color? backgroundColor,
+  double? elevation,
+  ShapeBorder? shape,
+  double? closeProgressThreshold,
+  Clip? clipBehavior,
   Color barrierColor = Colors.black87,
   bool bounce = true,
   bool expand = false,
-  AnimationController secondAnimation,
-  Curve animationCurve,
+  AnimationController? secondAnimation,
+  Curve? animationCurve,
   bool useRootNavigator = false,
   bool isDismissible = true,
   bool enableDrag = true,
-  Widget topControl,
-  Duration duration,
+  Widget? topControl,
+  Duration? duration,
 }) async {
   assert(context != null);
   assert(builder != null);

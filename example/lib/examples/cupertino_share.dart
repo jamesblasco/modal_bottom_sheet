@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:example/examples/sliver_container.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -72,7 +71,7 @@ class CupertinoSharePage extends StatelessWidget {
 }
 
 class PhotoShareBottomSheet extends StatelessWidget {
-  const PhotoShareBottomSheet({Key key}) : super(key: key);
+  const PhotoShareBottomSheet({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -150,6 +149,7 @@ class PhotoShareBottomSheet extends StatelessWidget {
                               margin: EdgeInsets.symmetric(horizontal: 4),
                               child: Column(
                                 children: <Widget>[
+                                  if(app.imageUrl != null)
                                   Material(
                                     child: ClipRRect(
                                       child: Container(
@@ -157,7 +157,7 @@ class PhotoShareBottomSheet extends StatelessWidget {
                                         width: 60,
                                         decoration: BoxDecoration(
                                             image: DecorationImage(
-                                                image: AssetImage(app.imageUrl),
+                                                image: AssetImage(app.imageUrl!),
                                                 fit: BoxFit.cover),
                                             color: Colors.white,
                                             borderRadius:
@@ -186,11 +186,7 @@ class PhotoShareBottomSheet extends StatelessWidget {
                   ),
                   SliverPadding(
                     padding: EdgeInsets.symmetric(horizontal: 18, vertical: 6),
-                    sliver: SliverContainer(
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(12)),
-                        sliver: SliverList(
+                    sliver: SliverList(
                           delegate: SliverChildListDelegate.fixed(
                               List<Widget>.from(actions.map(
                             (action) => Container(
@@ -206,14 +202,10 @@ class PhotoShareBottomSheet extends StatelessWidget {
                             height: 1,
                           ))),
                         )),
-                  ),
+             
                   SliverPadding(
                     padding: EdgeInsets.symmetric(horizontal: 18, vertical: 6),
-                    sliver: SliverContainer(
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(12)),
-                        sliver: SliverList(
+                    sliver:  SliverList(
                           delegate: SliverChildListDelegate.fixed(
                               List<Widget>.from(actions1.map(
                             (action) => Container(
@@ -228,15 +220,11 @@ class PhotoShareBottomSheet extends StatelessWidget {
                           )).addItemInBetween(Divider(
                             height: 1,
                           ))),
-                        )),
+                        )
                   ),
                   SliverPadding(
                     padding: EdgeInsets.symmetric(horizontal: 18, vertical: 4),
-                    sliver: SliverContainer(
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(12)),
-                        sliver: SliverList(
+                    sliver:  SliverList(
                           delegate: SliverChildListDelegate.fixed(
                               List<Widget>.from(actions2.map(
                             (action) => Container(
@@ -251,7 +239,7 @@ class PhotoShareBottomSheet extends StatelessWidget {
                           )).addItemInBetween(Divider(
                             height: 1,
                           ))),
-                        )),
+                        )
                   ),
                   SliverSafeArea(
                     top: false,
@@ -280,10 +268,11 @@ class PhotoShareBottomSheet extends StatelessWidget {
               margin: EdgeInsets.symmetric(horizontal: 4),
               child: Column(
                 children: <Widget>[
+                  if(person.imageUrl != null)
                   Material(
                     child: CircleAvatar(
                       backgroundImage: AssetImage(
-                        person.imageUrl,
+                        person.imageUrl!,
                       ),
                       radius: 30,
                       backgroundColor: Colors.white,
@@ -406,7 +395,7 @@ class PhotoShareBottomSheet extends StatelessWidget {
 
 class Item {
   final String title;
-  final String imageUrl;
+  final String? imageUrl;
 
   Item(this.title, this.imageUrl);
 }
@@ -453,10 +442,9 @@ final actions2 = [
 ];
 
 extension ListUtils<T> on List<T> {
-  List<T> addItemInBetween<T>(T item) => this.length == 0
+  List<T> addItemInBetween<A extends T>(A item) => this.length == 0
       ? this
-      : (this.fold([], (r, element) => [...r, element as T, item])
-        ..removeLast());
+      : (this.fold([], (r, element) => [...r, element, item])..removeLast());
 }
 
 class SimpleSliverDelegate extends SliverPersistentHeaderDelegate {
@@ -464,8 +452,8 @@ class SimpleSliverDelegate extends SliverPersistentHeaderDelegate {
   final double height;
 
   SimpleSliverDelegate({
-    this.child,
-    this.height,
+    required this.child,
+    required this.height,
   });
 
   @override

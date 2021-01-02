@@ -25,7 +25,7 @@ import 'package:flutter/foundation.dart';
 /// animation at the time when the finger was released.
 ///
 /// The [startingPoint] and [curve] arguments must not be null.
-class BottomSheetSuspendedCurve extends ParametricCurve<double> {
+class BottomSheetSuspendedCurve extends Curve {
   /// Creates a suspended curve.
   const BottomSheetSuspendedCurve(
     this.startingPoint, {
@@ -56,7 +56,7 @@ class BottomSheetSuspendedCurve extends ParametricCurve<double> {
 
     final curveProgress = (t - startingPoint) / (1 - startingPoint);
     final transformed = curve.transform(curveProgress);
-    return lerpDouble(startingPoint, 1, transformed);
+    return lerpDouble(startingPoint, 1, transformed)!;
   }
 
   @override

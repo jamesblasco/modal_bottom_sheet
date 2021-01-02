@@ -11,8 +11,8 @@ class MaterialWithModalsPageRoute<T> extends MaterialPageRoute<T> {
   /// The values of [builder], [maintainState], and [fullScreenDialog] must not
   /// be null.
   MaterialWithModalsPageRoute({
-    @required WidgetBuilder builder,
-    RouteSettings settings,
+    required WidgetBuilder builder,
+    RouteSettings? settings,
     bool maintainState = true,
     bool fullscreenDialog = false,
   })  : assert(builder != null),
@@ -24,7 +24,7 @@ class MaterialWithModalsPageRoute<T> extends MaterialPageRoute<T> {
             builder: builder,
             maintainState: maintainState);
 
-  ModalBottomSheetRoute _nextModalRoute;
+  ModalBottomSheetRoute? _nextModalRoute;
 
   @override
   bool canTransitionTo(TransitionRoute<dynamic> nextRoute) {
@@ -37,7 +37,7 @@ class MaterialWithModalsPageRoute<T> extends MaterialPageRoute<T> {
   }
 
   @override
-  void didChangeNext(Route nextRoute) {
+  void didChangeNext(Route? nextRoute) {
     if (nextRoute is ModalBottomSheetRoute) {
       _nextModalRoute = nextRoute;
     }
@@ -51,7 +51,7 @@ class MaterialWithModalsPageRoute<T> extends MaterialPageRoute<T> {
   }
 
   @override
-  bool didPop(T result) {
+  bool didPop(T? result) {
     _nextModalRoute = null;
     return super.didPop(result);
   }
@@ -60,7 +60,8 @@ class MaterialWithModalsPageRoute<T> extends MaterialPageRoute<T> {
   Widget buildTransitions(BuildContext context, Animation<double> animation,
       Animation<double> secondaryAnimation, Widget child) {
     final theme = Theme.of(context).pageTransitionsTheme;
-    if (_nextModalRoute != null) {
+    final nextRoute = _nextModalRoute;
+    if (nextRoute != null) {
       if (!secondaryAnimation.isDismissed) {
         // Avoid default transition theme to animate when a new modal view is pushed
         final fakeSecondaryAnimation =
@@ -68,7 +69,7 @@ class MaterialWithModalsPageRoute<T> extends MaterialPageRoute<T> {
 
         final defaultTransition = theme.buildTransitions<T>(
             this, context, animation, fakeSecondaryAnimation, child);
-        return _nextModalRoute.getPreviousRouteTransition(
+        return nextRoute.getPreviousRouteTransition(
             context, secondaryAnimation, defaultTransition);
       } else {
         _nextModalRoute = null;

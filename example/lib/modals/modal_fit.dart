@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ModalFit extends StatelessWidget {
-  const ModalFit({Key key}) : super(key: key);
+  const ModalFit({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
