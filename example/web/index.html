@@ -1,33 +1,37 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <!--
-    If you are serving your web app in a path other than the root, change the
-    href value below to reflect the base path you are serving from.
-
-    The path provided below has to start and end with a slash "/" in order for
-    it to work correctly.
-
-    Fore more details:
-    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
-  -->
-  <base href="/">
-
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="A new Flutter project.">
+  <!-- Primary Meta Tags -->
+  <title>Flutter Modal Bottom Sheets</title>
+  <meta name="title" content="Flutter Modal Bottom Sheets">
+  <meta name="description" content="Build advanced modals. Cupertino, material or create your own">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://jamesblasco.github.io/modal_bottom_sheet/">
+  <meta property="og:title" content="Flutter Modal Bottom Sheets">
+  <meta property="og:description" content="Build advanced modals. Cupertino, material or create your own">
+  <meta property="og:image" content="https://jamesblasco.github.io/modal_bottom_sheet/icons/image.png">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://jamesblasco.github.io/modal_bottom_sheet/">
+  <meta property="twitter:title" content="Flutter Modal Bottom Sheets">
+  <meta property="twitter:description" content="Build advanced modals. Cupertino, material or create your own">
+  <meta property="og:image" content="https://jamesblasco.github.io/modal_bottom_sheet/icons/image.png">
 
   <!-- iOS meta tags & icons -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-mobile-web-app-title" content="example">
-  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+  <link rel="apple-touch-icon" href="/icons/Icon-192.png">
 
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png"/>
+  <link rel="shortcut icon" type="image/png" href="/favicon.png"/>
 
-  <title>example</title>
-  <link rel="manifest" href="manifest.json">
+  <link rel="manifest" href="/manifest.json">
 </head>
 <body>
   <!-- This script installs service_worker.js to provide PWA functionality to
@@ -35,8 +39,10 @@
        https://developers.google.com/web/fundamentals/primers/service-workers -->
   <script>
     if ('serviceWorker' in navigator) {
-      window.addEventListener('flutter-first-frame', function () {
-        navigator.serviceWorker.register('flutter_service_worker.js');
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('flutter_service_worker.js', {
+        scope: './'
+         });
       });
     }
   </script>
