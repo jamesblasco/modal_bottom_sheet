@@ -19,15 +19,15 @@ import 'package:flutter/widgets.dart';
 import '../../modal_bottom_sheet.dart';
 import '../bottom_sheet_route.dart';
 
-const double _behind_widget_visible_height = 10;
+const double _kPreviousPageVisibleOffset = 10;
 
-const Radius _default_top_radius = Radius.circular(12);
-const BoxShadow _default_box_shadow = BoxShadow(blurRadius: 10, color: Colors.black12, spreadRadius: 5);
+const Radius _kDefaultTopRadius = Radius.circular(12);
+const BoxShadow _kDefaultBoxShadow = BoxShadow(blurRadius: 10, color: Colors.black12, spreadRadius: 5);
 
 /// Cupertino Bottom Sheet Container
 ///
 /// Clip the child widget to rectangle with top rounded corners and adds
-/// top padding(+safe area padding). This padding [_behind_widget_visible_height]
+/// top padding(+safe area padding). This padding [_kPreviousPageVisibleOffset]
 /// is the height that will be displayed from previous route.
 class _CupertinoBottomSheetContainer extends StatelessWidget {
   final Widget child;
@@ -47,9 +47,9 @@ class _CupertinoBottomSheetContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final topSafeAreaPadding = MediaQuery.of(context).padding.top;
-    final topPadding = _behind_widget_visible_height + topSafeAreaPadding;
+    final topPadding = _kPreviousPageVisibleOffset + topSafeAreaPadding;
 
-    final _shadow = shadow ?? _default_box_shadow;
+    final _shadow = shadow ?? _kDefaultBoxShadow;
         BoxShadow(blurRadius: 10, color: Colors.black12, spreadRadius: 5);
     final _backgroundColor =
         backgroundColor ?? CupertinoTheme.of(context).scaffoldBackgroundColor;
@@ -89,7 +89,7 @@ Future<T?> showCupertinoModalBottomSheet<T>({
   bool bounce = true,
   bool? isDismissible,
   bool enableDrag = true,
-  Radius topRadius = _default_top_radius,
+  Radius topRadius = _kDefaultTopRadius,
   Duration? duration,
   RouteSettings? settings,
   Color? transitionBackgroundColor,
@@ -169,9 +169,9 @@ class CupertinoModalBottomSheetRoute<T> extends ModalBottomSheetRoute<T> {
     Duration? duration,
     RouteSettings? settings,
     ScrollController? scrollController,
-    this.boxShadow = _default_box_shadow,
+    this.boxShadow = _kDefaultBoxShadow,
     this.transitionBackgroundColor,
-    this.topRadius = _default_top_radius,
+    this.topRadius = _kDefaultTopRadius,
     this.previousRouteAnimationCurve,
   })  : assert(expanded != null),
         assert(isDismissible != null),
@@ -202,7 +202,7 @@ class CupertinoModalBottomSheetRoute<T> extends ModalBottomSheetRoute<T> {
   ) {
     final paddingTop = MediaQuery.of(context).padding.top;
     final distanceWithScale =
-        (paddingTop + _behind_widget_visible_height) * 0.9;
+        (paddingTop + _kPreviousPageVisibleOffset) * 0.9;
     final offsetY = secondaryAnimation.value * (paddingTop - distanceWithScale);
     final scale = 1 - secondaryAnimation.value / 10;
     return AnimatedBuilder(
@@ -331,7 +331,7 @@ class CupertinoScaffold extends StatefulWidget {
   const CupertinoScaffold({
     Key? key,
     required this.body,
-    this.topRadius = _default_top_radius,
+    this.topRadius = _kDefaultTopRadius,
     this.transitionBackgroundColor = Colors.black,
   }) : super(key: key);
 
@@ -377,7 +377,7 @@ class CupertinoScaffold extends StatefulWidget {
       containerBuilder: (context, _, child) => _CupertinoBottomSheetContainer(
         child: child,
         backgroundColor: backgroundColor,
-        topRadius: topRadius ?? _default_top_radius,
+        topRadius: topRadius ?? _kDefaultTopRadius,
         shadow: shadow,
       ),
       expanded: expand,
@@ -386,7 +386,7 @@ class CupertinoScaffold extends StatefulWidget {
       isDismissible: isDismissible ?? expand == false ? true : false,
       modalBarrierColor: barrierColor ?? Colors.black12,
       enableDrag: enableDrag,
-      topRadius: topRadius ?? _default_top_radius,
+      topRadius: topRadius ?? _kDefaultTopRadius,
       animationCurve: animationCurve,
       previousRouteAnimationCurve: previousRouteAnimationCurve,
       duration: duration,
