@@ -231,7 +231,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
     // ignore: unawaited_futures
     _bounceDragController.reverse();
 
-    bool canClose = true;
+    var canClose = true;
     if (widget.shouldClose != null && hasReachedWillPopThreshold) {
       _cancelClose();
       canClose = await shouldClose();
