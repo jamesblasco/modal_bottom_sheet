@@ -34,6 +34,7 @@ class _CupertinoBottomSheetContainer extends StatelessWidget {
   final Color? backgroundColor;
   final Radius topRadius;
   final BoxShadow? shadow;
+  final double? width;
 
   const _CupertinoBottomSheetContainer({
     Key? key,
@@ -41,6 +42,7 @@ class _CupertinoBottomSheetContainer extends StatelessWidget {
     this.backgroundColor,
     required this.topRadius,
     this.shadow,
+    this.width,
   }) : super(key: key);
 
 
@@ -57,14 +59,17 @@ class _CupertinoBottomSheetContainer extends StatelessWidget {
       padding: EdgeInsets.only(top: topPadding),
       child: ClipRRect(
         borderRadius: BorderRadius.vertical(top: topRadius),
-        child: Container(
-          decoration:
-              BoxDecoration(color: _backgroundColor, boxShadow: [_shadow]),
-          width: double.infinity,
-          child: MediaQuery.removePadding(
-            context: context,
-            removeTop: true, //Remove top Safe Area
-            child: child,
+        child: Align(
+          alignment: Alignment.bottomCenter,
+          child: Container(
+            decoration:
+                BoxDecoration(color: _backgroundColor, boxShadow: [_shadow]),
+            width: width ?? double.infinity,
+            child: MediaQuery.removePadding(
+              context: context,
+              removeTop: true, //Remove top Safe Area
+              child: child,
+            ),
           ),
         ),
       ),
@@ -94,6 +99,7 @@ Future<T?> showCupertinoModalBottomSheet<T>({
   RouteSettings? settings,
   Color? transitionBackgroundColor,
   BoxShadow? shadow,
+  double? width,
 }) async {
   assert(context != null);
   assert(builder != null);
@@ -117,6 +123,7 @@ Future<T?> showCupertinoModalBottomSheet<T>({
               backgroundColor: backgroundColor,
               topRadius: topRadius,
               shadow: shadow,
+              width: width,
             ),
         secondAnimationController: secondAnimation,
         expanded: expand,
