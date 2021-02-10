@@ -142,6 +142,7 @@ class ModalBottomSheetRoute<T> extends PopupRoute<T> {
     this.bounce = false,
     this.animationCurve,
     this.duration,
+    this.width,
     RouteSettings? settings,
   })  : assert(expanded != null),
         assert(isDismissible != null),
@@ -159,6 +160,8 @@ class ModalBottomSheetRoute<T> extends PopupRoute<T> {
   final ScrollController? scrollController;
 
   final Duration? duration;
+
+  final double? width;
 
   final AnimationController? secondAnimationController;
   final Curve? animationCurve;

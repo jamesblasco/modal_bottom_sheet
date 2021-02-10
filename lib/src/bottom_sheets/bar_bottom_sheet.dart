@@ -14,6 +14,7 @@ class BarBottomSheet extends StatelessWidget {
   final Clip? clipBehavior;
   final double? elevation;
   final ShapeBorder? shape;
+  final double? width;
 
   const BarBottomSheet({
     Key? key,
@@ -22,6 +23,7 @@ class BarBottomSheet extends StatelessWidget {
     this.clipBehavior,
     this.shape,
     this.elevation,
+    this.width,
   }) : super(key: key);
 
   @override
@@ -59,7 +61,7 @@ class BarBottomSheet extends StatelessWidget {
                 clipBehavior: clipBehavior ?? Clip.hardEdge,
                 elevation: elevation ?? 2,
                 child: SizedBox(
-                  width: double.infinity,
+                  width: width ?? double.infinity,
                   child: MediaQuery.removePadding(
                       context: context, removeTop: true, child: child),
                 ),
@@ -88,6 +90,7 @@ Future<T?> showBarModalBottomSheet<T>({
   bool enableDrag = true,
   Widget? topControl,
   Duration? duration,
+  double? width,
 }) async {
   assert(context != null);
   assert(builder != null);
@@ -108,6 +111,7 @@ Future<T?> showBarModalBottomSheet<T>({
       clipBehavior: clipBehavior,
       shape: shape,
       elevation: elevation,
+      width: width,
     ),
     secondAnimationController: secondAnimation,
     expanded: expand,
@@ -117,6 +121,7 @@ Future<T?> showBarModalBottomSheet<T>({
     enableDrag: enableDrag,
     animationCurve: animationCurve,
     duration: duration,
+    width: width,
   ));
   return result;
 }
