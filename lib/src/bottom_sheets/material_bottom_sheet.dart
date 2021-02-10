@@ -20,6 +20,7 @@ Future<T?> showMaterialModalBottomSheet<T>({
   bool isDismissible = true,
   bool enableDrag = true,
   Duration? duration,
+  double? width,
 }) async {
   assert(context != null);
   assert(builder != null);
@@ -40,6 +41,7 @@ Future<T?> showMaterialModalBottomSheet<T>({
       shape: shape,
       clipBehavior: clipBehavior,
       theme: Theme.of(context),
+      width: width,
     ),
     secondAnimationController: secondAnimation,
     bounce: bounce,
@@ -60,7 +62,8 @@ WidgetWithChildBuilder _materialContainerBuilder(BuildContext context,
     double? elevation,
     ThemeData? theme,
     Clip? clipBehavior,
-    ShapeBorder? shape}) {
+    ShapeBorder? shape,
+    double? width}) {
   final bottomSheetTheme = Theme.of(context).bottomSheetTheme;
   final color = backgroundColor ??
       bottomSheetTheme.modalBackgroundColor ??
@@ -75,7 +78,13 @@ WidgetWithChildBuilder _materialContainerBuilder(BuildContext context,
       elevation: _elevation,
       shape: _shape,
       clipBehavior: _clipBehavior,
-      child: child);
+      child: Align(
+        alignment: Alignment.bottomCenter,
+        child: Container(
+          width: width,
+          child: child,
+        ),
+      ));
   if (theme != null) {
     return (context, animation, child) =>
         Theme(data: theme, child: result(context, animation, child));
