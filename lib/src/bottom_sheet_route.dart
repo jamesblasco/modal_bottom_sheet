@@ -19,6 +19,7 @@ class _ModalBottomSheet<T> extends StatefulWidget {
     this.expanded = false,
     this.enableDrag = true,
     this.animationCurve,
+    this.width,
   })  : assert(expanded != null),
         assert(enableDrag != null),
         super(key: key);
@@ -30,6 +31,7 @@ class _ModalBottomSheet<T> extends StatefulWidget {
   final bool enableDrag;
   final AnimationController? secondAnimationController;
   final Curve? animationCurve;
+  final double? width;
 
   @override
   _ModalBottomSheetState<T> createState() => _ModalBottomSheetState<T>();
@@ -117,6 +119,7 @@ class _ModalBottomSheetState<T> extends State<_ModalBottomSheet<T>> {
                 bounce: widget.bounce,
                 scrollController: scrollController,
                 animationCurve: widget.animationCurve,
+                width: widget.width,
               ),
             );
           },
@@ -142,6 +145,7 @@ class ModalBottomSheetRoute<T> extends PopupRoute<T> {
     this.bounce = false,
     this.animationCurve,
     this.duration,
+    this.width,
     RouteSettings? settings,
   })  : assert(expanded != null),
         assert(isDismissible != null),
@@ -162,6 +166,8 @@ class ModalBottomSheetRoute<T> extends PopupRoute<T> {
 
   final AnimationController? secondAnimationController;
   final Curve? animationCurve;
+
+  final double? width;
 
   @override
   Duration get transitionDuration => duration ?? _bottomSheetDuration;
@@ -205,6 +211,7 @@ class ModalBottomSheetRoute<T> extends PopupRoute<T> {
         bounce: bounce,
         enableDrag: enableDrag,
         animationCurve: animationCurve,
+        width: width,
       ),
     );
     return bottomSheet;

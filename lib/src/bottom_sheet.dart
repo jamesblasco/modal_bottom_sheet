@@ -49,6 +49,7 @@ class ModalBottomSheet extends StatefulWidget {
     required this.expanded,
     required this.onClosing,
     required this.child,
+    this.width,
   })   : assert(enableDrag != null),
         assert(onClosing != null),
         assert(child != null),
@@ -106,6 +107,12 @@ class ModalBottomSheet extends StatefulWidget {
   final bool enableDrag;
 
   final ScrollController scrollController;
+
+
+  /// Width of the modal.
+  ///
+  /// Default is to expand to the devices full width.
+  final double? width;
 
   @override
   _ModalBottomSheetState createState() => _ModalBottomSheetState();
@@ -358,52 +365,57 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
 
     final mediaQuery = MediaQuery.of(context);
 
-    child = AnimatedBuilder(
-      animation: widget.animationController,
-      builder: (context, Widget? child) {
-        assert(child != null);
-        final animationValue = animationCurve.transform(
-            mediaQuery.accessibleNavigation
-                ? 1.0
-                : widget.animationController.value);
+    child = Center(
+      child: Container(
+        width: widget.width,
+        child: AnimatedBuilder(
+          animation: widget.animationController,
+          builder: (context, Widget? child) {
+            assert(child != null);
+            final animationValue = animationCurve.transform(
+                mediaQuery.accessibleNavigation
+                    ? 1.0
+                    : widget.animationController.value);
 
-        final draggableChild = !widget.enableDrag
-            ? child
-            : KeyedSubtree(
-                key: _childKey,
-                child: AnimatedBuilder(
-                  animation: bounceAnimation,
-                  builder: (context, _) => CustomSingleChildLayout(
-                    delegate: _CustomBottomSheetLayout(bounceAnimation.value),
-                    child: GestureDetector(
-                      onVerticalDragUpdate: (details) {
-                        _handleDragUpdate(details.delta.dy);
-                      },
-                      onVerticalDragEnd: (details) {
-                        _handleDragEnd(details.primaryVelocity ?? 0);
-                      },
-                      child: NotificationListener<ScrollNotification>(
-                        onNotification: (ScrollNotification notification) {
-                          _handleScrollUpdate(notification);
-                          return false;
-                        },
-                        child: child!,
+            final draggableChild = !widget.enableDrag
+                ? child
+                : KeyedSubtree(
+                    key: _childKey,
+                    child: AnimatedBuilder(
+                      animation: bounceAnimation,
+                      builder: (context, _) => CustomSingleChildLayout(
+                        delegate: _CustomBottomSheetLayout(bounceAnimation.value),
+                        child: GestureDetector(
+                          onVerticalDragUpdate: (details) {
+                            _handleDragUpdate(details.delta.dy);
+                          },
+                          onVerticalDragEnd: (details) {
+                            _handleDragEnd(details.primaryVelocity ?? 0);
+                          },
+                          child: NotificationListener<ScrollNotification>(
+                            onNotification: (ScrollNotification notification) {
+                              _handleScrollUpdate(notification);
+                              return false;
+                            },
+                            child: child!,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                  );
+            return ClipRect(
+              child: CustomSingleChildLayout(
+                delegate: _ModalBottomSheetLayout(
+                  animationValue,
+                  widget.expanded,
                 ),
-              );
-        return ClipRect(
-          child: CustomSingleChildLayout(
-            delegate: _ModalBottomSheetLayout(
-              animationValue,
-              widget.expanded,
-            ),
-            child: draggableChild,
-          ),
-        );
-      },
-      child: RepaintBoundary(child: child),
+                child: draggableChild,
+              ),
+            );
+          },
+          child: RepaintBoundary(child: child),
+        ),
+      ),
     );
 
     return ScrollToTopStatusBarHandler(
@@ -425,7 +437,7 @@ class _ModalBottomSheetLayout extends SingleChildLayoutDelegate {
       minWidth: constraints.maxWidth,
       maxWidth: constraints.maxWidth,
       minHeight: expand ? constraints.maxHeight : 0,
-      maxHeight: expand ? constraints.maxHeight : constraints.minHeight,
+      maxHeight: constraints.maxHeight,
     );
   }
 
