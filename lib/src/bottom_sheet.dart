@@ -49,6 +49,7 @@ class ModalBottomSheet extends StatefulWidget {
     required this.expanded,
     required this.onClosing,
     required this.child,
+    this.width,
   })   : assert(enableDrag != null),
         assert(onClosing != null),
         assert(child != null),
@@ -106,6 +107,12 @@ class ModalBottomSheet extends StatefulWidget {
   final bool enableDrag;
 
   final ScrollController scrollController;
+
+
+  /// Width of the modal.
+  ///
+  /// Default is to expand to the devices full width.
+  final double? width;
 
   @override
   _ModalBottomSheetState createState() => _ModalBottomSheetState();
