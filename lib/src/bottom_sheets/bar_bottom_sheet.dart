@@ -88,6 +88,7 @@ Future<T?> showBarModalBottomSheet<T>({
   bool enableDrag = true,
   Widget? topControl,
   Duration? duration,
+  double? width,
 }) async {
   assert(context != null);
   assert(builder != null);
@@ -117,6 +118,7 @@ Future<T?> showBarModalBottomSheet<T>({
     enableDrag: enableDrag,
     animationCurve: animationCurve,
     duration: duration,
+    width: width,
   ));
   return result;
 }

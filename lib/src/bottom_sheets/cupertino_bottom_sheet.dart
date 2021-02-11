@@ -94,6 +94,7 @@ Future<T?> showCupertinoModalBottomSheet<T>({
   RouteSettings? settings,
   Color? transitionBackgroundColor,
   BoxShadow? shadow,
+  double? width,
 }) async {
   assert(context != null);
   assert(builder != null);
@@ -134,7 +135,8 @@ Future<T?> showCupertinoModalBottomSheet<T>({
         previousRouteAnimationCurve: previousRouteAnimationCurve,
         duration: duration,
         settings: settings,
-        transitionBackgroundColor: transitionBackgroundColor ?? Colors.black),
+        transitionBackgroundColor: transitionBackgroundColor ?? Colors.black,
+        width: width),
   );
   return result;
 }
@@ -150,6 +152,8 @@ class CupertinoModalBottomSheetRoute<T> extends ModalBottomSheetRoute<T> {
   // Background color behind all routes
   // Black by default
   final Color? transitionBackgroundColor;
+
+  final double? width;
 
   CupertinoModalBottomSheetRoute({
     required WidgetBuilder builder,
@@ -173,6 +177,7 @@ class CupertinoModalBottomSheetRoute<T> extends ModalBottomSheetRoute<T> {
     this.transitionBackgroundColor,
     this.topRadius = _kDefaultTopRadius,
     this.previousRouteAnimationCurve,
+    this.width,
   })  : assert(expanded != null),
         assert(isDismissible != null),
         assert(enableDrag != null),
@@ -191,6 +196,7 @@ class CupertinoModalBottomSheetRoute<T> extends ModalBottomSheetRoute<T> {
           settings: settings,
           animationCurve: animationCurve,
           duration: duration,
+          width: width,
         );
 
   @override
