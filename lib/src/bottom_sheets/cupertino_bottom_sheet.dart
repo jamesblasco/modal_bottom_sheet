@@ -360,6 +360,7 @@ class CupertinoScaffold extends StatefulWidget {
     Duration? duration,
     RouteSettings? settings,
     BoxShadow? shadow,
+    double? width,
   }) async {
     assert(context != null);
     assert(builder != null);
@@ -397,6 +398,7 @@ class CupertinoScaffold extends StatefulWidget {
       previousRouteAnimationCurve: previousRouteAnimationCurve,
       duration: duration,
       settings: settings,
+      width: width,
     ));
     return result;
   }
