@@ -225,15 +225,6 @@ class _MyHomePageState extends State<MyHomePage> {
                               context: context,
                               builder: (context) => ModalWithPageView(),
                             )),
-                    ListTile(
-                        title: Text('Modal with Width'),
-                        onTap: () => showCupertinoModalBottomSheet(
-                          expand: true,
-                          width: 300,
-                          context: context,
-                          backgroundColor: Colors.transparent,
-                          builder: (context) => ModalFit(),
-                        )),
                     SizedBox(
                       height: 60,
                     )
