@@ -57,6 +57,7 @@ showMaterialModalBottomSheet(
 |bool bounce = false| The `bounce` parameter specifies if the bottom sheet can go beyond the top boundary while dragging |
 |Duration duration = const Duration(milliseconds: 400)| The `duration` of modal opening |
 |double closeProgressThreshold = 0.6| The `closeProgressThreshold` specifies when the bottom sheet will be dismissed when user drags it. |
+|double width| The `width` parameter specifies the width of the modal. If `width` is not provided, the modal will expand to the entire width. |
 
 
 #### Material params
