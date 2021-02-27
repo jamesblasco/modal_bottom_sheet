@@ -194,18 +194,14 @@ class ModalBottomSheetRoute<T> extends PopupRoute<T> {
       Animation<double> secondaryAnimation) {
     // By definition, the bottom sheet is aligned to the bottom of the page
     // and isn't exposed to the top padding of the MediaQuery.
-    Widget bottomSheet = MediaQuery.removePadding(
-      context: context,
-      // removeTop: true,
-      child: _ModalBottomSheet<T>(
-        closeProgressThreshold: closeProgressThreshold,
-        route: this,
-        secondAnimationController: secondAnimationController,
-        expanded: expanded,
-        bounce: bounce,
-        enableDrag: enableDrag,
-        animationCurve: animationCurve,
-      ),
+    Widget bottomSheet = _ModalBottomSheet<T>(
+      closeProgressThreshold: closeProgressThreshold,
+      route: this,
+      secondAnimationController: secondAnimationController,
+      expanded: expanded,
+      bounce: bounce,
+      enableDrag: enableDrag,
+      animationCurve: animationCurve,
     );
     return bottomSheet;
   }
