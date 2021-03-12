@@ -364,10 +364,7 @@ class _CupertinoModalTransition extends StatelessWidget {
       previousRouteTheme = previousRouteTheme.copyWith(
         scaffoldBackgroundColor: ColorTween(
           begin: systemBackground,
-          end: previousRouteSystemBackgroundColor.resolveFrom(
-            context,
-            nullOk: true,
-          ),
+          end: previousRouteSystemBackgroundColor.resolveFrom(context),
         ).evaluate(animation),
       );
     }
@@ -388,10 +385,7 @@ class _CupertinoModalTransition extends StatelessWidget {
       previousRouteTheme = previousRouteTheme.copyWith(
         barBackgroundColor: ColorTween(
           begin: barBackgroundColor,
-          end: previousRouteNavigationBarColor.resolveFrom(
-            context,
-            nullOk: true,
-          ),
+          end: previousRouteNavigationBarColor.resolveFrom(context),
         ).evaluate(animation),
       );
     }
