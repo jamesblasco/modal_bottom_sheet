@@ -19,9 +19,7 @@ class _ModalBottomSheet<T> extends StatefulWidget {
     this.expanded = false,
     this.enableDrag = true,
     this.animationCurve,
-  })  : assert(expanded != null),
-        assert(enableDrag != null),
-        super(key: key);
+  }) : super(key: key);
 
   final double? closeProgressThreshold;
   final ModalBottomSheetRoute<T> route;
@@ -143,10 +141,7 @@ class ModalBottomSheetRoute<T> extends PopupRoute<T> {
     this.animationCurve,
     this.duration,
     RouteSettings? settings,
-  })  : assert(expanded != null),
-        assert(isDismissible != null),
-        assert(enableDrag != null),
-        super(settings: settings);
+  }) : super(settings: settings);
 
   final double? closeProgressThreshold;
   final WidgetWithChildBuilder? containerBuilder;
@@ -246,13 +241,6 @@ Future<T?> showCustomModalBottomSheet<T>({
   bool enableDrag = true,
   Duration? duration,
 }) async {
-  assert(context != null);
-  assert(builder != null);
-  assert(containerWidget != null);
-  assert(expand != null);
-  assert(useRootNavigator != null);
-  assert(isDismissible != null);
-  assert(enableDrag != null);
   assert(debugCheckHasMediaQuery(context));
   assert(debugCheckHasMaterialLocalizations(context));
   final hasMaterialLocalizations =

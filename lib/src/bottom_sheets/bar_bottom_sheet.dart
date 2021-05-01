@@ -89,12 +89,6 @@ Future<T?> showBarModalBottomSheet<T>({
   Widget? topControl,
   Duration? duration,
 }) async {
-  assert(context != null);
-  assert(builder != null);
-  assert(expand != null);
-  assert(useRootNavigator != null);
-  assert(isDismissible != null);
-  assert(enableDrag != null);
   assert(debugCheckHasMediaQuery(context));
   assert(debugCheckHasMaterialLocalizations(context));
   final result = await Navigator.of(context, rootNavigator: useRootNavigator)

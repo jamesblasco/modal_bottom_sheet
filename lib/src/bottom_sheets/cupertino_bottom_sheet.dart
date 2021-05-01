@@ -22,7 +22,8 @@ import '../bottom_sheet_route.dart';
 const double _kPreviousPageVisibleOffset = 10;
 
 const Radius _kDefaultTopRadius = Radius.circular(12);
-const BoxShadow _kDefaultBoxShadow = BoxShadow(blurRadius: 10, color: Colors.black12, spreadRadius: 5);
+const BoxShadow _kDefaultBoxShadow =
+    BoxShadow(blurRadius: 10, color: Colors.black12, spreadRadius: 5);
 
 /// Cupertino Bottom Sheet Container
 ///
@@ -43,14 +44,13 @@ class _CupertinoBottomSheetContainer extends StatelessWidget {
     this.shadow,
   }) : super(key: key);
 
-
   @override
   Widget build(BuildContext context) {
     final topSafeAreaPadding = MediaQuery.of(context).padding.top;
     final topPadding = _kPreviousPageVisibleOffset + topSafeAreaPadding;
 
     final _shadow = shadow ?? _kDefaultBoxShadow;
-        BoxShadow(blurRadius: 10, color: Colors.black12, spreadRadius: 5);
+    BoxShadow(blurRadius: 10, color: Colors.black12, spreadRadius: 5);
     final _backgroundColor =
         backgroundColor ?? CupertinoTheme.of(context).scaffoldBackgroundColor;
     return Padding(
@@ -95,11 +95,6 @@ Future<T?> showCupertinoModalBottomSheet<T>({
   Color? transitionBackgroundColor,
   BoxShadow? shadow,
 }) async {
-  assert(context != null);
-  assert(builder != null);
-  assert(expand != null);
-  assert(useRootNavigator != null);
-  assert(enableDrag != null);
   assert(debugCheckHasMediaQuery(context));
   final hasMaterialLocalizations =
       Localizations.of<MaterialLocalizations>(context, MaterialLocalizations) !=
@@ -144,7 +139,6 @@ class CupertinoModalBottomSheetRoute<T> extends ModalBottomSheetRoute<T> {
 
   final Curve? previousRouteAnimationCurve;
 
-
   final BoxShadow? boxShadow;
 
   // Background color behind all routes
@@ -173,10 +167,7 @@ class CupertinoModalBottomSheetRoute<T> extends ModalBottomSheetRoute<T> {
     this.transitionBackgroundColor,
     this.topRadius = _kDefaultTopRadius,
     this.previousRouteAnimationCurve,
-  })  : assert(expanded != null),
-        assert(isDismissible != null),
-        assert(enableDrag != null),
-        super(
+  }) : super(
           closeProgressThreshold: closeProgressThreshold,
           scrollController: scrollController,
           containerBuilder: containerBuilder,
@@ -201,8 +192,7 @@ class CupertinoModalBottomSheetRoute<T> extends ModalBottomSheetRoute<T> {
     Widget child,
   ) {
     final paddingTop = MediaQuery.of(context).padding.top;
-    final distanceWithScale =
-        (paddingTop + _kPreviousPageVisibleOffset) * 0.9;
+    final distanceWithScale = (paddingTop + _kPreviousPageVisibleOffset) * 0.9;
     final offsetY = secondaryAnimation.value * (paddingTop - distanceWithScale);
     final scale = 1 - secondaryAnimation.value / 10;
     return AnimatedBuilder(
@@ -355,11 +345,6 @@ class CupertinoScaffold extends StatefulWidget {
     RouteSettings? settings,
     BoxShadow? shadow,
   }) async {
-    assert(context != null);
-    assert(builder != null);
-    assert(expand != null);
-    assert(useRootNavigator != null);
-    assert(enableDrag != null);
     assert(debugCheckHasMediaQuery(context));
     final isCupertinoApp =
         context.findAncestorWidgetOfExactType<CupertinoApp>() != null;
