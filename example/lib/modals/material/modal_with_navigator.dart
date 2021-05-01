@@ -6,16 +6,14 @@ class ModalWithNavigator extends StatelessWidget {
   const ModalWithNavigator({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext rootContext) {
+  Widget build(BuildContext context) {
     return Material(
       child: Navigator(
         onGenerateRoute: (_) => MaterialPageRoute(
-          builder: (context2) => Builder(
+          builder: (context) => Builder(
             builder: (context) => CupertinoPageScaffold(
               navigationBar: CupertinoNavigationBar(
-                leading: Container(),
-                middle: Text('Modal Page'),
-              ),
+                  leading: Container(), middle: Text('Modal Page')),
               child: SafeArea(
                 bottom: false,
                 child: ListView(
@@ -28,7 +26,7 @@ class ModalWithNavigator extends StatelessWidget {
                       (index) => ListTile(
                         title: Text('Item'),
                         onTap: () {
-                          Navigator.of(context).push(
+                          Navigator.of(context).pushAndRemoveUntil(
                             MaterialPageRoute(
                               builder: (context) => CupertinoPageScaffold(
                                 navigationBar: CupertinoNavigationBar(
@@ -39,13 +37,14 @@ class ModalWithNavigator extends StatelessWidget {
                                   children: <Widget>[
                                     MaterialButton(
                                       onPressed: () =>
-                                          Navigator.of(rootContext).pop(),
+                                          Navigator.of(context).pop(),
                                       child: Text('touch here'),
-                                    )
+                                    ),
                                   ],
                                 ),
                               ),
                             ),
+                            ModalRoute.withName('/'),
                           );
                         },
                       ),

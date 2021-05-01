@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../modal_bottom_sheet.dart';
@@ -15,10 +14,7 @@ class MaterialWithModalsPageRoute<T> extends MaterialPageRoute<T> {
     RouteSettings? settings,
     bool maintainState = true,
     bool fullscreenDialog = false,
-  })  : assert(builder != null),
-        assert(maintainState != null),
-        assert(fullscreenDialog != null),
-        super(
+  }) : super(
             settings: settings,
             fullscreenDialog: fullscreenDialog,
             builder: builder,
@@ -77,6 +73,11 @@ class MaterialWithModalsPageRoute<T> extends MaterialPageRoute<T> {
     }
 
     return theme.buildTransitions<T>(
-        this, context, animation, secondaryAnimation, child);
+      this,
+      context,
+      animation,
+      secondaryAnimation,
+      child,
+    );
   }
 }

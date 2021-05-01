@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -9,7 +10,8 @@ class AvatarBottomSheet extends StatelessWidget {
   final Widget child;
   final Animation<double> animation;
 
-  const AvatarBottomSheet({Key? key, required  this.child, required this.animation})
+  const AvatarBottomSheet(
+      {Key? key, required this.child, required this.animation})
       : super(key: key);
 
   @override
@@ -17,52 +19,63 @@ class AvatarBottomSheet extends StatelessWidget {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light,
       child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 12),
-            SafeArea(
-                bottom: false,
-                child: AnimatedBuilder(
-                  animation: animation,
-                  builder: (context, child) => Transform.translate(
-                      offset: Offset(0, (1 - animation.value) * 100),
-                      child: Opacity(
-                          child: child,
-                          opacity: max(0, animation.value * 2 - 1))),
-                  child: Row(
-                    children: <Widget>[
-                      SizedBox(width: 20),
-                      CircleAvatar(
-                        child: Text('JB'),
-                        radius: 32,
-                      ),
-                    ],
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(height: 12),
+          SafeArea(
+            bottom: false,
+            child: AnimatedBuilder(
+              animation: animation,
+              builder: (context, child) => Transform.translate(
+                offset: Offset(0, (1 - animation.value) * 100),
+                child: Opacity(
+                  child: child,
+                  opacity: max(0, animation.value * 2 - 1),
+                ),
+              ),
+              child: Row(
+                children: <Widget>[
+                  SizedBox(width: 20),
+                  CircleAvatar(
+                    child: Text('JB'),
+                    radius: 32,
                   ),
-                )),
-            SizedBox(height: 12),
-            Flexible(
-              flex: 1,
-              fit: FlexFit.loose,
-              child: ClipRRect(
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(15),
-                    topRight: Radius.circular(15)),
-                child: Container(
-                    decoration: BoxDecoration(
-                        color: Theme.of(context).scaffoldBackgroundColor,
-                        boxShadow: [
-                          BoxShadow(
-                              blurRadius: 10,
-                              color: Colors.black12,
-                              spreadRadius: 5)
-                        ]),
-                    width: double.infinity,
-                    child: MediaQuery.removePadding(
-                        context: context, removeTop: true, child: child)),
+                ],
               ),
             ),
-          ]),
+          ),
+          SizedBox(height: 12),
+          Flexible(
+            flex: 1,
+            fit: FlexFit.loose,
+            child: ClipRRect(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(15),
+                topRight: Radius.circular(15),
+              ),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  boxShadow: [
+                    BoxShadow(
+                      blurRadius: 10,
+                      color: Colors.black12,
+                      spreadRadius: 5,
+                    ),
+                  ],
+                ),
+                width: double.infinity,
+                child: MediaQuery.removePadding(
+                  context: context,
+                  removeTop: true,
+                  child: child,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -83,29 +96,32 @@ Future<T?> showAvatarModalBottomSheet<T>({
   bool enableDrag = true,
   Duration? duration,
 }) async {
-  assert(context != null);
-  assert(builder != null);
-  assert(expand != null);
-  assert(useRootNavigator != null);
-  assert(isDismissible != null);
-  assert(enableDrag != null);
   assert(debugCheckHasMediaQuery(context));
-  assert(debugCheckHasMaterialLocalizations(context));
-  final result = await Navigator.of(context, rootNavigator: useRootNavigator)
-      .push(ModalBottomSheetRoute<T>(
-    builder: builder,
-    containerBuilder: (_, animation, child) => AvatarBottomSheet(
-      child: child,
-      animation: animation,
+  final isCupertinoApp =
+      context.findAncestorWidgetOfExactType<CupertinoApp>() != null;
+  var barrierLabel = '';
+  if (!isCupertinoApp) {
+    assert(debugCheckHasMaterialLocalizations(context));
+    barrierLabel = MaterialLocalizations.of(context).modalBarrierDismissLabel;
+  }
+
+  final result =
+      await Navigator.of(context, rootNavigator: useRootNavigator).push(
+    ModalBottomSheetRoute<T>(
+      builder: builder,
+      containerBuilder: (_, animation, child) => AvatarBottomSheet(
+        child: child,
+        animation: animation,
+      ),
+      bounce: bounce,
+      secondAnimationController: secondAnimation,
+      expanded: expand,
+      barrierLabel: barrierLabel,
+      isDismissible: isDismissible,
+      modalBarrierColor: barrierColor,
+      enableDrag: enableDrag,
+      duration: duration,
     ),
-    bounce: bounce,
-    secondAnimationController: secondAnimation,
-    expanded: expand,
-    barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
-    isDismissible: isDismissible,
-    modalBarrierColor: barrierColor,
-    enableDrag: enableDrag,
-    duration: duration,
-  ));
+  );
   return result;
 }

@@ -25,18 +25,19 @@ class FloatingModal extends StatelessWidget {
   }
 }
 
-Future<T> showFloatingModalBottomSheet<T>({
+Future<T?> showFloatingModalBottomSheet<T>({
   required BuildContext context,
   required WidgetBuilder builder,
   Color? backgroundColor,
 }) async {
-  final result = await showCustomModalBottomSheet(
-      context: context,
-      builder: builder,
-      containerWidget: (_, animation, child) => FloatingModal(
-            child: child,
-          ),
-      expand: false);
+  final result = await showCustomModalBottomSheet<T>(
+    context: context,
+    builder: builder,
+    containerWidget: (_, animation, child) => FloatingModal(
+      child: child,
+    ),
+    expand: false,
+  );
 
   return result;
 }

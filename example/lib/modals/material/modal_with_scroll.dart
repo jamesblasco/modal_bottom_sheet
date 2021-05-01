@@ -10,7 +10,9 @@ class ModalWithScroll extends StatelessWidget {
     return Material(
       child: CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
-            leading: Container(), middle: Text('Modal Page')),
+          leading: Container(),
+          middle: Text('Modal Page'),
+        ),
         child: SafeArea(
           bottom: false,
           child: ListView(
@@ -19,10 +21,11 @@ class ModalWithScroll extends StatelessWidget {
             children: ListTile.divideTiles(
               context: context,
               tiles: List.generate(
-                  100,
-                  (index) => ListTile(
-                        title: Text('Item'),
-                      )),
+                100,
+                (index) => ListTile(
+                  title: Text('Item'),
+                ),
+              ),
             ).toList(),
           ),
         ),

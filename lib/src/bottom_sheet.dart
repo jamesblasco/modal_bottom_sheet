@@ -49,10 +49,7 @@ class ModalBottomSheet extends StatefulWidget {
     required this.expanded,
     required this.onClosing,
     required this.child,
-  })   : assert(enableDrag != null),
-        assert(onClosing != null),
-        assert(child != null),
-        super(key: key);
+  }) : super(key: key);
 
   /// The closeProgressThreshold parameter
   /// specifies when the bottom sheet will be dismissed when user drags it.
@@ -489,5 +486,4 @@ PointerDeviceKind defaultPointerDeviceKind(BuildContext context) {
     case TargetPlatform.fuchsia:
       return PointerDeviceKind.unknown;
   }
-  return PointerDeviceKind.unknown;
 }

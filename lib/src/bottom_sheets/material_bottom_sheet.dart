@@ -21,12 +21,6 @@ Future<T?> showMaterialModalBottomSheet<T>({
   bool enableDrag = true,
   Duration? duration,
 }) async {
-  assert(context != null);
-  assert(builder != null);
-  assert(expand != null);
-  assert(useRootNavigator != null);
-  assert(isDismissible != null);
-  assert(enableDrag != null);
   assert(debugCheckHasMediaQuery(context));
   assert(debugCheckHasMaterialLocalizations(context));
   final result = await Navigator.of(context, rootNavigator: useRootNavigator)
@@ -55,12 +49,14 @@ Future<T?> showMaterialModalBottomSheet<T>({
 }
 
 //Default container builder is the Material Appearance
-WidgetWithChildBuilder _materialContainerBuilder(BuildContext context,
-    {Color? backgroundColor,
-    double? elevation,
-    ThemeData? theme,
-    Clip? clipBehavior,
-    ShapeBorder? shape}) {
+WidgetWithChildBuilder _materialContainerBuilder(
+  BuildContext context, {
+  Color? backgroundColor,
+  double? elevation,
+  ThemeData? theme,
+  Clip? clipBehavior,
+  ShapeBorder? shape,
+}) {
   final bottomSheetTheme = Theme.of(context).bottomSheetTheme;
   final color = backgroundColor ??
       bottomSheetTheme.modalBackgroundColor ??

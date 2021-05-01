@@ -1,10 +1,12 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../modal_bottom_sheet.dart';
 import '../bottom_sheet_route.dart';
+
 
 const Radius _default_bar_top_radius = Radius.circular(15);
 
@@ -89,14 +91,16 @@ Future<T?> showBarModalBottomSheet<T>({
   Widget? topControl,
   Duration? duration,
 }) async {
-  assert(context != null);
-  assert(builder != null);
-  assert(expand != null);
-  assert(useRootNavigator != null);
-  assert(isDismissible != null);
-  assert(enableDrag != null);
   assert(debugCheckHasMediaQuery(context));
-  assert(debugCheckHasMaterialLocalizations(context));
+
+  final isCupertinoApp =
+      context.findAncestorWidgetOfExactType<CupertinoApp>() != null;
+  var barrierLabel = '';
+  if (!isCupertinoApp) {
+    assert(debugCheckHasMaterialLocalizations(context));
+    barrierLabel = MaterialLocalizations.of(context).modalBarrierDismissLabel;
+  }
+
   final result = await Navigator.of(context, rootNavigator: useRootNavigator)
       .push(ModalBottomSheetRoute<T>(
     builder: builder,
@@ -111,7 +115,7 @@ Future<T?> showBarModalBottomSheet<T>({
     ),
     secondAnimationController: secondAnimation,
     expanded: expand,
-    barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+    barrierLabel: barrierLabel,
     isDismissible: isDismissible,
     modalBarrierColor: barrierColor,
     enableDrag: enableDrag,
