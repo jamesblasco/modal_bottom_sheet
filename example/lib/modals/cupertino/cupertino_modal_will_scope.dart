@@ -2,10 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class CupertinoModalWillScope extends StatelessWidget {
-  final ScrollController scrollController;
+  final ScrollController? scrollController;
 
-  const CupertinoModalWillScope({Key key, this.scrollController})
-      : super(key: key);
+  const CupertinoModalWillScope({
+    Key? key,
+    this.scrollController,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +31,7 @@ class CupertinoModalWillScope extends StatelessWidget {
           ),
         );
         print('hello');
-        return shouldClose ?? true;
+        return shouldClose;
       },
       child: CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(

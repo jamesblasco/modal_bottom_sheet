@@ -13,11 +13,10 @@ import 'package:flutter/widgets.dart';
 class ModalScrollController extends InheritedWidget {
   /// Creates a widget that associates a [ScrollController] with a subtree.
   ModalScrollController({
-    Key key,
-    @required this.controller,
-    @required Widget child,
-  })  : assert(controller != null),
-        super(
+    Key? key,
+    required this.controller,
+    required Widget child,
+  }) : super(
           key: key,
           child: PrimaryScrollController(
             controller: controller,
@@ -38,7 +37,7 @@ class ModalScrollController extends InheritedWidget {
   ///
   /// Returns null if there is no [ScrollController] associated with the given
   /// context.
-  static ScrollController of(BuildContext context) {
+  static ScrollController? of(BuildContext context) {
     final result =
         context.dependOnInheritedWidgetOfExactType<ModalScrollController>();
     return result?.controller;

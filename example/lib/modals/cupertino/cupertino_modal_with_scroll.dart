@@ -2,10 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class CupertinoModalWithScroll extends StatelessWidget {
-  final ScrollController scrollController;
+  final ScrollController? scrollController;
 
-  const CupertinoModalWithScroll({Key key, this.scrollController})
-      : super(key: key);
+  const CupertinoModalWithScroll({
+    Key? key,
+    this.scrollController,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

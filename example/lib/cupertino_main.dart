@@ -105,9 +105,7 @@ class MyCupertinoHomePage extends StatelessWidget {
                 title: Text('Cupertino Photo Share Example'),
                 onTap: () => Navigator.of(context).push(
                   MaterialWithModalsPageRoute(
-                    builder: (context) => CupertinoSharePage(
-                      useMaterial: false,
-                    ),
+                    builder: (context) => CupertinoSharePage(),
                   ),
                 ),
               ),
@@ -247,11 +245,11 @@ class MyCupertinoHomePage extends StatelessWidget {
 }
 
 class CupertinoListTile extends StatelessWidget {
-  final Widget title;
-  final VoidCallback onTap;
+  final Widget? title;
+  final VoidCallback? onTap;
 
   const CupertinoListTile({
-    Key key,
+    Key? key,
     this.title,
     this.onTap,
   }) : super(key: key);

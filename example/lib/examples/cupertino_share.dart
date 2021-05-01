@@ -1,83 +1,69 @@
 import 'dart:ui';
 
-import 'package:example/examples/sliver_container.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class CupertinoSharePage extends StatelessWidget {
-  final bool useMaterial;
-
-  const CupertinoSharePage({
-    Key key,
-    this.useMaterial,
-  }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        middle: Column(
-          children: <Widget>[
-            Text(
-              'New York',
-              style: TextStyle(fontWeight: FontWeight.normal),
-            ),
-            Text(
-              '1 February 11:45',
-              style: TextStyle(
-                fontWeight: FontWeight.normal,
-                fontSize: 12,
-              ),
-            ),
-          ],
+    return Scaffold(
+        appBar: appBar(context),
+        body: CupertinoPageScaffold(
+          child: Center(
+              child: Hero(
+            tag: 'image',
+            child: Image.asset('assets/demo_image.jpeg'),
+          )),
         ),
-        trailing: Text(
-          'Edit',
-          style: TextStyle(
-            color: CupertinoTheme.of(context).primaryColor,
-          ),
+        bottomNavigationBar: bottomAppBar(context));
+  }
+
+  PreferredSizeWidget appBar(BuildContext context) {
+    return CupertinoNavigationBar(
+      middle: Column(
+        children: <Widget>[
+          Text('New York', style: TextStyle(fontWeight: FontWeight.normal)),
+          Text('1 February 11:45',
+              style: TextStyle(fontWeight: FontWeight.normal, fontSize: 12))
+        ],
+      ),
+      trailing: Text(
+        'Edit',
+        style: TextStyle(
+          color: CupertinoTheme.of(context).primaryColor,
         ),
       ),
-      child: Column(
+    );
+  }
+
+  Widget bottomAppBar(BuildContext context) {
+    return BottomAppBar(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Expanded(
-            child: Center(
-              child: Hero(
-                tag: 'image',
-                child: Image.asset('assets/demo_image.jpeg'),
-              ),
+          CupertinoButton(
+            child: Icon(
+              CupertinoIcons.share,
+              size: 28,
             ),
+            onPressed: () {
+              showCupertinoModalBottomSheet(
+                expand: true,
+                context: context,
+                backgroundColor: Colors.transparent,
+                builder: (context) => PhotoShareBottomSheet(),
+              );
+            },
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              CupertinoButton(
-                child: Icon(
-                  CupertinoIcons.share,
-                  size: 28,
-                ),
-                onPressed: () {
-                  showCupertinoModalBottomSheet(
-                    expand: true,
-                    context: context,
-                    backgroundColor: Colors.transparent,
-                    builder: (context) => PhotoShareBottomSheet(
-                      useMaterial: useMaterial,
-                    ),
-                  );
-                },
-              ),
-              CupertinoButton(
-                child: Icon(CupertinoIcons.heart, size: 28),
-                onPressed: null,
-              ),
-              CupertinoButton(
-                child: Icon(CupertinoIcons.delete, size: 28),
-                onPressed: null,
-              )
-            ],
+          CupertinoButton(
+            child: Icon(CupertinoIcons.heart, size: 28),
+            onPressed: null,
           ),
+          CupertinoButton(
+            child: Icon(CupertinoIcons.delete, size: 28),
+            onPressed: null,
+          )
         ],
       ),
     );
@@ -85,12 +71,7 @@ class CupertinoSharePage extends StatelessWidget {
 }
 
 class PhotoShareBottomSheet extends StatelessWidget {
-  final bool useMaterial;
-
-  const PhotoShareBottomSheet({
-    Key key,
-    this.useMaterial,
-  }) : super(key: key);
+  const PhotoShareBottomSheet({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -170,37 +151,33 @@ class PhotoShareBottomSheet extends StatelessWidget {
                         margin: EdgeInsets.symmetric(horizontal: 4),
                         child: Column(
                           children: <Widget>[
-                            Material(
-                              child: ClipRRect(
-                                child: Container(
-                                  height: 60,
-                                  width: 60,
-                                  decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                        image: AssetImage(app.imageUrl),
-                                        fit: BoxFit.cover),
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(15),
+                            if (app.imageUrl != null)
+                              Material(
+                                child: ClipRRect(
+                                  child: Container(
+                                    height: 60,
+                                    width: 60,
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                          image: AssetImage(app.imageUrl!),
+                                          fit: BoxFit.cover),
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
                                   ),
                                 ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                elevation: 12,
+                                shadowColor: Colors.black12,
                               ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                              elevation: 12,
-                              shadowColor: Colors.black12,
-                            ),
                             SizedBox(height: 8),
                             Text(
                               app.title,
                               maxLines: 2,
                               textAlign: TextAlign.center,
-                              style: (useMaterial ?? true
-                                      ? Theme.of(context).textTheme.bodyText2
-                                      : CupertinoTheme.of(context)
-                                          .textTheme
-                                          .textStyle)
-                                  .copyWith(fontSize: 11),
+                              style: TextStyle(fontSize: 11),
                             )
                           ],
                         ),
@@ -212,97 +189,61 @@ class PhotoShareBottomSheet extends StatelessWidget {
               ),
               SliverPadding(
                 padding: EdgeInsets.symmetric(horizontal: 18, vertical: 6),
-                sliver: SliverContainer(
-                  decoration: BoxDecoration(
-                    color: CupertinoColors.secondarySystemGroupedBackground
-                        .resolveFrom(context),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  sliver: SliverList(
-                    delegate: SliverChildListDelegate.fixed(
-                      List<Widget>.from(
-                        actions.map(
-                          (action) => Container(
-                            padding: EdgeInsets.symmetric(
-                                vertical: 16, horizontal: 16),
-                            child: Text(
-                              action.title,
-                              style: CupertinoTheme.of(context)
-                                  .textTheme
-                                  .textStyle,
-                            ),
+                sliver: SliverList(
+                  delegate: SliverChildListDelegate.fixed(
+                    List<Widget>.from(
+                      actions.map(
+                        (action) => Container(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 16, horizontal: 16),
+                          child: Text(
+                            action.title,
+                            style:
+                                CupertinoTheme.of(context).textTheme.textStyle,
                           ),
                         ),
-                      ).addItemInBetween(
-                        Divider(
-                          height: 1,
-                        ),
                       ),
-                    ),
+                    ).addItemInBetween(Divider(height: 1)),
                   ),
                 ),
               ),
               SliverPadding(
                 padding: EdgeInsets.symmetric(horizontal: 18, vertical: 6),
-                sliver: SliverContainer(
-                  decoration: BoxDecoration(
-                    color: CupertinoColors.secondarySystemGroupedBackground
-                        .resolveFrom(context),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  sliver: SliverList(
-                    delegate: SliverChildListDelegate.fixed(
-                      List<Widget>.from(
-                        actions1.map(
-                          (action) => Container(
-                            padding: EdgeInsets.symmetric(
-                                vertical: 16, horizontal: 16),
-                            child: Text(
-                              action.title,
-                              style: CupertinoTheme.of(context)
-                                  .textTheme
-                                  .textStyle,
-                            ),
+                sliver: SliverList(
+                  delegate: SliverChildListDelegate.fixed(
+                    List<Widget>.from(
+                      actions1.map(
+                        (action) => Container(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 16, horizontal: 16),
+                          child: Text(
+                            action.title,
+                            style:
+                                CupertinoTheme.of(context).textTheme.textStyle,
                           ),
                         ),
-                      ).addItemInBetween(
-                        Divider(
-                          height: 1,
-                        ),
                       ),
-                    ),
+                    ).addItemInBetween(Divider(height: 1)),
                   ),
                 ),
               ),
               SliverPadding(
                 padding: EdgeInsets.symmetric(horizontal: 18, vertical: 4),
-                sliver: SliverContainer(
-                  decoration: BoxDecoration(
-                    color: CupertinoColors.secondarySystemGroupedBackground
-                        .resolveFrom(context),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  sliver: SliverList(
-                    delegate: SliverChildListDelegate.fixed(
-                      List<Widget>.from(
-                        actions2.map(
-                          (action) => Container(
-                            padding: EdgeInsets.symmetric(
-                                vertical: 16, horizontal: 16),
-                            child: Text(
-                              action.title,
-                              style: CupertinoTheme.of(context)
-                                  .textTheme
-                                  .textStyle,
-                            ),
+                sliver: SliverList(
+                  delegate: SliverChildListDelegate.fixed(
+                    List<Widget>.from(
+                      actions2.map(
+                        (action) => Container(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 16, horizontal: 16),
+                          child: Text(
+                            action.title,
+                            style:
+                                CupertinoTheme.of(context).textTheme.textStyle,
                           ),
                         ),
-                      ).addItemInBetween(
-                        Divider(
-                          height: 1,
-                        ),
                       ),
-                    ),
+                    ).addItemInBetween(Divider(height: 1)),
                   ),
                 ),
               ),
@@ -336,27 +277,25 @@ class PhotoShareBottomSheet extends StatelessWidget {
               margin: EdgeInsets.symmetric(horizontal: 4),
               child: Column(
                 children: <Widget>[
-                  Material(
-                    child: CircleAvatar(
-                      backgroundImage: AssetImage(
-                        person.imageUrl,
+                  if (person.imageUrl != null)
+                    Material(
+                      child: CircleAvatar(
+                        backgroundImage: AssetImage(
+                          person.imageUrl!,
+                        ),
+                        radius: 30,
+                        backgroundColor: Colors.white,
                       ),
-                      radius: 30,
-                      backgroundColor: Colors.white,
+                      shape: CircleBorder(),
+                      elevation: 12,
+                      shadowColor: Colors.black12,
                     ),
-                    shape: CircleBorder(),
-                    elevation: 12,
-                    shadowColor: Colors.black12,
-                  ),
                   SizedBox(height: 8),
                   Text(
                     person.title,
                     maxLines: 2,
                     textAlign: TextAlign.center,
-                    style: (useMaterial ?? true
-                            ? Theme.of(context).textTheme.bodyText2
-                            : CupertinoTheme.of(context).textTheme.textStyle)
-                        .copyWith(fontSize: 11),
+                    style: TextStyle(fontSize: 11),
                   )
                 ],
               ),
@@ -427,7 +366,7 @@ class PhotoShareBottomSheet extends StatelessWidget {
                                   size: 14,
                                   color:
                                       CupertinoTheme.of(context).primaryColor,
-                                ),
+                                )
                               ],
                             ),
                           ],
@@ -468,7 +407,7 @@ class PhotoShareBottomSheet extends StatelessWidget {
 
 class Item {
   final String title;
-  final String imageUrl;
+  final String? imageUrl;
 
   Item(this.title, this.imageUrl);
 }
@@ -515,10 +454,9 @@ final actions2 = [
 ];
 
 extension ListUtils<T> on List<T> {
-  List<T> addItemInBetween<T>(T item) => this.length == 0
+  List<T> addItemInBetween<A extends T>(A item) => this.length == 0
       ? this
-      : (this.fold([], (r, element) => [...r, element as T, item])
-        ..removeLast());
+      : (this.fold([], (r, element) => [...r, element, item])..removeLast());
 }
 
 class SimpleSliverDelegate extends SliverPersistentHeaderDelegate {
@@ -526,8 +464,8 @@ class SimpleSliverDelegate extends SliverPersistentHeaderDelegate {
   final double height;
 
   SimpleSliverDelegate({
-    this.child,
-    this.height,
+    required this.child,
+    required this.height,
   });
 
   @override

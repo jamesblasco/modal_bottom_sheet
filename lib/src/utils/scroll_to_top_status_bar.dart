@@ -9,9 +9,9 @@ class ScrollToTopStatusBarHandler extends StatefulWidget {
   final ScrollController scrollController;
 
   const ScrollToTopStatusBarHandler({
-    Key key,
-    @required this.child,
-    @required this.scrollController,
+    Key? key,
+    required this.child,
+    required this.scrollController,
   }) : super(key: key);
 
   @override
@@ -50,7 +50,7 @@ class _ScrollToTopStatusBarState extends State<ScrollToTopStatusBarHandler> {
 
   void _handleStatusBarTap(BuildContext context) {
     final controller = widget.scrollController;
-    if (controller != null && controller.hasClients) {
+    if (controller.hasClients) {
       controller.animateTo(
         0.0,
         duration: const Duration(milliseconds: 300),

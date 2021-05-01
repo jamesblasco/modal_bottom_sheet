@@ -3,11 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class ModalInsideModal extends StatelessWidget {
-  final ScrollController scrollController;
+  final ScrollController? scrollController;
   final bool reverse;
 
-  const ModalInsideModal({Key key, this.scrollController, this.reverse = false})
-      : super(key: key);
+  const ModalInsideModal({
+    Key? key,
+    this.scrollController,
+    this.reverse = false,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

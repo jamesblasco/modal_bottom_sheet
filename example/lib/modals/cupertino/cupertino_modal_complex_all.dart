@@ -2,10 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class CupertinoComplexModal extends StatelessWidget {
-  final ScrollController scrollController;
+  final ScrollController? scrollController;
 
   const CupertinoComplexModal({
-    Key key,
+    Key? key,
     this.scrollController,
   }) : super(key: key);
 
@@ -31,7 +31,7 @@ class CupertinoComplexModal extends StatelessWidget {
           ),
         );
         print('hello');
-        return shouldClose ?? true;
+        return shouldClose;
       },
       child: Navigator(
         onGenerateRoute: (_) => CupertinoPageRoute(

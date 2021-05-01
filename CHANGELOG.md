@@ -1,3 +1,6 @@
+## 2.0.0-nullsafety.1 - Null Safety support
++ Fixes #119 & #113
+
 ## 1.0.0 - An optimized modal + Breaking change
 - An optimized builder function.
 - The `builder` param has changed from:

@@ -10,11 +10,9 @@ class AvatarBottomSheet extends StatelessWidget {
   final Widget child;
   final Animation<double> animation;
 
-  const AvatarBottomSheet({
-    Key key,
-    this.child,
-    this.animation,
-  }) : super(key: key);
+  const AvatarBottomSheet(
+      {Key? key, required this.child, required this.animation})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -82,28 +80,22 @@ class AvatarBottomSheet extends StatelessWidget {
   }
 }
 
-Future<T> showAvatarModalBottomSheet<T>({
-  @required BuildContext context,
-  @required WidgetBuilder builder,
-  Color backgroundColor,
-  double elevation,
-  ShapeBorder shape,
-  Clip clipBehavior,
+Future<T?> showAvatarModalBottomSheet<T>({
+  required BuildContext context,
+  required WidgetBuilder builder,
+  Color? backgroundColor,
+  double? elevation,
+  ShapeBorder? shape,
+  Clip? clipBehavior,
   Color barrierColor = Colors.black87,
   bool bounce = true,
   bool expand = false,
-  AnimationController secondAnimation,
+  AnimationController? secondAnimation,
   bool useRootNavigator = false,
   bool isDismissible = true,
   bool enableDrag = true,
-  Duration duration,
+  Duration? duration,
 }) async {
-  assert(context != null);
-  assert(builder != null);
-  assert(expand != null);
-  assert(useRootNavigator != null);
-  assert(isDismissible != null);
-  assert(enableDrag != null);
   assert(debugCheckHasMediaQuery(context));
   final isCupertinoApp =
       context.findAncestorWidgetOfExactType<CupertinoApp>() != null;

@@ -7,7 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 class WebFrame extends StatelessWidget {
   final Widget child;
 
-  const WebFrame({Key key, this.child}) : super(key: key);
+  const WebFrame({Key? key, required this.child}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
