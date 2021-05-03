@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class ModalWithPageView extends StatelessWidget {
   const ModalWithPageView({Key? key}) : super(key: key);
@@ -17,7 +16,7 @@ class ModalWithPageView extends StatelessWidget {
                 2,
                 (index) => ListView(
                       shrinkWrap: true,
-                      controller: ModalScrollController.of(context),
+                      primary: true,
                       children: ListTile.divideTiles(
                         context: context,
                         tiles: List.generate(

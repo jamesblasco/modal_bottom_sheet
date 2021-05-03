@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 class ModalWillScope extends StatelessWidget {
   const ModalWillScope({Key? key}) : super(key: key);
 
@@ -10,9 +10,9 @@ class ModalWillScope extends StatelessWidget {
         child: WillPopScope(
       onWillPop: () async {
         bool shouldClose = true;
-        await showCupertinoDialog(
+        await showCupertinoDialog<void>(
             context: context,
-            builder: (context) => CupertinoAlertDialog(
+            builder: (BuildContext context) => CupertinoAlertDialog(
                   title: Text('Should Close?'),
                   actions: <Widget>[
                     CupertinoButton(

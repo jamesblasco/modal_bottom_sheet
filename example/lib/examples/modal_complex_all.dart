@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+
 
 class ComplexModal extends StatelessWidget {
   const ComplexModal({Key? key}) : super(key: key);
@@ -11,7 +11,7 @@ class ComplexModal extends StatelessWidget {
       child: WillPopScope(
         onWillPop: () async {
           bool shouldClose = true;
-          await showCupertinoDialog(
+          await showCupertinoDialog<void>(
               context: context,
               builder: (context) => CupertinoAlertDialog(
                     title: Text('Should Close?'),
@@ -35,7 +35,7 @@ class ComplexModal extends StatelessWidget {
           return shouldClose;
         },
         child: Navigator(
-          onGenerateRoute: (_) => MaterialPageRoute(
+          onGenerateRoute: (_) => MaterialPageRoute<void>(
             builder: (context) => Builder(
               builder: (context) => CupertinoPageScaffold(
                 navigationBar: CupertinoNavigationBar(
@@ -44,7 +44,7 @@ class ComplexModal extends StatelessWidget {
                   bottom: false,
                   child: ListView(
                     shrinkWrap: true,
-                    controller: ModalScrollController.of(context),
+                    primary: true,
                     children: ListTile.divideTiles(
                       context: context,
                       tiles: List.generate(
@@ -52,17 +52,18 @@ class ComplexModal extends StatelessWidget {
                           (index) => ListTile(
                                 title: Text('Item'),
                                 onTap: () {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) =>
-                                          CupertinoPageScaffold(
-                                              navigationBar:
-                                                  CupertinoNavigationBar(
-                                                middle: Text('New Page'),
-                                              ),
-                                              child: Stack(
-                                                fit: StackFit.expand,
-                                                children: <Widget>[],
-                                              ))));
+                                  Navigator.of(context).push(
+                                      MaterialPageRoute<void>(
+                                          builder: (context) =>
+                                              CupertinoPageScaffold(
+                                                  navigationBar:
+                                                      CupertinoNavigationBar(
+                                                    middle: Text('New Page'),
+                                                  ),
+                                                  child: Stack(
+                                                    fit: StackFit.expand,
+                                                    children: <Widget>[],
+                                                  ))));
                                 },
                               )),
                     ).toList(),

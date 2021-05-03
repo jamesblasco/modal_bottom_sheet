@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class NestedScrollModal extends StatelessWidget {
   const NestedScrollModal({Key? key}) : super(key: key);
@@ -8,8 +7,8 @@ class NestedScrollModal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return NestedScrollView(
-      controller: ScrollController(),
-      physics: ScrollPhysics(parent: PageScrollPhysics()),
+      physics: ClampingScrollPhysics(),
+      controller: PrimaryScrollController.of(context),
       headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
         return <Widget>[
           SliverList(
@@ -22,7 +21,6 @@ class NestedScrollModal extends StatelessWidget {
         ];
       },
       body: ListView.builder(
-        controller: ModalScrollController.of(context),
         itemBuilder: (context, index) {
           return Container(
             height: 100,

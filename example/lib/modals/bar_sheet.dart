@@ -2,9 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-import '../../modal_bottom_sheet.dart';
-import '../bottom_sheet_route.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 const Radius _default_bar_top_radius = Radius.circular(15);
 
@@ -15,14 +13,14 @@ class BarBottomSheet extends StatelessWidget {
   final double? elevation;
   final ShapeBorder? shape;
 
-  const BarBottomSheet({
-    Key? key,
-    required this.child,
-    this.control,
-    this.clipBehavior,
-    this.shape,
-    this.elevation,
-  }) : super(key: key);
+  const BarBottomSheet(
+      {Key? key,
+      required this.child,
+      this.control,
+      this.clipBehavior,
+      this.shape,
+      this.elevation})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -70,53 +68,36 @@ class BarBottomSheet extends StatelessWidget {
   }
 }
 
-Future<T?> showBarModalBottomSheet<T>({
-  required BuildContext context,
-  required WidgetBuilder builder,
-  Color? backgroundColor,
-  double? elevation,
-  ShapeBorder? shape,
-  double? closeProgressThreshold,
-  Clip? clipBehavior,
-  Color barrierColor = Colors.black87,
-  bool bounce = true,
-  bool expand = false,
-  AnimationController? secondAnimation,
-  Curve? animationCurve,
-  bool useRootNavigator = false,
-  bool isDismissible = true,
-  bool enableDrag = true,
-  Widget? topControl,
-  Duration? duration,
-}) async {
-  assert(context != null);
-  assert(builder != null);
-  assert(expand != null);
-  assert(useRootNavigator != null);
-  assert(isDismissible != null);
-  assert(enableDrag != null);
-  assert(debugCheckHasMediaQuery(context));
-  assert(debugCheckHasMaterialLocalizations(context));
-  final result = await Navigator.of(context, rootNavigator: useRootNavigator)
-      .push(ModalBottomSheetRoute<T>(
-    builder: builder,
-    bounce: bounce,
-    closeProgressThreshold: closeProgressThreshold,
-    containerBuilder: (_, __, child) => BarBottomSheet(
-      child: child,
-      control: topControl,
-      clipBehavior: clipBehavior,
-      shape: shape,
-      elevation: elevation,
-    ),
-    secondAnimationController: secondAnimation,
-    expanded: expand,
-    barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
-    isDismissible: isDismissible,
-    modalBarrierColor: barrierColor,
-    enableDrag: enableDrag,
-    animationCurve: animationCurve,
-    duration: duration,
-  ));
-  return result;
+class BarSheetRoute<T> extends SheetRoute<T> {
+  BarSheetRoute({
+    required WidgetBuilder builder,
+    Color? backgroundColor,
+    double? elevation,
+    ShapeBorder? shape,
+    Clip? clipBehavior,
+    Color barrierColor = Colors.black87,
+    bool expand = false,
+    Curve? animationCurve,
+    bool useRootNavigator = false,
+    bool isDismissible = true,
+    bool enableDrag = true,
+    Widget? topControl,
+    Duration? duration,
+  }) : super(
+          builder: (context) => BarBottomSheet(
+            child: Builder(
+              builder: builder,
+            ),
+            control: topControl,
+            clipBehavior: clipBehavior,
+            shape: shape,
+            elevation: elevation,
+          ),
+          expanded: expand,
+          barrierDismissible: isDismissible,
+          barrierColor: barrierColor,
+          draggable: enableDrag,
+          animationCurve: animationCurve,
+          duration: duration,
+        );
 }

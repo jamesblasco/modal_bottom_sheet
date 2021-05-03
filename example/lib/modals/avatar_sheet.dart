@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
-class AvatarBottomSheet extends StatelessWidget {
+class _AvatarSheet extends StatelessWidget {
   final Widget child;
   final Animation<double> animation;
 
-  const AvatarBottomSheet({Key? key, required  this.child, required this.animation})
+  const _AvatarSheet({Key? key, required this.child, required this.animation})
       : super(key: key);
 
   @override
@@ -67,45 +69,31 @@ class AvatarBottomSheet extends StatelessWidget {
   }
 }
 
-Future<T?> showAvatarModalBottomSheet<T>({
-  required BuildContext context,
-  required WidgetBuilder builder,
-  Color? backgroundColor,
-  double? elevation,
-  ShapeBorder? shape,
-  Clip? clipBehavior,
-  Color barrierColor = Colors.black87,
-  bool bounce = true,
-  bool expand = false,
-  AnimationController? secondAnimation,
-  bool useRootNavigator = false,
-  bool isDismissible = true,
-  bool enableDrag = true,
-  Duration? duration,
-}) async {
-  assert(context != null);
-  assert(builder != null);
-  assert(expand != null);
-  assert(useRootNavigator != null);
-  assert(isDismissible != null);
-  assert(enableDrag != null);
-  assert(debugCheckHasMediaQuery(context));
-  assert(debugCheckHasMaterialLocalizations(context));
-  final result = await Navigator.of(context, rootNavigator: useRootNavigator)
-      .push(ModalBottomSheetRoute<T>(
-    builder: builder,
-    containerBuilder: (_, animation, child) => AvatarBottomSheet(
-      child: child,
-      animation: animation,
-    ),
-    bounce: bounce,
-    secondAnimationController: secondAnimation,
-    expanded: expand,
-    barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
-    isDismissible: isDismissible,
-    modalBarrierColor: barrierColor,
-    enableDrag: enableDrag,
-    duration: duration,
-  ));
-  return result;
+// ignore: always_specify_types
+class AvatarSheetRoute<T> extends SheetRoute<T> {
+  AvatarSheetRoute({
+    required WidgetBuilder builder,
+    Color? backgroundColor,
+    double? elevation,
+    ShapeBorder? shape,
+    Clip? clipBehavior,
+    Color barrierColor = Colors.black87,
+    bool expand = false,
+    bool useRootNavigator = false,
+    bool isDismissible = true,
+    bool enableDrag = true,
+    Duration? duration,
+  }) : super(
+          builder: (context) {
+            return _AvatarSheet(
+              child: Builder(builder: builder),
+              animation: Sheet.of(context)!.animation,
+            );
+          },
+          expanded: expand,
+          barrierDismissible: isDismissible,
+          barrierColor: barrierColor,
+          draggable: enableDrag,
+          duration: duration,
+        );
 }
