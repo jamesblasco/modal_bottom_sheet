@@ -221,8 +221,11 @@ class _MyHomePageState extends State<MyHomePage> {
                     ListTile(
                         title: Text('Modal with PageView'),
                         onTap: () => showBarModalBottomSheet(
-                              expand: true,
-                              context: context,
+                          context: context,
+                          expand: false,
+                          barrierColor: Colors.transparent,
+                          elevation: 0,
+                          useRootNavigator: true,
                               builder: (context) => ModalWithPageView(),
                             )),
                     SizedBox(

@@ -14,6 +14,7 @@ class BarBottomSheet extends StatelessWidget {
   final Clip? clipBehavior;
   final double? elevation;
   final ShapeBorder? shape;
+  final Color? backgroundColor;
 
   const BarBottomSheet({
     Key? key,
@@ -22,6 +23,7 @@ class BarBottomSheet extends StatelessWidget {
     this.clipBehavior,
     this.shape,
     this.elevation,
+    this.backgroundColor,
   }) : super(key: key);
 
   @override
@@ -49,6 +51,7 @@ class BarBottomSheet extends StatelessWidget {
               flex: 1,
               fit: FlexFit.loose,
               child: Material(
+                color: backgroundColor,
                 shape: shape ??
                     RoundedRectangleBorder(
                       side: BorderSide(),
@@ -108,6 +111,7 @@ Future<T?> showBarModalBottomSheet<T>({
       clipBehavior: clipBehavior,
       shape: shape,
       elevation: elevation,
+      backgroundColor: backgroundColor,
     ),
     secondAnimationController: secondAnimation,
     expanded: expand,

@@ -7,7 +7,9 @@ class ModalWithPageView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
+      color: Colors.transparent,
       child: Scaffold(
+        backgroundColor: Colors.transparent,
         appBar:
             AppBar(leading: Container(), title: Text('Modal With Page View')),
         body: SafeArea(
