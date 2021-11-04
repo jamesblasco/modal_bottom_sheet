@@ -76,7 +76,7 @@ Future<T?> showBarModalBottomSheet<T>({
   Color? backgroundColor,
   double? elevation,
   ShapeBorder? shape,
-  double? closeProgressThreshold,
+  double closeProgressThreshold = 0.6,
   Clip? clipBehavior,
   Color barrierColor = Colors.black87,
   bool bounce = true,
@@ -87,7 +87,7 @@ Future<T?> showBarModalBottomSheet<T>({
   bool isDismissible = true,
   bool enableDrag = true,
   Widget? topControl,
-  Duration? duration,
+  Duration duration = const Duration(milliseconds: 400),
 }) async {
   assert(context != null);
   assert(builder != null);

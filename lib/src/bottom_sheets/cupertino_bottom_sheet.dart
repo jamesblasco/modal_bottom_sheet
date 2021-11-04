@@ -77,7 +77,7 @@ Future<T?> showCupertinoModalBottomSheet<T>({
   required WidgetBuilder builder,
   Color? backgroundColor,
   double? elevation,
-  double? closeProgressThreshold,
+  double closeProgressThreshold = 0.6,
   ShapeBorder? shape,
   Clip? clipBehavior,
   Color? barrierColor,
@@ -90,7 +90,7 @@ Future<T?> showCupertinoModalBottomSheet<T>({
   bool? isDismissible,
   bool enableDrag = true,
   Radius topRadius = _kDefaultTopRadius,
-  Duration? duration,
+  Duration duration = const Duration(milliseconds: 400),
   RouteSettings? settings,
   Color? transitionBackgroundColor,
   BoxShadow? shadow,
@@ -154,7 +154,7 @@ class CupertinoModalBottomSheetRoute<T> extends ModalBottomSheetRoute<T> {
   CupertinoModalBottomSheetRoute({
     required WidgetBuilder builder,
     WidgetWithChildBuilder? containerBuilder,
-    double? closeProgressThreshold,
+    double closeProgressThreshold = 0.6,
     String? barrierLabel,
     double? elevation,
     ShapeBorder? shape,
@@ -166,7 +166,7 @@ class CupertinoModalBottomSheetRoute<T> extends ModalBottomSheetRoute<T> {
     bool isDismissible = true,
     bool enableDrag = true,
     required bool expanded,
-    Duration? duration,
+    Duration duration = const Duration(milliseconds: 400),
     RouteSettings? settings,
     ScrollController? scrollController,
     this.boxShadow = _kDefaultBoxShadow,
@@ -340,7 +340,7 @@ class CupertinoScaffold extends StatefulWidget {
 
   static Future<T?> showCupertinoModalBottomSheet<T>({
     required BuildContext context,
-    double? closeProgressThreshold,
+    double closeProgressThreshold = 0.6,
     required WidgetBuilder builder,
     Curve? animationCurve,
     Curve? previousRouteAnimationCurve,
@@ -351,7 +351,7 @@ class CupertinoScaffold extends StatefulWidget {
     bool bounce = true,
     bool? isDismissible,
     bool enableDrag = true,
-    Duration? duration,
+    Duration duration = const Duration(milliseconds: 400),
     RouteSettings? settings,
     BoxShadow? shadow,
   }) async {

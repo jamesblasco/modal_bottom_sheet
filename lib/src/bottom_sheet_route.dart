@@ -7,12 +7,10 @@ import 'package:modal_bottom_sheet/src/utils/modal_scroll_controller.dart';
 
 import '../modal_bottom_sheet.dart';
 
-const Duration _bottomSheetDuration = Duration(milliseconds: 400);
-
 class _ModalBottomSheet<T> extends StatefulWidget {
   const _ModalBottomSheet({
     Key? key,
-    this.closeProgressThreshold,
+    this.closeProgressThreshold = 0.6,
     required this.route,
     this.secondAnimationController,
     this.bounce = false,
@@ -23,7 +21,7 @@ class _ModalBottomSheet<T> extends StatefulWidget {
         assert(enableDrag != null),
         super(key: key);
 
-  final double? closeProgressThreshold;
+  final double closeProgressThreshold;
   final ModalBottomSheetRoute<T> route;
   final bool expanded;
   final bool bounce;
@@ -129,7 +127,7 @@ class _ModalBottomSheetState<T> extends State<_ModalBottomSheet<T>> {
 
 class ModalBottomSheetRoute<T> extends PopupRoute<T> {
   ModalBottomSheetRoute({
-    this.closeProgressThreshold,
+    this.closeProgressThreshold = 0.6,
     this.containerBuilder,
     required this.builder,
     this.scrollController,
@@ -141,14 +139,14 @@ class ModalBottomSheetRoute<T> extends PopupRoute<T> {
     required this.expanded,
     this.bounce = false,
     this.animationCurve,
-    this.duration,
+    this.duration = const Duration(milliseconds: 400),
     RouteSettings? settings,
   })  : assert(expanded != null),
         assert(isDismissible != null),
         assert(enableDrag != null),
         super(settings: settings);
 
-  final double? closeProgressThreshold;
+  final double closeProgressThreshold;
   final WidgetWithChildBuilder? containerBuilder;
   final WidgetBuilder builder;
   final bool expanded;
@@ -158,13 +156,13 @@ class ModalBottomSheetRoute<T> extends PopupRoute<T> {
   final bool enableDrag;
   final ScrollController? scrollController;
 
-  final Duration? duration;
+  final Duration duration;
 
   final AnimationController? secondAnimationController;
   final Curve? animationCurve;
 
   @override
-  Duration get transitionDuration => duration ?? _bottomSheetDuration;
+  Duration get transitionDuration => duration;
 
   @override
   bool get barrierDismissible => isDismissible;
@@ -182,7 +180,7 @@ class ModalBottomSheetRoute<T> extends PopupRoute<T> {
     assert(_animationController == null);
     _animationController = ModalBottomSheet.createAnimationController(
       navigator!.overlay!,
-      duration: transitionDuration,
+      transitionDuration,
     );
     return _animationController!;
   }
@@ -244,7 +242,7 @@ Future<T?> showCustomModalBottomSheet<T>({
   bool useRootNavigator = false,
   bool isDismissible = true,
   bool enableDrag = true,
-  Duration? duration,
+  Duration duration = const Duration(milliseconds: 400),
 }) async {
   assert(context != null);
   assert(builder != null);

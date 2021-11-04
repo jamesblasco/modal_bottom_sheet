@@ -10,15 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 import 'package:modal_bottom_sheet/src/utils/scroll_to_top_status_bar.dart';
-
 import 'package:modal_bottom_sheet/src/utils/bottom_sheet_suspended_curve.dart';
-
-const Curve _decelerateEasing = Cubic(0.0, 0.0, 0.2, 1.0);
-const Curve _modalBottomSheetCurve = _decelerateEasing;
-const Duration _bottomSheetDuration = Duration(milliseconds: 400);
-const double _minFlingVelocity = 500.0;
-const double _closeProgressThreshold = 0.6;
-const double _willPopThreshold = 0.97;
 
 typedef WidgetWithChildBuilder = Widget Function(
     BuildContext context, Animation<double> animation, Widget child);
@@ -38,7 +30,6 @@ class ModalBottomSheet extends StatefulWidget {
   /// Creates a bottom sheet.
   const ModalBottomSheet({
     Key? key,
-    this.closeProgressThreshold,
     required this.animationController,
     this.animationCurve,
     this.enableDrag = true,
@@ -49,6 +40,10 @@ class ModalBottomSheet extends StatefulWidget {
     required this.expanded,
     required this.onClosing,
     required this.child,
+    this.decelerateEasing = const Cubic(0.0, 0.0, 0.2, 1.0),
+    this.minFlingVelocity= 500.0,
+    this.closeProgressThreshold = 0.6,
+    this.willPopThreshold= 0.97,
   })   : assert(enableDrag != null),
         assert(onClosing != null),
         assert(child != null),
@@ -56,7 +51,7 @@ class ModalBottomSheet extends StatefulWidget {
 
   /// The closeProgressThreshold parameter
   /// specifies when the bottom sheet will be dismissed when user drags it.
-  final double? closeProgressThreshold;
+  final double closeProgressThreshold;
 
   /// The animation controller that controls the bottom sheet's entrance and
   /// exit animations.
@@ -107,6 +102,18 @@ class ModalBottomSheet extends StatefulWidget {
 
   final ScrollController scrollController;
 
+  /// The decelerateEasing parameter
+  /// Determines the speed at which it should decelerate.
+  final Curve decelerateEasing;
+
+  /// The minFlingVelocity parameter
+  /// Determines how fast the sheet should be flinged before closing.
+  final double minFlingVelocity;
+
+  /// The willPopThreshold parameter
+  /// Determines how far the sheet should be flinged before closing.
+  final double willPopThreshold;
+
   @override
   _ModalBottomSheetState createState() => _ModalBottomSheetState();
 
@@ -117,11 +124,10 @@ class ModalBottomSheet extends StatefulWidget {
   /// animation. If alternative animation durations are required, a different
   /// animation controller could be provided.
   static AnimationController createAnimationController(
-    TickerProvider vsync, {
-    Duration? duration,
-  }) {
+      TickerProvider vsync,
+        Duration duration) {
     return AnimationController(
-      duration: duration ?? _bottomSheetDuration,
+      duration: duration,
       debugLabel: 'BottomSheet',
       vsync: vsync,
     );
@@ -151,11 +157,11 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
   bool isDragging = false;
 
   bool get hasReachedWillPopThreshold =>
-      widget.animationController.value < _willPopThreshold;
+      widget.animationController.value < widget.willPopThreshold;
 
   bool get hasReachedCloseThreshold =>
       widget.animationController.value <
-      (widget.closeProgressThreshold ?? _closeProgressThreshold);
+          widget.closeProgressThreshold;
 
   void _close() {
     isDragging = false;
@@ -238,7 +244,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
     }
     if (canClose) {
       // If speed is bigger than _minFlingVelocity try to close it
-      if (velocity > _minFlingVelocity) {
+      if (velocity > widget.minFlingVelocity) {
         _close();
       } else if (hasReachedCloseThreshold) {
         if (widget.animationController.value > 0.0) {
@@ -328,7 +334,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
     }
   }
 
-  Curve get _defaultCurve => widget.animationCurve ?? _modalBottomSheetCurve;
+  Curve get _defaultCurve => widget.animationCurve ?? widget.decelerateEasing;
 
   @override
   void initState() {
@@ -370,29 +376,29 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
         final draggableChild = !widget.enableDrag
             ? child
             : KeyedSubtree(
-                key: _childKey,
-                child: AnimatedBuilder(
-                  animation: bounceAnimation,
-                  builder: (context, _) => CustomSingleChildLayout(
-                    delegate: _CustomBottomSheetLayout(bounceAnimation.value),
-                    child: GestureDetector(
-                      onVerticalDragUpdate: (details) {
-                        _handleDragUpdate(details.delta.dy);
-                      },
-                      onVerticalDragEnd: (details) {
-                        _handleDragEnd(details.primaryVelocity ?? 0);
-                      },
-                      child: NotificationListener<ScrollNotification>(
-                        onNotification: (ScrollNotification notification) {
-                          _handleScrollUpdate(notification);
-                          return false;
-                        },
-                        child: child!,
-                      ),
-                    ),
-                  ),
+          key: _childKey,
+          child: AnimatedBuilder(
+            animation: bounceAnimation,
+            builder: (context, _) => CustomSingleChildLayout(
+              delegate: _CustomBottomSheetLayout(bounceAnimation.value),
+              child: GestureDetector(
+                onVerticalDragUpdate: (details) {
+                  _handleDragUpdate(details.delta.dy);
+                },
+                onVerticalDragEnd: (details) {
+                  _handleDragEnd(details.primaryVelocity ?? 0);
+                },
+                child: NotificationListener<ScrollNotification>(
+                  onNotification: (ScrollNotification notification) {
+                    _handleScrollUpdate(notification);
+                    return false;
+                  },
+                  child: child!,
                 ),
-              );
+              ),
+            ),
+          ),
+        );
         return ClipRect(
           child: CustomSingleChildLayout(
             delegate: _ModalBottomSheetLayout(

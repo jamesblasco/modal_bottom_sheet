@@ -81,7 +81,7 @@ Future<T?> showAvatarModalBottomSheet<T>({
   bool useRootNavigator = false,
   bool isDismissible = true,
   bool enableDrag = true,
-  Duration? duration,
+  Duration duration = const Duration(milliseconds: 400),
 }) async {
   assert(context != null);
   assert(builder != null);
