@@ -14,6 +14,7 @@ class BarBottomSheet extends StatelessWidget {
   final Clip? clipBehavior;
   final double? elevation;
   final ShapeBorder? shape;
+  final SystemUiOverlayStyle? overlayStyle;
 
   const BarBottomSheet({
     Key? key,
@@ -22,12 +23,13 @@ class BarBottomSheet extends StatelessWidget {
     this.clipBehavior,
     this.shape,
     this.elevation,
+    this.overlayStyle,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle.light,
+      value: overlayStyle ?? SystemUiOverlayStyle.light,
       child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -88,6 +90,7 @@ Future<T?> showBarModalBottomSheet<T>({
   bool enableDrag = true,
   Widget? topControl,
   Duration? duration,
+  SystemUiOverlayStyle? overlayStyle,
 }) async {
   assert(debugCheckHasMediaQuery(context));
   assert(debugCheckHasMaterialLocalizations(context));
@@ -102,6 +105,7 @@ Future<T?> showBarModalBottomSheet<T>({
       clipBehavior: clipBehavior,
       shape: shape,
       elevation: elevation,
+      overlayStyle: overlayStyle,
     ),
     secondAnimationController: secondAnimation,
     expanded: expand,

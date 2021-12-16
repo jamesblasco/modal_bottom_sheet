@@ -91,6 +91,7 @@ Future<T?> showCupertinoModalBottomSheet<T>({
   RouteSettings? settings,
   Color? transitionBackgroundColor,
   BoxShadow? shadow,
+  SystemUiOverlayStyle? overlayStyle,
 }) async {
   assert(debugCheckHasMediaQuery(context));
   final hasMaterialLocalizations =
@@ -126,7 +127,8 @@ Future<T?> showCupertinoModalBottomSheet<T>({
         previousRouteAnimationCurve: previousRouteAnimationCurve,
         duration: duration,
         settings: settings,
-        transitionBackgroundColor: transitionBackgroundColor ?? Colors.black),
+        transitionBackgroundColor: transitionBackgroundColor ?? Colors.black,
+        overlayStyle: overlayStyle),
   );
   return result;
 }
@@ -142,6 +144,7 @@ class CupertinoModalBottomSheetRoute<T> extends ModalBottomSheetRoute<T> {
   // Background color behind all routes
   // Black by default
   final Color? transitionBackgroundColor;
+  final SystemUiOverlayStyle? overlayStyle;
 
   CupertinoModalBottomSheetRoute({
     required WidgetBuilder builder,
@@ -165,6 +168,7 @@ class CupertinoModalBottomSheetRoute<T> extends ModalBottomSheetRoute<T> {
     this.transitionBackgroundColor,
     this.topRadius = _kDefaultTopRadius,
     this.previousRouteAnimationCurve,
+    this.overlayStyle,
   })  : super(
           closeProgressThreshold: closeProgressThreshold,
           scrollController: scrollController,
@@ -217,6 +221,7 @@ class CupertinoModalBottomSheetRoute<T> extends ModalBottomSheetRoute<T> {
       animationCurve: previousRouteAnimationCurve,
       topRadius: topRadius,
       backgroundColor: transitionBackgroundColor ?? Colors.black,
+      overlayStyle: overlayStyle,
     );
   }
 }
@@ -227,6 +232,7 @@ class _CupertinoModalTransition extends StatelessWidget {
   final Curve? animationCurve;
   final Color backgroundColor;
   final BoxShadow? boxShadow;
+  final SystemUiOverlayStyle? overlayStyle;
 
   final Widget body;
 
@@ -238,6 +244,7 @@ class _CupertinoModalTransition extends StatelessWidget {
     this.backgroundColor = Colors.black,
     this.animationCurve,
     this.boxShadow,
+    this.overlayStyle,
   }) : super(key: key);
 
   @override
@@ -255,10 +262,7 @@ class _CupertinoModalTransition extends StatelessWidget {
     );
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle(
-        statusBarIconBrightness: Brightness.light,
-        statusBarBrightness: Brightness.dark,
-      ),
+      value: overlayStyle ?? SystemUiOverlayStyle.light,
       child: AnimatedBuilder(
         animation: curvedAnimation,
         child: body,
@@ -319,12 +323,14 @@ class CupertinoScaffold extends StatefulWidget {
   final Widget body;
   final Radius topRadius;
   final Color transitionBackgroundColor;
+  final SystemUiOverlayStyle? overlayStyle;
 
   const CupertinoScaffold({
     Key? key,
     required this.body,
     this.topRadius = _kDefaultTopRadius,
     this.transitionBackgroundColor = Colors.black,
+    this.overlayStyle,
   }) : super(key: key);
 
   @override
@@ -346,6 +352,7 @@ class CupertinoScaffold extends StatefulWidget {
     Duration? duration,
     RouteSettings? settings,
     BoxShadow? shadow,
+    SystemUiOverlayStyle? overlayStyle,
   }) async {
     assert(debugCheckHasMediaQuery(context));
     final isCupertinoApp =
@@ -378,6 +385,7 @@ class CupertinoScaffold extends StatefulWidget {
       previousRouteAnimationCurve: previousRouteAnimationCurve,
       duration: duration,
       settings: settings,
+      overlayStyle: overlayStyle,
     ));
     return result;
   }
@@ -409,6 +417,7 @@ class _CupertinoScaffoldState extends State<CupertinoScaffold>
         body: widget.body,
         topRadius: widget.topRadius,
         backgroundColor: widget.transitionBackgroundColor,
+        overlayStyle: widget.overlayStyle,
       ),
     );
   }
