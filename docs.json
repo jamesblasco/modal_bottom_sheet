@@ -1,0 +1,40 @@
+{
+    "name": "Modal Bottom Sheet Docs",
+    "theme": "#36B9B9",
+    "sidebar": [
+        [
+            "Overview",
+            "/"
+        ],
+        [
+            "Sheet",
+            [
+                [
+                    "Getting Started",
+                    "/sheet/install"
+                ],
+                [
+                    "Parameters",
+                    "/sheet/customize"
+                ]
+            ]
+        ],
+        [
+            "Sheet Route",
+            [
+                [
+                    "Getting Started",
+                    "/sheet_route/install"
+                ],
+                [
+                    "Parameters",
+                    "/sheet_route/customize"
+                ],
+                [
+                    "Cupertino Sheet Route",
+                    "/sheet_route/cupertino"
+                ]
+            ]
+        ]
+    ]
+}

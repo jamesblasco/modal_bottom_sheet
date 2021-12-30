@@ -1,0 +1,6 @@
+{
+    "dart.analyzerAdditionalArgs": [
+        "--enable-experiment=non-nullable"
+    ],
+    "dart.lineLength": 80,
+}
