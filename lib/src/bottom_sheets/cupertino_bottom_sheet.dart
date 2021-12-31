@@ -13,8 +13,6 @@ import 'package:flutter/cupertino.dart'
         CupertinoThemeData,
         CupertinoUserInterfaceLevel,
         CupertinoUserInterfaceLevelData;
-import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart'
     show
         Colors,
@@ -25,7 +23,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../modal_bottom_sheet.dart';
-import '../bottom_sheet_route.dart';
 
 const double _kPreviousPageVisibleOffset = 10;
 
@@ -210,9 +207,11 @@ class CupertinoModalBottomSheetRoute<T> extends ModalBottomSheetRoute<T> {
     final distanceWithScale = (paddingTop + _kPreviousPageVisibleOffset) * 0.9;
     final offsetY = secondaryAnimation.value * (paddingTop - distanceWithScale);
     final scale = 1 - secondaryAnimation.value / 10;
+
     return Transform.translate(
       offset: Offset(0, offsetY),
       child: Transform.scale(
+        filterQuality: FilterQuality.low,
         scale: scale,
         child: child,
         alignment: Alignment.topCenter,
@@ -269,8 +268,6 @@ class _CupertinoModalTransition extends StatelessWidget {
       curve: animationCurve ?? Curves.easeOut,
     );
 
-    final systemBackground = CupertinoTheme.of(context).scaffoldBackgroundColor;
-
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light,
       child: AnimatedBuilder(
@@ -292,6 +289,7 @@ class _CupertinoModalTransition extends StatelessWidget {
               Transform.translate(
                 offset: Offset(0, yOffset),
                 child: Transform.scale(
+                  filterQuality: FilterQuality.low,
                   scale: scale,
                   alignment: Alignment.topCenter,
                   child: ClipRRect(
@@ -299,24 +297,16 @@ class _CupertinoModalTransition extends StatelessWidget {
                     child: CupertinoUserInterfaceLevel(
                       data: CupertinoUserInterfaceLevelData.elevated,
                       child: Builder(
-                        builder: (context) {
-                          return ColorFiltered(
-                            colorFilter: ColorFilter.mode(
-                              systemBackground,
-                              BlendMode.saturation,
-                            ),
-                            child: CupertinoTheme(
-                              data: createPreviousRouteTheme(
-                                context,
-                                curvedAnimation,
-                              ),
-                              child: CupertinoUserInterfaceLevel(
-                                data: CupertinoUserInterfaceLevelData.base,
-                                child: child!,
-                              ),
-                            ),
-                          );
-                        },
+                        builder: (context) => CupertinoTheme(
+                          data: createPreviousRouteTheme(
+                            context,
+                            curvedAnimation,
+                          ),
+                          child: CupertinoUserInterfaceLevel(
+                            data: CupertinoUserInterfaceLevelData.base,
+                            child: child!,
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -339,57 +329,62 @@ class _CupertinoModalTransition extends StatelessWidget {
       cTheme.scaffoldBackgroundColor,
       context,
     );
-    final animateBackground =
-        cTheme.scaffoldBackgroundColor is CupertinoDynamicColor;
 
     final barBackgroundColor = CupertinoDynamicColor.resolve(
       cTheme.barBackgroundColor,
       context,
     );
-    final animateBarBackground =
-        cTheme.barBackgroundColor is CupertinoDynamicColor;
 
     var previousRouteTheme = cTheme;
 
-    if (animateBackground) {
+    if (cTheme.scaffoldBackgroundColor is CupertinoDynamicColor) {
       /// BackgroundColor for the previous route with forced using
       /// of the elevated colors
-      final previousRouteSystemBackgroundColor =
+
+      final dynamicScaffoldBackgroundColor =
+          cTheme.scaffoldBackgroundColor as CupertinoDynamicColor;
+
+      final elevatedScaffoldBackgroundColor =
           CupertinoDynamicColor.withBrightnessAndContrast(
-        color: CupertinoColors.systemBackground.elevatedColor,
-        darkColor: CupertinoColors.systemBackground.darkElevatedColor,
+        color: dynamicScaffoldBackgroundColor.elevatedColor,
+        darkColor: dynamicScaffoldBackgroundColor.darkElevatedColor,
         highContrastColor:
-            CupertinoColors.systemBackground.highContrastElevatedColor,
+            dynamicScaffoldBackgroundColor.highContrastElevatedColor,
         darkHighContrastColor:
-            CupertinoColors.systemBackground.darkHighContrastElevatedColor,
+            dynamicScaffoldBackgroundColor.darkHighContrastElevatedColor,
       );
 
       previousRouteTheme = previousRouteTheme.copyWith(
         scaffoldBackgroundColor: ColorTween(
           begin: systemBackground,
-          end: previousRouteSystemBackgroundColor.resolveFrom(context),
+          end: elevatedScaffoldBackgroundColor.resolveFrom(context),
         ).evaluate(animation),
+        primaryColor: CupertinoColors.placeholderText.resolveFrom(context),
       );
     }
 
-    if (animateBarBackground) {
+    if (cTheme.barBackgroundColor is CupertinoDynamicColor) {
       /// NavigationBarColor for the previous route with forced using
       /// of the elevated colors
-      final previousRouteNavigationBarColor =
+
+      final dynamicBarBackgroundColor =
+          cTheme.barBackgroundColor as CupertinoDynamicColor;
+
+      final elevatedBarBackgroundColor =
           CupertinoDynamicColor.withBrightnessAndContrast(
-        color: CupertinoColors.secondarySystemBackground.elevatedColor,
-        darkColor: CupertinoColors.secondarySystemBackground.darkElevatedColor,
-        highContrastColor:
-            CupertinoColors.secondarySystemBackground.highContrastElevatedColor,
-        darkHighContrastColor: CupertinoColors
-            .secondarySystemBackground.darkHighContrastElevatedColor,
+        color: dynamicBarBackgroundColor.elevatedColor,
+        darkColor: dynamicBarBackgroundColor.darkElevatedColor,
+        highContrastColor: dynamicBarBackgroundColor.highContrastElevatedColor,
+        darkHighContrastColor:
+            dynamicBarBackgroundColor.darkHighContrastElevatedColor,
       );
 
       previousRouteTheme = previousRouteTheme.copyWith(
         barBackgroundColor: ColorTween(
           begin: barBackgroundColor,
-          end: previousRouteNavigationBarColor.resolveFrom(context),
+          end: elevatedBarBackgroundColor.resolveFrom(context),
         ).evaluate(animation),
+        primaryColor: CupertinoColors.placeholderText.resolveFrom(context),
       );
     }
 
