@@ -1,0 +1,21 @@
+name: Flutter Test
+on:
+  push:
+    branches:
+      - master
+jobs:
+  build:
+    name: Sheet test
+    env:
+      my_secret: ${{secrets.commit_secret}}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: 'dev'
+      - run: |
+          cd sheet
+          flutter pub get
+      - run: |
+          tools/coverage.sh sheet
