@@ -21,7 +21,8 @@ class _NoMomentumSheetState extends State<NoMomentumSheet> {
   }
 
   void animateSheet() {
-    controller.relativeAnimateTo(0.2, duration: const Duration(milliseconds: 400), curve: Curves.easeOut);
+    controller.relativeAnimateTo(0.2,
+        duration: const Duration(milliseconds: 400), curve: Curves.easeOut);
   }
 
   @override

@@ -9,6 +9,7 @@ import 'package:example/examples/snap_sheet.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'editor/editor_page.dart';
 import 'examples/clamped_sheet.dart';
 import 'examples/complex_snap_sheet.dart';
 import 'examples/fit_sheet_snap.dart';
@@ -45,6 +46,11 @@ class SheetExamplesPage extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             const SectionTitle('SHEET'),
+            const ExampleTile(
+              title: 'Customizable sheet',
+              sheet: SheetConfigurationPage(),
+            ),
+            const SectionTitle('EXAMPLES'),
             ExampleTile(
               title: 'Simple sheet',
               sheet: SimpleSheetPage(),

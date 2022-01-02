@@ -16,7 +16,7 @@ class SimpleSheetPage extends StatelessWidget {
           color: Colors.blue[100],
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
-            children:  <Widget>[
+            children: <Widget>[
               const SizedBox(height: 20),
               Text('Title', style: Theme.of(context).textTheme.headline3),
               Text('Subtitle', style: Theme.of(context).textTheme.headline6),

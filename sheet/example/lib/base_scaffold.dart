@@ -27,10 +27,12 @@ class BaseScaffold extends StatelessWidget {
     this.sheet,
     this.title,
     this.showBottomBar = true,
+    this.appBarTrailingButton,
   }) : super(key: key);
 
   final Widget? sheet;
   final Widget? title;
+  final Widget? appBarTrailingButton;
   final bool showBottomBar;
 
   @override
@@ -39,6 +41,7 @@ class BaseScaffold extends StatelessWidget {
       appBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,
         middle: title ?? const Text('Example'),
+        trailing: appBarTrailingButton,
       ),
       backgroundColor: Colors.grey[200],
       body: Stack(
@@ -50,7 +53,10 @@ class BaseScaffold extends StatelessWidget {
             alignment: Alignment.center,
             child: ListView.builder(
                 itemBuilder: (BuildContext context, int index) {
-              return ListTile(title: Text('Item $index'));
+              return ListTile(
+                title: Text('Item $index'),
+                onTap: () {},
+              );
             }),
           ),
           if (sheet != null) sheet!

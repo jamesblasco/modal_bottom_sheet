@@ -21,8 +21,11 @@ class _SnapSheetState extends State<SnapSheet> {
   }
 
   void animateSheet() {
-    controller.relativeAnimateTo(0.2,
-        duration: const Duration(milliseconds: 400), curve: Curves.easeOut);
+    controller.relativeAnimateTo(
+      0.5,
+      duration: const Duration(milliseconds: 400),
+      curve: Curves.easeOut,
+    );
   }
 
   @override

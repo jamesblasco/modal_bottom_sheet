@@ -152,21 +152,22 @@ void main() {
 
       testWidgets('Initial extent - fit (Arbitrary)',
           (WidgetTester tester) async {
+        const String text = 'Item\nItem\nItem\nItem\n';
         await tester.pumpApp(
           Sheet(
             fit: SheetFit.loose,
-            initialExtent: 100,
+            initialExtent: 20,
             child: Container(
               key: key,
-              child: const Text('Item'),
+              child: const Text(text),
             ),
           ),
         );
         final Rect rect = tester.getRect(find.byKey(key));
-        final double textHeight = tester.getRect(find.text('Item')).height;
+        final double textHeight = tester.getRect(find.text(text)).height;
         expect(textHeight, isNonZero);
         expect(rect.size.height, equals(textHeight));
-        expect(rect.top, equals(screenRect.bottom - 100));
+        expect(rect.top, equals(screenRect.bottom - 20));
       });
 
       testWidgets(

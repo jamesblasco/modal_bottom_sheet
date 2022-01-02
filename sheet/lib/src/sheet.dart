@@ -434,8 +434,6 @@ class SheetController extends ScrollController {
     for (final ScrollPosition position in positions)
       (position as SheetPosition).relativeJumpTo(offset);
   }
-
-
 }
 
 /// A scroll position that manages scroll activities for
@@ -514,16 +512,14 @@ class SheetPosition extends ScrollPositionWithSingleContext {
 
   @override
   double setPixels(double newPixels) {
-    final double pixels = newPixels.clamp(minScrollExtent, maxScrollExtent);
-    _controller.value = (pixels / maxScrollExtent).clamp(0, 1);
-    return super.setPixels(pixels);
+    _controller.value = (newPixels / maxScrollExtent).clamp(0, 1);
+    return super.setPixels(newPixels);
   }
 
   @override
   void forcePixels(double value) {
-    final double pixels = value.clamp(minScrollExtent, maxScrollExtent);
-    _controller.value = (pixels / maxScrollExtent).clamp(0, 1);
-    super.forcePixels(pixels);
+    _controller.value = (value / maxScrollExtent).clamp(0, 1);
+    super.forcePixels(value);
   }
 
   @override
@@ -531,6 +527,15 @@ class SheetPosition extends ScrollPositionWithSingleContext {
     _scrollController.dispose();
     _controller.dispose();
     super.dispose();
+  }
+
+  @override
+  bool applyContentDimensions(double minScrollExtent, double maxScrollExtent) {
+    // Clamp initial extent to maxScrollExtent
+    if (!hasContentDimensions) {
+      correctPixels(pixels.clamp(minScrollExtent, maxScrollExtent));
+    }
+    return super.applyContentDimensions(minScrollExtent, maxScrollExtent);
   }
 }
 
@@ -666,11 +671,12 @@ class _RenderSheetViewport extends RenderBox
   void _hasScrolled() {
     if (offset.pixels > _maxScrollExtent) {
       _maxScrollExtentDuringOverflow ??= _maxScrollExtent;
-      _childExtentDuringOverflow ??= child!.size.height;
+      _childExtentBeforeOverflow ??= child!.size.height;
       markNeedsLayout();
-    } else {
+    } else if (offset.pixels < (_childExtentBeforeOverflow ?? 0)) {
       _maxScrollExtentDuringOverflow = null;
-      _childExtentDuringOverflow = null;
+      _childExtentBeforeOverflow = null;
+      markNeedsLayout();
     }
     markNeedsPaint();
     markNeedsSemanticsUpdate();
@@ -745,7 +751,7 @@ class _RenderSheetViewport extends RenderBox
   }
 
   double? _maxScrollExtentDuringOverflow;
-  double? _childExtentDuringOverflow;
+  double? _childExtentBeforeOverflow;
 
   //BoxConstraints _getInnerConstraints(BoxConstraints constraints) {
   //  switch (axis) {
@@ -786,8 +792,6 @@ class _RenderSheetViewport extends RenderBox
     if (child == null) {
       return constraints.smallest;
     }
-   // final Size childSize =
-   //     child!.getDryLayout(_getInnerConstraints(constraints));
     return constraints.biggest;
   }
 
@@ -798,12 +802,11 @@ class _RenderSheetViewport extends RenderBox
       size = constraints.smallest;
     } else {
       final double? minHeight = _maxScrollExtentDuringOverflow != null
-          ? _childExtentDuringOverflow! +
+          ? _childExtentBeforeOverflow! +
               offset.pixels -
               _maxScrollExtentDuringOverflow!
           : null;
       final bool expand = fit == SheetFit.expand;
-      //  child!.layout(_getInnerConstraints(constraints), parentUsesSize: true);
       double height = maxExtent ?? constraints.biggest.height;
       height = math.max(height, offset.pixels);
       if (minHeight == null) {

@@ -93,7 +93,7 @@ class _CupertinoSheetDecorationBuilder extends StatelessWidget {
 ///
 /// Clip the child widget to rectangle with top rounded corners and adds
 /// top padding and top safe area.
-/// 
+///
 /// * [CupertinoSheetPage], which is the [Page] version of this class
 class CupertinoSheetRoute<T> extends SheetRoute<T> {
   CupertinoSheetRoute({
@@ -119,7 +119,7 @@ class CupertinoSheetRoute<T> extends SheetRoute<T> {
         );
 
   @override
-  SheetPhysics? get physics => BouncingSheetPhysics(overflow: true);
+  SheetPhysics? get physics => BouncingSheetPhysics(overflowViewport: true);
 
   @override
   bool get draggable => true;
@@ -282,7 +282,6 @@ class _CupertinoSheetBottomRouteTransition extends StatelessWidget {
     );
   }
 }
-
 
 /// A modal page that overlays a widget over the current route and animates
 /// it from the bottom with a cupertino modal sheet appareance

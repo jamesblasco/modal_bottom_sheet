@@ -20,7 +20,7 @@ class ModalInsideModal extends StatelessWidget {
         bottom: false,
         child: ListView(
           reverse: reverse,
-         // shrinkWrap: true,
+          // shrinkWrap: true,
           controller: PrimaryScrollController.of(context),
           physics: BouncingScrollPhysics(),
           children: ListTile.divideTiles(

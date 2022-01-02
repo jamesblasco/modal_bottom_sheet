@@ -268,10 +268,10 @@ class MapSheet extends StatelessWidget {
                           topRight: Radius.circular(radius),
                         ),
                         color: Colors.white,
-                        boxShadow:  <BoxShadow>[
+                        boxShadow: <BoxShadow>[
                           BoxShadow(color: shadow!, blurRadius: 12),
                         ]),
-                    child: Column(children:  <Widget>[
+                    child: Column(children: <Widget>[
                       Container(
                         margin: EdgeInsets.all(8),
                         width: 36,
@@ -286,7 +286,7 @@ class MapSheet extends StatelessWidget {
                           physics: BouncingScrollPhysics(),
                           children: ListTile.divideTiles(
                             context: context,
-                            tiles: List <Widget>.generate(100, (int index) {
+                            tiles: List<Widget>.generate(100, (int index) {
                               if (index == 0) {
                                 return Container(
                                   child: Text(

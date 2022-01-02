@@ -19,6 +19,11 @@ class NeverDraggableSheetPhysics extends NeverScrollableScrollPhysics
     with SheetPhysics {
   const NeverDraggableSheetPhysics({ScrollPhysics? parent})
       : super(parent: parent);
+
+  @override
+  NeverDraggableSheetPhysics applyTo(ScrollPhysics? ancestor) {
+    return NeverDraggableSheetPhysics(parent: buildParent(ancestor));
+  }
 }
 
 /// Sheet physics that always lets the user to drag a sheet.
@@ -27,6 +32,11 @@ class AlwaysDraggableSheetPhysics extends AlwaysScrollableScrollPhysics
   /// Creates scroll physics that always lets the user scroll.
   const AlwaysDraggableSheetPhysics({ScrollPhysics? parent})
       : super(parent: parent);
+
+  @override
+  AlwaysDraggableSheetPhysics applyTo(ScrollPhysics? ancestor) {
+    return AlwaysDraggableSheetPhysics(parent: buildParent(ancestor));
+  }
 }
 
 /// Creates sheet physics that bounce back from the edge.
@@ -34,20 +44,21 @@ class BouncingSheetPhysics extends ScrollPhysics with SheetPhysics {
   /// Creates sheet physics that bounce back from the edge.
   const BouncingSheetPhysics({
     ScrollPhysics? parent,
-    this.overflow = false,
+    this.overflowViewport = false,
   }) : super(parent: parent);
 
-  final bool overflow;
+  final bool overflowViewport;
 
   @override
   BouncingSheetPhysics applyTo(ScrollPhysics? ancestor) {
     return BouncingSheetPhysics(
-        parent: buildParent(ancestor), overflow: overflow);
+        parent: buildParent(ancestor), overflowViewport: overflowViewport);
   }
 
   @override
   bool shouldReload(covariant ScrollPhysics old) {
-    return old is BouncingSheetPhysics && old.overflow != overflow;
+    return old is BouncingSheetPhysics &&
+        old.overflowViewport != overflowViewport;
   }
 
   /// The multiple applied to overscroll to make it appear that scrolling past
@@ -131,17 +142,17 @@ class BouncingSheetPhysics extends ScrollPhysics with SheetPhysics {
       }
       return true;
     }());
-    if (value < position.pixels &&
-        position.pixels <= position.minScrollExtent) // underscroll
-      return value - position.pixels;
-    if (!overflow &&
+    // if (value < position.pixels &&
+    //     position.pixels <= position.minScrollExtent) // underscroll
+    //   return value - position.pixels;
+    if (!overflowViewport &&
         position.viewportDimension <= position.pixels &&
         position.pixels < value) // overscroll
       return value - position.pixels;
-    if (value < position.minScrollExtent &&
-        position.minScrollExtent < position.pixels) // hit top edge
-      return value - position.minScrollExtent;
-    if (!overflow &&
+    // if (value < position.minScrollExtent &&
+    //     position.minScrollExtent < position.pixels) // hit top edge
+    //   return value - position.minScrollExtent;
+    if (!overflowViewport &&
         position.pixels < position.viewportDimension &&
         position.viewportDimension < value) // hit bottom edge
       return value - position.viewportDimension;
@@ -257,7 +268,7 @@ class SnapSheetPhysics extends ScrollPhysics with SheetPhysics {
     this.relative = true,
   }) : super(parent: parent);
 
-  /// Positions where the sheet could be snapped once the user stops 
+  /// Positions where the sheet could be snapped once the user stops
   /// dragging
   final List<double> stops;
 

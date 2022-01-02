@@ -36,8 +36,9 @@ class _FitSheetState extends State<FloatingSheet> {
       title: const Text('Floating Sheet'),
       sheet: Sheet.raw(
         physics: const SnapSheetPhysics(
-            parent: BouncingSheetPhysics(overflow: false),
-            stops: <double>[0, 1]),
+          parent: BouncingSheetPhysics(overflowViewport: false),
+          stops: <double>[0, 1],
+        ),
         padding: const EdgeInsets.all(20),
         child: Container(
           height: 200,

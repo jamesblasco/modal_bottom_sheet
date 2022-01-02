@@ -1,16 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 
-
 /// A widget that add a min interaction zone where hitTestSelf is true
 /// This is rarely used by its own
-/// 
+///
 /// See also:
 ///
 ///  * [Sheet], that uses this widget that enables to drag closed/hidden
 /// sheets
 class MinInteractionZone extends SingleChildRenderObjectWidget {
-
   const MinInteractionZone({
     required this.direction,
     required this.extent,
@@ -18,7 +16,7 @@ class MinInteractionZone extends SingleChildRenderObjectWidget {
   }) : super(child: child);
 
   final AxisDirection direction;
-  
+
   final double extent;
 
   @override
@@ -27,7 +25,8 @@ class MinInteractionZone extends SingleChildRenderObjectWidget {
   }
 
   @override
-  void updateRenderObject(BuildContext context, MinInteractionPaddingRenderBox renderObject) {
+  void updateRenderObject(
+      BuildContext context, MinInteractionPaddingRenderBox renderObject) {
     renderObject
       ..direction = direction
       ..extent = extent;
@@ -60,7 +59,8 @@ class MinInteractionPaddingRenderBox extends RenderProxyBox {
     Rect minInteractionZone;
     switch (direction) {
       case AxisDirection.up:
-        minInteractionZone = Rect.fromLTRB(0, size.height - extent, size.width, size.height);
+        minInteractionZone =
+            Rect.fromLTRB(0, size.height - extent, size.width, size.height);
         break;
       case AxisDirection.down:
         minInteractionZone = Rect.fromLTRB(0, 0, size.width, extent);
@@ -69,7 +69,8 @@ class MinInteractionPaddingRenderBox extends RenderProxyBox {
         minInteractionZone = Rect.fromLTRB(0, 0, extent, size.height);
         break;
       case AxisDirection.left:
-        minInteractionZone = Rect.fromLTRB(size.width - extent, 0, size.width, size.height);
+        minInteractionZone =
+            Rect.fromLTRB(size.width - extent, 0, size.width, size.height);
         break;
     }
     return minInteractionZone.contains(position);

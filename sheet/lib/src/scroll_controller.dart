@@ -43,7 +43,19 @@ class SheetPrimaryScrollController extends ScrollController {
       sheetContext: sheetContext,
     );
   }
+}
 
+class _SheetScrollActivity extends ScrollActivity {
+  _SheetScrollActivity(SheetPosition delegate) : super(delegate);
+
+  @override
+  bool get isScrolling => true;
+
+  @override
+  bool get shouldIgnorePointer => false;
+
+  @override
+  double get velocity => 0;
 }
 
 /// A scroll position that manages scroll activities for
@@ -79,7 +91,7 @@ class SheetPrimaryScrollPosition extends ScrollPositionWithSingleContext {
   final SheetContext sheetContext;
   SheetPosition get sheetPosition => sheetContext.position;
 
-  bool sheetCanDrag(double delta) {
+  bool sheetShouldSheetAcceptUserOffser(double delta) {
     // Can drag down if list already on the top
     final bool canDragForward = delta >= 0 && pixels <= minScrollExtent;
 
@@ -88,18 +100,26 @@ class SheetPrimaryScrollPosition extends ScrollPositionWithSingleContext {
         sheetPosition.pixels < sheetPosition.maxScrollExtent &&
         pixels <= minScrollExtent;
 
-    return canDragForward || canDragBackwards;
+    return sheetPosition.physics.shouldAcceptUserOffset(sheetPosition) &&
+        (canDragForward || canDragBackwards);
   }
 
   @override
   void applyUserOffset(double delta) {
     if (sheetPosition.preventingDrag) return;
-    if (sheetCanDrag(delta)) {
+    if (sheetShouldSheetAcceptUserOffser(delta)) {
       final double pixels = sheetPosition.pixels -
           sheetPosition.physics.applyPhysicsToUserOffset(sheetPosition, delta);
-      sheetPosition.forcePixels(pixels);
+
+      sheetPosition.forcePixels(
+        pixels.clamp(
+            sheetPosition.minScrollExtent, sheetPosition.maxScrollExtent),
+      );
+      sheetPosition.beginActivity(_SheetScrollActivity(sheetPosition));
+      return;
     } else {
       super.applyUserOffset(delta);
+      sheetPosition.goIdle();
     }
   }
 
@@ -125,14 +145,24 @@ class SheetPrimaryScrollPosition extends ScrollPositionWithSingleContext {
 
       return;
     }
-    if (sheetPosition.hasContentDimensions && !sheetPosition.preventingDrag) {
+
+    final bool sheetDragging = sheetPosition.activity!.isScrolling;
+    if (sheetDragging &&
+        sheetPosition.hasContentDimensions &&
+        !sheetPosition.preventingDrag &&
+        sheetPosition.activity!.isScrolling) {
       sheetPosition.goBallistic(velocity);
+    } else {
+      sheetPosition.goIdle();
     }
 
-    if (velocity > 0.0 &&
+    if (!sheetDragging) {
+      super.goBallistic(velocity);
+      return;
+    } else if (velocity > 0.0 &&
             sheetPosition.pixels >= sheetPosition.maxScrollExtent ||
         (velocity < 0.0 && pixels > 0)) {
-      super.goBallistic(velocity);
+      //   super.goBallistic(velocity);
       return;
     } else if (outOfRange) {
       beginActivity(

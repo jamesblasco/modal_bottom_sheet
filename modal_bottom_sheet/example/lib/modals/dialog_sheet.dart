@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
-
 class DialogSheet extends StatelessWidget {
   final Widget child;
   final Color? backgroundColor;
 
-  const DialogSheet({Key? key, required this.child, this.backgroundColor}) : super(key: key);
+  const DialogSheet({Key? key, required this.child, this.backgroundColor})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final MediaQueryData mediaQuery = MediaQuery.of(context);
     return MediaQuery(
-      data: mediaQuery.copyWith(padding: mediaQuery.padding + const EdgeInsets.only(top:40)),
+      data: mediaQuery.copyWith(
+          padding: mediaQuery.padding + const EdgeInsets.only(top: 40)),
       child: SafeArea(
-        bottom: false, left: false, right: false,
+        bottom: false,
+        left: false,
+        right: false,
         child: SizedBox.expand(
           child: Align(
             alignment: Alignment.center,

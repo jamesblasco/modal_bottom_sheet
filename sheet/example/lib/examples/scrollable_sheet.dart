@@ -22,7 +22,7 @@ class _SnapSheetPageExampleState extends State<ScrollableSheet>
       showBottomBar: false,
       title: const Text('Floating Sheet'),
       sheet: Sheet(
-        physics: const BouncingSheetPhysics(overflow: true),
+        physics: const BouncingSheetPhysics(overflowViewport: true),
         initialExtent: 500,
         controller: controller,
         child: Container(
@@ -43,7 +43,7 @@ class _SnapSheetPageExampleState extends State<ScrollableSheet>
               physics: const BouncingScrollPhysics(),
               children: ListTile.divideTiles(
                 context: context,
-                tiles: List <Widget>.generate(100, (int index) {
+                tiles: List<Widget>.generate(100, (int index) {
                   if (index == 0) {
                     return Container(
                       child: Text(

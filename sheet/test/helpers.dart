@@ -4,6 +4,8 @@ import 'package:sheet/sheet.dart';
 
 const Key _key = Key('_sheet_builder');
 
+Finder findSheet() => find.byKey(_key);
+
 extension SheetTester on WidgetTester {
   Future<void> pumpApp(Widget sheet, {VoidCallback? onButtonPressed}) async {
     await pumpWidget(
@@ -71,5 +73,6 @@ class FitSheetVariant extends ValueVariant<SheetFit> {
 final SheetChildVariant childVariants = SheetChildVariant();
 
 class SheetChildVariant extends ValueVariant<Widget> {
-  SheetChildVariant() : super( <Widget>{Container(), const SingleChildScrollView()});
+  SheetChildVariant()
+      : super(<Widget>{Container(), const SingleChildScrollView()});
 }

@@ -51,7 +51,7 @@ class CupertinoSharePage extends StatelessWidget {
               Navigator.of(context).push(
                 CupertinoSheetRoute<void>(
                   initialStop: 0.5,
-                  stops: [0,0.5,1],
+                  stops: [0, 0.5, 1],
                   backgroundColor: Colors.transparent,
                   builder: (context) => PhotoShareBottomSheet(),
                 ),
@@ -89,7 +89,7 @@ class PhotoShareBottomSheet extends StatelessWidget {
               appBar: appBar(context),
               body: CustomScrollView(
                 physics: ClampingScrollPhysics(),
-                primary:true,
+                primary: true,
                 slivers: <Widget>[
                   SliverSafeArea(
                     bottom: false,
@@ -445,8 +445,7 @@ final actions2 = [
 extension ListUtils<T> on List<T> {
   List<T> addItemInBetween(T item) => this.length == 0
       ? this
-      : (this.fold([], (r, element) => [...r, element, item])
-        ..removeLast());
+      : (this.fold([], (r, element) => [...r, element, item])..removeLast());
 }
 
 class SimpleSliverDelegate extends SliverPersistentHeaderDelegate {
