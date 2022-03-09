@@ -232,7 +232,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
     _bounceDragController.reverse();
 
     var canClose = true;
-    if (widget.shouldClose != null && hasReachedWillPopThreshold) {
+    if (widget.shouldClose != null) {
       _cancelClose();
       canClose = await shouldClose();
     }
