@@ -128,3 +128,8 @@ lib/generated_plugin_registrant.dart
 
 # Python related
 venv/
+
+# Coverage
+coverage/
+sheet/coverage/
+.test_coverage.dart
