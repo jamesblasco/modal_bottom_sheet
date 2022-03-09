@@ -19,7 +19,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  url_launcher: 6.0.0-nullsafety.1
+  url_launcher: ^6.0.20
   modal_bottom_sheet:
     path: '../'
 
