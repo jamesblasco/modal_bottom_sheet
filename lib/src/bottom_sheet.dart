@@ -3,12 +3,8 @@
 // found in the LICENSE file.
 
 import 'dart:async';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:flutter/widgets.dart';
 import 'package:modal_bottom_sheet/src/utils/scroll_to_top_status_bar.dart';
 
 import 'package:modal_bottom_sheet/src/utils/bottom_sheet_suspended_curve.dart';
@@ -49,10 +45,7 @@ class ModalBottomSheet extends StatefulWidget {
     required this.expanded,
     required this.onClosing,
     required this.child,
-  })   : assert(enableDrag != null),
-        assert(onClosing != null),
-        assert(child != null),
-        super(key: key);
+  })  : super(key: key);
 
   /// The closeProgressThreshold parameter
   /// specifies when the bottom sheet will be dismissed when user drags it.
@@ -488,5 +481,4 @@ PointerDeviceKind defaultPointerDeviceKind(BuildContext context) {
     case TargetPlatform.fuchsia:
       return PointerDeviceKind.unknown;
   }
-  return PointerDeviceKind.unknown;
 }
