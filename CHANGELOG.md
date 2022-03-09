@@ -1,3 +1,8 @@
+## 2.0.1 - Small fixes
++ Fixes bug with will pop scope
++ Replaces VelocityTracker deprecated constructor
++ Add optional RouteSettings to all showModal methods
+
 ## 2.0.0-nullsafety.1 - Null Safety support
 + Fixes #119 & #113
 
