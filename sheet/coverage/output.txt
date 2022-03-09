@@ -4,14 +4,14 @@ Found 7 entries.
 Found common filename prefix "/Users/jb/Developer/GitHub/modal_bottom_sheet/sheet/lib"
 Writing .css and .png files.
 Generating output.
-Processing file src/physics.dart
 Processing file src/scrollable.dart
 Processing file src/scroll_controller.dart
 Processing file src/sheet.dart
-Processing file src/widgets/scroll_to_top_status_handler.dart
-Processing file src/widgets/resizable_sheet.dart
+Processing file src/physics.dart
 Processing file src/widgets/min_interaction.dart
+Processing file src/widgets/resizable_sheet.dart
+Processing file src/widgets/scroll_to_top_status_handler.dart
 Writing directory view page.
 Overall coverage rate:
-  lines......: 61.8% (622 of 1006 lines)
+  lines......: 70.1% (708 of 1010 lines)
   functions..: no data found

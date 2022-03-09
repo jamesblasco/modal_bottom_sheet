@@ -13,6 +13,8 @@ class BouncingSheetPage extends StatefulWidget {
 class _BouncingSheetPageState extends State<BouncingSheetPage> {
   final SheetController controller = SheetController();
 
+  double minExtent = 0;
+
   @override
   void initState() {
     Future<void>.delayed(const Duration(milliseconds: 400), animateSheet);
@@ -21,8 +23,19 @@ class _BouncingSheetPageState extends State<BouncingSheetPage> {
   }
 
   void animateSheet() {
-    controller.relativeAnimateTo(0.2,
-        duration: const Duration(milliseconds: 400), curve: Curves.easeOut);
+    controller
+        .animateTo(
+      100,
+      duration: const Duration(milliseconds: 400),
+      curve: Curves.easeOut,
+    )
+        .then(
+      (_) {
+        setState(() {
+          minExtent = 100;
+        });
+      },
+    );
   }
 
   @override
@@ -36,7 +49,7 @@ class _BouncingSheetPageState extends State<BouncingSheetPage> {
     return BaseScaffold(
       title: const Text('Bouncing Sheet'),
       sheet: Sheet(
-        minExtent: 100,
+        minExtent: minExtent,
         maxExtent: 400,
         elevation: 4,
         physics: const BouncingSheetPhysics(),

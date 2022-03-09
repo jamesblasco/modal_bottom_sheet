@@ -142,20 +142,14 @@ class BouncingSheetPhysics extends ScrollPhysics with SheetPhysics {
       }
       return true;
     }());
-    // if (value < position.pixels &&
-    //     position.pixels <= position.minScrollExtent) // underscroll
-    //   return value - position.pixels;
-    if (!overflowViewport &&
-        position.viewportDimension <= position.pixels &&
-        position.pixels < value) // overscroll
-      return value - position.pixels;
-    // if (value < position.minScrollExtent &&
-    //     position.minScrollExtent < position.pixels) // hit top edge
-    //   return value - position.minScrollExtent;
-    if (!overflowViewport &&
-        position.pixels < position.viewportDimension &&
-        position.viewportDimension < value) // hit bottom edge
-      return value - position.viewportDimension;
+    if (!overflowViewport) {
+      if (position.viewportDimension <= position.pixels &&
+          position.pixels < value) // hit top edge
+        return value - position.pixels;
+      if (position.pixels < 0 && position.pixels > value) // hit bottom edge
+        return value - position.pixels;
+    }
+
     return 0.0;
   }
 
@@ -222,18 +216,11 @@ class NoMomentumSheetPhysics extends ScrollPhysics with SheetPhysics {
 
   @override
   double applyBoundaryConditions(ScrollMetrics position, double value) {
-    if (value < position.pixels &&
-        position.pixels <= position.minScrollExtent) // underscroll
+    if (position.viewportDimension <= position.pixels &&
+        position.pixels < value) // hit top edge
       return value - position.pixels;
-    if (position.maxScrollExtent <= position.pixels &&
-        position.pixels < value) // overscroll
+    if (position.pixels < 0 && position.pixels > value) // hit bottom edge
       return value - position.pixels;
-    if (value < position.minScrollExtent &&
-        position.minScrollExtent < position.pixels) // hit top edge
-      return value - position.minScrollExtent;
-    if (position.pixels < position.maxScrollExtent &&
-        position.maxScrollExtent < value) // hit bottom edge
-      return value - position.maxScrollExtent;
     return 0.0;
   }
 

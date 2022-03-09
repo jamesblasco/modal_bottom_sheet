@@ -1,5 +1,3 @@
-// ignore_for_file: always_put_control_body_on_new_line
-
 import 'package:flutter/physics.dart';
 import 'package:flutter/widgets.dart';
 import 'package:sheet/sheet.dart';
@@ -106,7 +104,9 @@ class SheetPrimaryScrollPosition extends ScrollPositionWithSingleContext {
 
   @override
   void applyUserOffset(double delta) {
-    if (sheetPosition.preventingDrag) return;
+    if (sheetPosition.preventingDrag) {
+      return;
+    }
     if (sheetShouldSheetAcceptUserOffser(delta)) {
       final double pixels = sheetPosition.pixels -
           sheetPosition.physics.applyPhysicsToUserOffset(sheetPosition, delta);
