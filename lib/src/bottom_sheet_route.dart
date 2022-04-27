@@ -16,7 +16,7 @@ class _ModalBottomSheet<T> extends StatefulWidget {
     this.expanded = false,
     this.enableDrag = true,
     this.animationCurve,
-  })  : super(key: key);
+  }) : super(key: key);
 
   final double? closeProgressThreshold;
   final ModalBottomSheetRoute<T> route;
@@ -138,7 +138,7 @@ class ModalBottomSheetRoute<T> extends PopupRoute<T> {
     this.animationCurve,
     this.duration,
     RouteSettings? settings,
-  })  : super(settings: settings);
+  }) : super(settings: settings);
 
   final double? closeProgressThreshold;
   final WidgetWithChildBuilder? containerBuilder;

@@ -45,7 +45,7 @@ class ModalBottomSheet extends StatefulWidget {
     required this.expanded,
     required this.onClosing,
     required this.child,
-  })  : super(key: key);
+  }) : super(key: key);
 
   /// The closeProgressThreshold parameter
   /// specifies when the bottom sheet will be dismissed when user drags it.
