@@ -19,7 +19,8 @@ import '../../modal_bottom_sheet.dart';
 const double _kPreviousPageVisibleOffset = 10;
 
 const Radius _kDefaultTopRadius = Radius.circular(12);
-const BoxShadow _kDefaultBoxShadow = BoxShadow(blurRadius: 10, color: Colors.black12, spreadRadius: 5);
+const BoxShadow _kDefaultBoxShadow =
+    BoxShadow(blurRadius: 10, color: Colors.black12, spreadRadius: 5);
 
 /// Cupertino Bottom Sheet Container
 ///
@@ -40,14 +41,13 @@ class _CupertinoBottomSheetContainer extends StatelessWidget {
     this.shadow,
   }) : super(key: key);
 
-
   @override
   Widget build(BuildContext context) {
     final topSafeAreaPadding = MediaQuery.of(context).padding.top;
     final topPadding = _kPreviousPageVisibleOffset + topSafeAreaPadding;
 
     final _shadow = shadow ?? _kDefaultBoxShadow;
-        BoxShadow(blurRadius: 10, color: Colors.black12, spreadRadius: 5);
+    BoxShadow(blurRadius: 10, color: Colors.black12, spreadRadius: 5);
     final _backgroundColor =
         backgroundColor ?? CupertinoTheme.of(context).scaffoldBackgroundColor;
     return Padding(
@@ -138,7 +138,6 @@ class CupertinoModalBottomSheetRoute<T> extends ModalBottomSheetRoute<T> {
 
   final Curve? previousRouteAnimationCurve;
 
-
   final BoxShadow? boxShadow;
 
   // Background color behind all routes
@@ -169,7 +168,7 @@ class CupertinoModalBottomSheetRoute<T> extends ModalBottomSheetRoute<T> {
     this.topRadius = _kDefaultTopRadius,
     this.previousRouteAnimationCurve,
     this.overlayStyle,
-  })  : super(
+  }) : super(
           closeProgressThreshold: closeProgressThreshold,
           scrollController: scrollController,
           containerBuilder: containerBuilder,
@@ -194,8 +193,7 @@ class CupertinoModalBottomSheetRoute<T> extends ModalBottomSheetRoute<T> {
     Widget child,
   ) {
     final paddingTop = MediaQuery.of(context).padding.top;
-    final distanceWithScale =
-        (paddingTop + _kPreviousPageVisibleOffset) * 0.9;
+    final distanceWithScale = (paddingTop + _kPreviousPageVisibleOffset) * 0.9;
     final offsetY = secondaryAnimation.value * (paddingTop - distanceWithScale);
     final scale = 1 - secondaryAnimation.value / 10;
     return AnimatedBuilder(
@@ -231,7 +229,6 @@ class _CupertinoModalTransition extends StatelessWidget {
   final Radius topRadius;
   final Curve? animationCurve;
   final Color backgroundColor;
-  final BoxShadow? boxShadow;
   final SystemUiOverlayStyle? overlayStyle;
 
   final Widget body;
@@ -243,7 +240,6 @@ class _CupertinoModalTransition extends StatelessWidget {
     required this.topRadius,
     this.backgroundColor = Colors.black,
     this.animationCurve,
-    this.boxShadow,
     this.overlayStyle,
   }) : super(key: key);
 

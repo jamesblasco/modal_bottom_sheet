@@ -16,7 +16,7 @@ class ModalScrollController extends InheritedWidget {
     Key? key,
     required this.controller,
     required Widget child,
-  })  : super(
+  }) : super(
           key: key,
           child: PrimaryScrollController(
             controller: controller,

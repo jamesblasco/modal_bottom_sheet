@@ -90,6 +90,7 @@ Future<T?> showBarModalBottomSheet<T>({
   bool enableDrag = true,
   Widget? topControl,
   Duration? duration,
+  RouteSettings? settings,
   SystemUiOverlayStyle? overlayStyle,
 }) async {
   assert(debugCheckHasMediaQuery(context));
@@ -115,6 +116,7 @@ Future<T?> showBarModalBottomSheet<T>({
     enableDrag: enableDrag,
     animationCurve: animationCurve,
     duration: duration,
+    settings: settings,
   ));
   return result;
 }

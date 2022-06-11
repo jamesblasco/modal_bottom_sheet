@@ -1,11 +1,11 @@
 name: modal_bottom_sheet
 description: 'Create awesome and powerful modal bottom sheets. Material, Cupertino iOS 13 or create your own style'
-version: 2.0.0-nullsafety.1
+version: 2.0.1
 homepage: 'https://github.com/jamesblasco/modal_bottom_sheet'
 
 environment:
-  sdk: ">=2.12.0-29.10.beta <3.0.0"
-  flutter: ">=1.12.0 <2.0.0"
+  sdk: ">=2.12.0 <3.0.0"
+  flutter: ">=2.0.0"
 
 dependencies:
   flutter:

@@ -45,7 +45,7 @@ class ModalBottomSheet extends StatefulWidget {
     required this.expanded,
     required this.onClosing,
     required this.child,
-  })   : super(key: key);
+  })  : super(key: key);
 
   /// The closeProgressThreshold parameter
   /// specifies when the bottom sheet will be dismissed when user drags it.
@@ -225,7 +225,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
     _bounceDragController.reverse();
 
     var canClose = true;
-    if (widget.shouldClose != null && hasReachedWillPopThreshold) {
+    if (widget.shouldClose != null) {
       _cancelClose();
       canClose = await shouldClose();
     }
@@ -291,9 +291,8 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
 
       // Otherwise the calculate the velocity with a VelocityTracker
       if (_velocityTracker == null) {
-        //final pointerKind = defaultPointerDeviceKind(context);
-        // ignore: deprecated_member_use
-        _velocityTracker = VelocityTracker();
+        final pointerKind = defaultPointerDeviceKind(context);
+        _velocityTracker = VelocityTracker.withKind(pointerKind);
         _startTime = DateTime.now();
       }
 
@@ -482,5 +481,4 @@ PointerDeviceKind defaultPointerDeviceKind(BuildContext context) {
     case TargetPlatform.fuchsia:
       return PointerDeviceKind.unknown;
   }
-  return PointerDeviceKind.unknown;
 }
