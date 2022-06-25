@@ -14,7 +14,7 @@ class MaterialWithModalsPageRoute<T> extends MaterialPageRoute<T> {
     RouteSettings? settings,
     bool maintainState = true,
     bool fullscreenDialog = false,
-  })  : super(
+  }) : super(
             settings: settings,
             fullscreenDialog: fullscreenDialog,
             builder: builder,
