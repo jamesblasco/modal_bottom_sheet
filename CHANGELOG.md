@@ -1,3 +1,6 @@
+## 2.1.0 - Flutter 3.0
++ Migrates to Flutter 3.0
++ Use PageRoute to allow Hero animations
 ## 2.0.1 - Small fixes
 + Fixes bug with will pop scope
 + Replaces VelocityTracker deprecated constructor
