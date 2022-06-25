@@ -24,9 +24,16 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(platform: TargetPlatform.iOS),
+      darkTheme: ThemeData.dark().copyWith(platform: TargetPlatform.iOS),
       title: 'BottomSheet Modals',
       builder: (context, Widget? child) => WebFrame(
-        child: child!,
+        child: CupertinoTheme(
+          data: CupertinoThemeData(
+            brightness: Theme.of(context).brightness,
+            scaffoldBackgroundColor: CupertinoColors.systemBackground,
+          ),
+          child: child!,
+        ),
       ),
       onGenerateRoute: (RouteSettings settings) {
         switch (settings.name) {
@@ -36,47 +43,48 @@ class MyApp extends StatelessWidget {
                 settings: settings);
         }
         return MaterialPageRoute(
-            builder: (context) => Scaffold(
-                  body: CupertinoScaffold(
-                    body: Builder(
-                      builder: (context) => CupertinoPageScaffold(
-                        backgroundColor: Colors.white,
-                        navigationBar: CupertinoNavigationBar(
-                          transitionBetweenRoutes: false,
-                          middle: Text('Normal Navigation Presentation'),
-                          trailing: GestureDetector(
-                              child: Icon(Icons.arrow_upward),
-                              onTap: () => CupertinoScaffold
-                                      .showCupertinoModalBottomSheet(
-                                    expand: true,
-                                    context: context,
-                                    backgroundColor: Colors.transparent,
-                                    builder: (context) => Stack(
-                                      children: <Widget>[
-                                        ModalWithScroll(),
-                                        Positioned(
-                                          height: 40,
-                                          left: 40,
-                                          right: 40,
-                                          bottom: 20,
-                                          child: MaterialButton(
-                                            onPressed: () => Navigator.of(
-                                                    context)
-                                                .popUntil((route) =>
-                                                    route.settings.name == '/'),
-                                            child: Text('Pop back home'),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  )),
+          builder: (context) => Scaffold(
+            body: CupertinoScaffold(
+              body: Builder(
+                builder: (context) => CupertinoPageScaffold(
+                  navigationBar: CupertinoNavigationBar(
+                    transitionBetweenRoutes: false,
+                    middle: Text('Normal Navigation Presentation'),
+                    trailing: GestureDetector(
+                      child: Icon(Icons.arrow_upward),
+                      onTap: () =>
+                          CupertinoScaffold.showCupertinoModalBottomSheet(
+                        expand: true,
+                        context: context,
+                        backgroundColor: Colors.transparent,
+                        builder: (context) => Stack(
+                          children: <Widget>[
+                            ModalWithScroll(),
+                            Positioned(
+                              height: 40,
+                              left: 40,
+                              right: 40,
+                              bottom: 20,
+                              child: MaterialButton(
+                                onPressed: () => Navigator.of(context).popUntil(
+                                    (route) => route.settings.name == '/'),
+                                child: Text('Pop back home'),
+                              ),
+                            )
+                          ],
                         ),
-                        child: Center(child: Container()),
                       ),
                     ),
                   ),
+                  child: Center(
+                    child: Container(),
+                  ),
                 ),
-            settings: settings);
+              ),
+            ),
+          ),
+          settings: settings,
+        );
       },
       debugShowCheckedModeBanner: false,
     );
@@ -98,7 +106,6 @@ class _MyHomePageState extends State<MyHomePage> {
     return Material(
       child: Scaffold(
         body: CupertinoPageScaffold(
-          backgroundColor: Colors.white,
           navigationBar: CupertinoNavigationBar(
             transitionBetweenRoutes: false,
             middle: Text('iOS13 Modal Presentation'),
@@ -123,43 +130,48 @@ class _MyHomePageState extends State<MyHomePage> {
                                 builder: (context) => CupertinoSharePage()))),
                     section('STYLES'),
                     ListTile(
-                        title: Text('Material fit'),
-                        onTap: () => showMaterialModalBottomSheet(
-                              expand: false,
-                              context: context,
-                              backgroundColor: Colors.transparent,
-                              builder: (context) => ModalFit(),
-                            )),
+                      title: Text('Material fit'),
+                      onTap: () => showMaterialModalBottomSheet(
+                        expand: false,
+                        context: context,
+                        backgroundColor: Colors.transparent,
+                        builder: (context) => ModalFit(),
+                      ),
+                    ),
                     ListTile(
-                        title: Text('Bar Modal'),
-                        onTap: () => showBarModalBottomSheet(
-                              expand: true,
-                              context: context,
-                              backgroundColor: Colors.transparent,
-                              builder: (context) => ModalInsideModal(),
-                            )),
+                      title: Text('Bar Modal'),
+                      onTap: () => showBarModalBottomSheet(
+                        expand: true,
+                        context: context,
+                        backgroundColor: Colors.transparent,
+                        builder: (context) => ModalInsideModal(),
+                      ),
+                    ),
                     ListTile(
-                        title: Text('Avatar Modal'),
-                        onTap: () => showAvatarModalBottomSheet(
-                              expand: true,
-                              context: context,
-                              backgroundColor: Colors.transparent,
-                              builder: (context) => ModalInsideModal(),
-                            )),
+                      title: Text('Avatar Modal'),
+                      onTap: () => showAvatarModalBottomSheet(
+                        expand: true,
+                        context: context,
+                        backgroundColor: Colors.transparent,
+                        builder: (context) => ModalInsideModal(),
+                      ),
+                    ),
                     ListTile(
-                        title: Text('Float Modal'),
-                        onTap: () => showFloatingModalBottomSheet(
-                              context: context,
-                              builder: (context) => ModalFit(),
-                            )),
+                      title: Text('Float Modal'),
+                      onTap: () => showFloatingModalBottomSheet(
+                        context: context,
+                        builder: (context) => ModalFit(),
+                      ),
+                    ),
                     ListTile(
-                        title: Text('Cupertino Modal fit'),
-                        onTap: () => showCupertinoModalBottomSheet(
-                              expand: false,
-                              context: context,
-                              backgroundColor: Colors.transparent,
-                              builder: (context) => ModalFit(),
-                            )),
+                      title: Text('Cupertino Modal fit'),
+                      onTap: () => showCupertinoModalBottomSheet(
+                        expand: false,
+                        context: context,
+                        backgroundColor: Colors.transparent,
+                        builder: (context) => ModalFit(),
+                      ),
+                    ),
                     section('COMPLEX CASES'),
                     ListTile(
                         title: Text('Cupertino Small Modal forced to expand'),
@@ -170,22 +182,23 @@ class _MyHomePageState extends State<MyHomePage> {
                               builder: (context) => ModalFit(),
                             )),
                     ListTile(
-                        title: Text('Reverse list'),
-                        onTap: () => showBarModalBottomSheet(
-                              expand: true,
-                              context: context,
-                              backgroundColor: Colors.transparent,
-                              builder: (context) =>
-                                  ModalInsideModal(reverse: true),
-                            )),
+                      title: Text('Reverse list'),
+                      onTap: () => showBarModalBottomSheet(
+                        expand: true,
+                        context: context,
+                        backgroundColor: Colors.transparent,
+                        builder: (context) => ModalInsideModal(reverse: true),
+                      ),
+                    ),
                     ListTile(
-                        title: Text('Cupertino Modal inside modal'),
-                        onTap: () => showCupertinoModalBottomSheet(
-                              expand: true,
-                              context: context,
-                              backgroundColor: Colors.transparent,
-                              builder: (context) => ModalInsideModal(),
-                            )),
+                      title: Text('Cupertino Modal inside modal'),
+                      onTap: () => showCupertinoModalBottomSheet(
+                        expand: true,
+                        context: context,
+                        backgroundColor: Colors.transparent,
+                        builder: (context) => ModalInsideModal(),
+                      ),
+                    ),
                     ListTile(
                         title: Text('Cupertino Modal with inside navigation'),
                         onTap: () => showCupertinoModalBottomSheet(
@@ -195,36 +208,40 @@ class _MyHomePageState extends State<MyHomePage> {
                               builder: (context) => ModalWithNavigator(),
                             )),
                     ListTile(
-                        title:
-                            Text('Cupertino Navigator + Scroll + WillPopScope'),
-                        onTap: () => showCupertinoModalBottomSheet(
-                              expand: true,
-                              context: context,
-                              backgroundColor: Colors.transparent,
-                              builder: (context) => ComplexModal(),
-                            )),
+                      title:
+                          Text('Cupertino Navigator + Scroll + WillPopScope'),
+                      onTap: () => showCupertinoModalBottomSheet(
+                        expand: true,
+                        context: context,
+                        backgroundColor: Colors.transparent,
+                        builder: (context) => ComplexModal(),
+                      ),
+                    ),
                     ListTile(
-                        title: Text('Modal with WillPopScope'),
-                        onTap: () => showCupertinoModalBottomSheet(
-                              expand: true,
-                              context: context,
-                              backgroundColor: Colors.transparent,
-                              builder: (context) => ModalWillScope(),
-                            )),
+                      title: Text('Modal with WillPopScope'),
+                      onTap: () => showCupertinoModalBottomSheet(
+                        expand: true,
+                        context: context,
+                        backgroundColor: Colors.transparent,
+                        builder: (context) => ModalWillScope(),
+                      ),
+                    ),
                     ListTile(
-                        title: Text('Modal with Nested Scroll'),
-                        onTap: () => showCupertinoModalBottomSheet(
-                              expand: true,
-                              context: context,
-                              builder: (context) => NestedScrollModal(),
-                            )),
+                      title: Text('Modal with Nested Scroll'),
+                      onTap: () => showCupertinoModalBottomSheet(
+                        expand: true,
+                        context: context,
+                        builder: (context) => NestedScrollModal(),
+                      ),
+                    ),
                     ListTile(
-                        title: Text('Modal with PageView'),
-                        onTap: () => showBarModalBottomSheet(
-                              expand: true,
-                              context: context,
-                              builder: (context) => ModalWithPageView(),
-                            )),
+                      title: Text('Modal with PageView'),
+                      onTap: () => showBarModalBottomSheet(
+                        expand: true,
+                        context: context,
+                        builder: (context) => ModalWithPageView(),
+                      ),
+                    ),
                     SizedBox(
                       height: 60,
                     )
@@ -240,10 +257,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget section(String title) {
     return Padding(
-        padding: EdgeInsets.fromLTRB(16, 20, 16, 8),
-        child: Text(
-          title,
-          style: Theme.of(context).textTheme.caption,
-        ));
+      padding: EdgeInsets.fromLTRB(16, 20, 16, 8),
+      child: Text(
+        title,
+        style: Theme.of(context).textTheme.caption,
+      ),
+    );
   }
 }
