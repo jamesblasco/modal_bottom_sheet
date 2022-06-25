@@ -122,7 +122,7 @@ class _ModalBottomSheetState<T> extends State<_ModalBottomSheet<T>> {
   }
 }
 
-class ModalBottomSheetRoute<T> extends PopupRoute<T> {
+class ModalBottomSheetRoute<T> extends PageRoute<T> {
   ModalBottomSheetRoute({
     this.closeProgressThreshold,
     this.containerBuilder,
@@ -160,7 +160,13 @@ class ModalBottomSheetRoute<T> extends PopupRoute<T> {
 
   @override
   bool get barrierDismissible => isDismissible;
+  
+  @override
+  bool get maintainState => false; //idk but needed
 
+  @override
+  bool get opaque => false; //transparency
+  
   @override
   final String? barrierLabel;
 
