@@ -224,24 +224,27 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
     // ignore: unawaited_futures
     _bounceDragController.reverse();
 
-    var canClose = true;
-    if (widget.shouldClose != null) {
-      _cancelClose();
-      canClose = await shouldClose();
-    }
-    if (canClose) {
-      // If speed is bigger than _minFlingVelocity try to close it
-      if (velocity > _minFlingVelocity) {
-        _close();
-      } else if (hasReachedCloseThreshold) {
-        if (widget.animationController.value > 0.0) {
-          // ignore: unawaited_futures
-          widget.animationController.fling(velocity: -1.0);
-        }
-        _close();
-      } else {
+    Future<void> tryClose() async {
+      if (widget.shouldClose != null) {
         _cancelClose();
+        bool canClose = await shouldClose();
+        if (canClose) {
+          _close();
+        }
+      } else {
+        _close();
       }
+    }
+
+    // If speed is bigger than _minFlingVelocity try to close it
+    if (velocity > _minFlingVelocity) {
+      tryClose();
+    } else if (hasReachedCloseThreshold) {
+      if (widget.animationController.value > 0.0) {
+        // ignore: unawaited_futures
+        widget.animationController.fling(velocity: -1.0);
+      }
+      tryClose();
     } else {
       _cancelClose();
     }
