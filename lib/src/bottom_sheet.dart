@@ -49,7 +49,7 @@ class ModalBottomSheet extends StatefulWidget {
     required this.expanded,
     required this.onClosing,
     required this.child,
-  })   : assert(enableDrag != null),
+  })  : assert(enableDrag != null),
         assert(onClosing != null),
         assert(child != null),
         super(key: key);
@@ -300,7 +300,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
       if (_velocityTracker == null) {
         //final pointerKind = defaultPointerDeviceKind(context);
         // ignore: deprecated_member_use
-        _velocityTracker = VelocityTracker();
+        _velocityTracker = VelocityTracker.withKind(PointerDeviceKind.touch);
         _startTime = DateTime.now();
       }
 
