@@ -84,7 +84,7 @@ class _MapAppBarState extends State<MapAppBar> {
   bool scrolled = false;
   @override
   void initState() {
-    WidgetsBinding.instance?.addPostFrameCallback((Duration timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((Duration timeStamp) {
       widget.controller.position.scrollController.addListener(() {
         if (widget.controller.position.scrollController.position.pixels > 60) {
           setState(() {

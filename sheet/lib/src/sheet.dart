@@ -371,14 +371,14 @@ class SheetController extends ScrollController {
     if (hasClients) {
       final ScrollPosition position = positions.first;
       if (position is SheetPosition) {
-        WidgetsBinding.instance!.addPostFrameCallback((_) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
           _animation.parent = position.animation;
         });
 
         return;
       }
     }
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       _animation.parent = kAlwaysDismissedAnimation;
     });
     return;
