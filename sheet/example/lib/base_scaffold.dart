@@ -38,6 +38,7 @@ class BaseScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,
         middle: title ?? const Text('Example'),

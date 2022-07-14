@@ -968,6 +968,7 @@ class _RenderSheetViewport extends RenderBox
     Duration duration = Duration.zero,
     Curve curve = Curves.ease,
   }) {
+    return;
     if (!offset.allowImplicitScrolling) {
       return super.showOnScreen(
         descendant: descendant,

@@ -6,6 +6,7 @@ import 'package:example/examples/floating_sheet.dart';
 import 'package:example/examples/resizable_sheet.dart';
 import 'package:example/examples/simple_sheet.dart';
 import 'package:example/examples/snap_sheet.dart';
+import 'package:example/examples/text_field.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -107,6 +108,10 @@ class SheetExamplesPage extends StatelessWidget {
                       AdvancedSnapSheetPageExample(),
                 ),
               ),
+            ),
+            ExampleTile(
+              title: 'Textfield sheet',
+              sheet: TextFieldSheet(),
             ),
             const SizedBox(height: 60)
           ].addItemInBetween(const Divider(height: 1)),
