@@ -12,6 +12,7 @@ class BarBottomSheet extends StatelessWidget {
   final Widget child;
   final Widget? control;
   final Clip? clipBehavior;
+  final Color? backgroundColor;
   final double? elevation;
   final ShapeBorder? shape;
   final SystemUiOverlayStyle? overlayStyle;
@@ -22,6 +23,7 @@ class BarBottomSheet extends StatelessWidget {
     this.control,
     this.clipBehavior,
     this.shape,
+    this.backgroundColor,
     this.elevation,
     this.overlayStyle,
   }) : super(key: key);
@@ -59,6 +61,7 @@ class BarBottomSheet extends StatelessWidget {
                           topRight: _default_bar_top_radius),
                     ),
                 clipBehavior: clipBehavior ?? Clip.hardEdge,
+                color: backgroundColor ?? Colors.white,
                 elevation: elevation ?? 2,
                 child: SizedBox(
                   width: double.infinity,
@@ -105,6 +108,7 @@ Future<T?> showBarModalBottomSheet<T>({
       control: topControl,
       clipBehavior: clipBehavior,
       shape: shape,
+      backgroundColor: backgroundColor,
       elevation: elevation,
       overlayStyle: overlayStyle,
     ),
