@@ -7,13 +7,17 @@ void main() {
   group(
     'Route.mainState are well-controlled by `mainState`',
     () {
-      testWidgets('with showCupertinoModalBottomSheet', (tester) async {
+      Future<void> testInitStateAndDispose(
+        WidgetTester tester,
+        Future<void> Function(BuildContext context, WidgetBuilder builder)
+            onPressed,
+      ) async {
         int _initState = 0, _dispose = 0;
         await _pumpWidget(
           tester: tester,
-          onPressed: (context) => showCupertinoModalBottomSheet(
-            context: context,
-            builder: (_) => _TestWidget(
+          onPressed: (context) => onPressed(
+            context,
+            (_) => _TestWidget(
               onInitState: () => _initState++,
               onDispose: () => _dispose++,
             ),
@@ -36,6 +40,25 @@ void main() {
         await tester.pumpAndSettle();
         expect(_initState, 1);
         expect(_dispose, 1);
+      }
+
+      testWidgets('with showCupertinoModalBottomSheet', (tester) {
+        return testInitStateAndDispose(
+          tester,
+          (context, builder) => showCupertinoModalBottomSheet(
+            context: context,
+            builder: builder,
+          ),
+        );
+      });
+      testWidgets('with showMaterialModalBottomSheet', (tester) {
+        return testInitStateAndDispose(
+          tester,
+          (context, builder) => showMaterialModalBottomSheet(
+            context: context,
+            builder: builder,
+          ),
+        );
       });
     },
   );
