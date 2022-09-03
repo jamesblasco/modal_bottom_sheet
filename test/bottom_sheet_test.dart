@@ -12,34 +12,34 @@ void main() {
         Future<void> Function(BuildContext context, WidgetBuilder builder)
             onPressed,
       ) async {
-        int _initState = 0, _dispose = 0;
+        int initState = 0, dispose = 0;
         await _pumpWidget(
           tester: tester,
           onPressed: (context) => onPressed(
             context,
             (_) => _TestWidget(
-              onInitState: () => _initState++,
-              onDispose: () => _dispose++,
+              onInitState: () => initState++,
+              onDispose: () => dispose++,
             ),
           ),
         );
-        expect(_initState, 0);
+        expect(initState, 0);
         await tester.tap(_textButtonWithText('Press me'));
         await tester.pumpAndSettle();
-        expect(_initState, 1);
-        expect(_dispose, 0);
+        expect(initState, 1);
+        expect(dispose, 0);
         await tester.tap(_textButtonWithText('TestWidget push'));
         await tester.pumpAndSettle();
-        expect(_initState, 1);
-        expect(_dispose, 0);
+        expect(initState, 1);
+        expect(dispose, 0);
         await tester.tap(_textButtonWithText('TestWidget pushed pop'));
         await tester.pumpAndSettle();
-        expect(_initState, 1);
-        expect(_dispose, 0);
+        expect(initState, 1);
+        expect(dispose, 0);
         await tester.tap(_textButtonWithText('TestWidget pop'));
         await tester.pumpAndSettle();
-        expect(_initState, 1);
-        expect(_dispose, 1);
+        expect(initState, 1);
+        expect(dispose, 1);
       }
 
       testWidgets('with showCupertinoModalBottomSheet', (tester) {

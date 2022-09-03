@@ -101,7 +101,7 @@ class ModalBottomSheet extends StatefulWidget {
   final ScrollController scrollController;
 
   @override
-  _ModalBottomSheetState createState() => _ModalBottomSheetState();
+  ModalBottomSheetState createState() => ModalBottomSheetState();
 
   /// Creates an [AnimationController] suitable for a
   /// [ModalBottomSheet.animationController].
@@ -121,7 +121,7 @@ class ModalBottomSheet extends StatefulWidget {
   }
 }
 
-class _ModalBottomSheetState extends State<ModalBottomSheet>
+class ModalBottomSheetState extends State<ModalBottomSheet>
     with TickerProviderStateMixin {
   final GlobalKey _childKey = GlobalKey(debugLabel: 'BottomSheet child');
 

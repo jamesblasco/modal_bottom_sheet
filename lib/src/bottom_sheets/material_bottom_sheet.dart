@@ -61,17 +61,18 @@ WidgetWithChildBuilder _materialContainerBuilder(BuildContext context,
   final color = backgroundColor ??
       bottomSheetTheme.modalBackgroundColor ??
       bottomSheetTheme.backgroundColor;
-  final _elevation = elevation ?? bottomSheetTheme.elevation ?? 0.0;
-  final _shape = shape ?? bottomSheetTheme.shape;
-  final _clipBehavior =
+  final effectiveElevation = elevation ?? bottomSheetTheme.elevation ?? 0.0;
+  final effectiveShape = shape ?? bottomSheetTheme.shape;
+  final effectiveClipBehavior =
       clipBehavior ?? bottomSheetTheme.clipBehavior ?? Clip.none;
 
-  final result = (context, animation, child) => Material(
-      color: color,
-      elevation: _elevation,
-      shape: _shape,
-      clipBehavior: _clipBehavior,
-      child: child);
+  Widget result(context, animation, child) => Material(
+        color: color,
+        elevation: effectiveElevation,
+        shape: effectiveShape,
+        clipBehavior: effectiveClipBehavior,
+        child: child,
+      );
   if (theme != null) {
     return (context, animation, child) =>
         Theme(data: theme, child: result(context, animation, child));

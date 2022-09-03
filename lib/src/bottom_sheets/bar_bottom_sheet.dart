@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import '../../modal_bottom_sheet.dart';
 import '../bottom_sheet_route.dart';
 
-const Radius _default_bar_top_radius = Radius.circular(15);
+const Radius kDefaultBarTopRadius = Radius.circular(15);
 
 class BarBottomSheet extends StatelessWidget {
   final Widget child;
@@ -57,8 +57,8 @@ class BarBottomSheet extends StatelessWidget {
                     RoundedRectangleBorder(
                       side: BorderSide(),
                       borderRadius: BorderRadius.only(
-                          topLeft: _default_bar_top_radius,
-                          topRight: _default_bar_top_radius),
+                          topLeft: kDefaultBarTopRadius,
+                          topRight: kDefaultBarTopRadius),
                     ),
                 clipBehavior: clipBehavior ?? Clip.hardEdge,
                 color: backgroundColor ?? Colors.white,
