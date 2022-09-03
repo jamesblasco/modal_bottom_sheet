@@ -160,13 +160,13 @@ class ModalBottomSheetRoute<T> extends PageRoute<T> {
 
   @override
   bool get barrierDismissible => isDismissible;
-  
+
   @override
-  bool get maintainState => false; //idk but needed
+  bool get maintainState => true; // keep in memory when not active (#252)
 
   @override
   bool get opaque => false; //transparency
-  
+
   @override
   final String? barrierLabel;
 
