@@ -19,7 +19,7 @@ void main() {
       );
       await tester.pumpAndSettle();
       expect(tester.getSheetHeight(), equals(200));
-      expect(tester.getSheetTop(), equals(kScreenHeight - 200));
+      expect(tester.getSheetTop(), equals(kScreenRect.bottom - 200));
       await tester.dragSheet(-100);
       await tester.pump();
       expect(tester.getSheetHeight(), greaterThan(200));
@@ -37,7 +37,7 @@ void main() {
       );
       await tester.pumpAndSettle();
       expect(tester.getSheetHeight(), equals(200));
-      expect(tester.getSheetTop(), equals(kScreenHeight - 200));
+      expect(tester.getSheetTop(), equals(kScreenRect.bottom - 200));
       await tester.dragSheet(-100);
       await tester.pump();
       expect(tester.getSheetHeight(), greaterThan(200));
@@ -55,10 +55,10 @@ void main() {
       );
       await tester.pumpAndSettle();
       expect(tester.getSheetHeight(), equals(200));
-      expect(tester.getSheetTop(), equals(kScreenHeight - 200));
+      expect(tester.getSheetTop(), equals(kScreenRect.bottom - 200));
       await tester.dragSheet(100);
       await tester.pump();
-      expect(tester.getSheetTop(), greaterThan(kScreenHeight - 150));
+      expect(tester.getSheetTop(), greaterThan(kScreenRect.bottom - 150));
     });
 
     testWidgets('expanded: with max extent: can bounce top',
@@ -74,7 +74,7 @@ void main() {
       );
       await tester.pumpAndSettle();
       expect(tester.getSheetHeight(), equals(200));
-      expect(tester.getSheetTop(), equals(kScreenHeight - 200));
+      expect(tester.getSheetTop(), equals(kScreenRect.bottom - 200));
       await tester.dragSheet(-100);
       await tester.pump();
       expect(tester.getSheetHeight(), greaterThan(200));
@@ -94,13 +94,13 @@ void main() {
       );
       await tester.pumpAndSettle();
       expect(tester.getSheetHeight(), equals(200));
-      expect(tester.getSheetTop(), equals(kScreenHeight - 200));
+      expect(tester.getSheetTop(), equals(kScreenRect.bottom - 200));
       await tester.dragSheet(100);
       await tester.pump();
-      expect(tester.getSheetTop(), greaterThan(kScreenHeight - 150));
+      expect(tester.getSheetTop(), greaterThan(kScreenRect.bottom - 150));
     });
 
-    testWidgets('expanded: does not bounce by default',
+    testWidgets('expanded: does not bounce outside viewport by default',
         (WidgetTester tester) async {
       await tester.pumpApp(
         Sheet(

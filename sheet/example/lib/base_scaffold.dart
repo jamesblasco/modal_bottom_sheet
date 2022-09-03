@@ -2,19 +2,29 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ExampleTile extends StatelessWidget {
-  const ExampleTile({Key? key, required this.title, required this.sheet})
-      : super(key: key);
+  const ExampleTile({
+    Key? key,
+    required this.title,
+    required this.page,
+    this.leading,
+  }) : super(key: key);
+
+  ExampleTile.sheet(this.title, Widget sheet, {this.leading})
+      : page = BaseScaffold(title: Text(title), sheet: sheet),
+        super();
 
   final String title;
-  final Widget sheet;
+  final Widget page;
+  final Widget? leading;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      leading: leading,
       title: Text(title),
       onTap: () => Navigator.of(context).push(
         MaterialPageRoute<void>(
-          builder: (BuildContext context) => sheet,
+          builder: (BuildContext context) => page,
         ),
       ),
     );
@@ -26,14 +36,12 @@ class BaseScaffold extends StatelessWidget {
     Key? key,
     this.sheet,
     this.title,
-    this.showBottomBar = true,
     this.appBarTrailingButton,
   }) : super(key: key);
 
   final Widget? sheet;
   final Widget? title;
   final Widget? appBarTrailingButton;
-  final bool showBottomBar;
 
   @override
   Widget build(BuildContext context) {

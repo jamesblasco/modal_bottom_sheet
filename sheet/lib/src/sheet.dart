@@ -246,14 +246,15 @@ class Sheet extends StatelessWidget {
             child: child,
           );
         };
-
+    final SheetController? effectiveController =
+        controller ?? DefaultSheetController.of(context);
     final double? initialExtent =
         this.initialExtent?.clamp(minExtent ?? 0, maxExtent ?? double.infinity);
     return SheetScrollable(
       initialExtent: initialExtent,
       minInteractionExtent: minInteractionExtent,
       physics: physics,
-      controller: controller,
+      controller: effectiveController,
       axisDirection: AxisDirection.down,
       scrollBehavior: SheetBehaviour(),
       viewportBuilder: (BuildContext context, ViewportOffset offset) {
@@ -433,6 +434,61 @@ class SheetController extends ScrollController {
         'ScrollController not attached to any scroll views.');
     for (final ScrollPosition position in positions)
       (position as SheetPosition).relativeJumpTo(offset);
+  }
+}
+
+typedef SheetControllerCallback = void Function(SheetController controller);
+
+class DefaultSheetController extends StatefulWidget {
+  const DefaultSheetController({Key? key, required this.child, this.onCreated})
+      : super(key: key);
+
+  final Widget child;
+
+  final SheetControllerCallback? onCreated;
+
+  static SheetController? of(BuildContext context) {
+    return context
+        .dependOnInheritedWidgetOfExactType<_InheritedSheetController>()
+        ?.controller;
+  }
+
+  @override
+  State<DefaultSheetController> createState() => _DefaultSheetControllerState();
+}
+
+class _DefaultSheetControllerState extends State<DefaultSheetController> {
+  late final SheetController controller = SheetController();
+
+  @override
+  void initState() {
+    widget.onCreated?.call(controller);
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _InheritedSheetController(
+        child: widget.child, controller: controller);
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+}
+
+class _InheritedSheetController extends InheritedWidget {
+  const _InheritedSheetController(
+      {Key? key, required super.child, required this.controller})
+      : super(key: key);
+
+  final SheetController controller;
+
+  @override
+  bool updateShouldNotify(_InheritedSheetController oldWidget) {
+    return false;
   }
 }
 
@@ -628,9 +684,9 @@ class _RenderSheetViewport extends RenderBox
   set offset(ViewportOffset value) {
     assert(value != null);
     if (value == _offset) return;
-    if (attached) _offset.removeListener(_hasScrolled);
+    if (attached) _offset.removeListener(_hasDragged);
     _offset = value;
-    if (attached) _offset.addListener(_hasScrolled);
+    if (attached) _offset.addListener(_hasDragged);
     markNeedsLayout();
   }
 
@@ -668,14 +724,14 @@ class _RenderSheetViewport extends RenderBox
     }
   }
 
-  void _hasScrolled() {
-    if (offset.pixels > _maxScrollExtent) {
-      _maxScrollExtentDuringOverflow ??= _maxScrollExtent;
+  void _hasDragged() {
+    if (!_isOverflow && offset.pixels > child!.size.height) {
       _childExtentBeforeOverflow ??= child!.size.height;
+      _isOverflow = true;
       markNeedsLayout();
-    } else if (offset.pixels < (_childExtentBeforeOverflow ?? 0)) {
-      _maxScrollExtentDuringOverflow = null;
+    } else if (isOverflow && offset.pixels < _childExtentBeforeOverflow!) {
       _childExtentBeforeOverflow = null;
+      _isOverflow = false;
       markNeedsLayout();
     }
     markNeedsPaint();
@@ -692,12 +748,12 @@ class _RenderSheetViewport extends RenderBox
   @override
   void attach(PipelineOwner owner) {
     super.attach(owner);
-    _offset.addListener(_hasScrolled);
+    _offset.addListener(_hasDragged);
   }
 
   @override
   void detach() {
-    _offset.removeListener(_hasScrolled);
+    _offset.removeListener(_hasDragged);
     super.detach();
   }
 
@@ -739,8 +795,7 @@ class _RenderSheetViewport extends RenderBox
 
   double get _maxScrollExtent {
     assert(hasSize);
-    if (_maxScrollExtentDuringOverflow != null)
-      return _maxScrollExtentDuringOverflow!;
+    if (_childExtentBeforeOverflow != null) return _childExtentBeforeOverflow!;
     if (child == null) return 0.0;
     switch (axis) {
       case Axis.horizontal:
@@ -750,8 +805,9 @@ class _RenderSheetViewport extends RenderBox
     }
   }
 
-  double? _maxScrollExtentDuringOverflow;
   double? _childExtentBeforeOverflow;
+  bool _isOverflow = false;
+  bool get isOverflow => _isOverflow;
 
   //BoxConstraints _getInnerConstraints(BoxConstraints constraints) {
   //  switch (axis) {
@@ -801,27 +857,25 @@ class _RenderSheetViewport extends RenderBox
     if (child == null) {
       size = constraints.smallest;
     } else {
-      final double? minHeight = _maxScrollExtentDuringOverflow != null
-          ? _childExtentBeforeOverflow! +
-              offset.pixels -
-              _maxScrollExtentDuringOverflow!
-          : null;
       final bool expand = fit == SheetFit.expand;
-      double height = maxExtent ?? constraints.biggest.height;
-      height = math.max(height, offset.pixels);
-      if (minHeight == null) {
-        height = height.clamp(0, constraints.maxHeight);
-      } else {
-        height = math.max(height, minHeight);
+      final double maxExtent = this.maxExtent ?? constraints.maxHeight;
+      double maxHeight = maxExtent.clamp(0, constraints.maxHeight);
+      double minHeight = expand ? maxHeight : 0;
+
+      if (isOverflow) {
+        final double overflowHeight =
+            _childExtentBeforeOverflow! + offset.pixels;
+        maxHeight = overflowHeight;
+        minHeight = overflowHeight;
       }
 
-      final BoxConstraints newContstraints = BoxConstraints(
-        minHeight: minHeight ?? (expand ? height : 0),
-        maxHeight: height,
+      final BoxConstraints childContstraints = BoxConstraints(
+        minHeight: minHeight,
+        maxHeight: maxHeight,
         minWidth: constraints.minWidth,
         maxWidth: constraints.maxWidth,
       );
-      child!.layout(newContstraints, parentUsesSize: true);
+      child!.layout(childContstraints, parentUsesSize: true);
       size = constraints.biggest;
     }
 

@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:sheet/sheet.dart';
 
 /// A widget that allows to resize the child according to offset
 /// of a sheet

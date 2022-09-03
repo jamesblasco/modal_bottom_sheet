@@ -34,7 +34,7 @@ void main() {
           child: Container(height: 200),
         ),
       );
-      expect(tester.getSheetTop(), equals(kScreenHeight));
+      expect(tester.getSheetTop(), equals(kScreenRect.bottom));
     });
 
     testWidgets('max top position is height', (WidgetTester tester) async {
@@ -43,15 +43,15 @@ void main() {
           child: Container(height: 200),
         ),
       );
-      expect(tester.getSheetTop(), equals(kScreenHeight));
+      expect(tester.getSheetTop(), equals(kScreenRect.bottom));
       tester.getSheetController().relativeJumpTo(1);
-      expect(tester.getSheetTop(), equals(kScreenHeight - 200));
+      expect(tester.getSheetTop(), equals(kScreenRect.bottom - 200));
 
       tester.getSheetController().jumpTo(200);
-      expect(tester.getSheetTop(), equals(kScreenHeight - 200));
+      expect(tester.getSheetTop(), equals(kScreenRect.bottom - 200));
 
       tester.getSheetController().jumpTo(300);
-      expect(tester.getSheetTop(), equals(kScreenHeight - 200));
+      expect(tester.getSheetTop(), equals(kScreenRect.bottom - 200));
     });
   });
 }
