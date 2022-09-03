@@ -261,14 +261,18 @@ class ModalBottomSheetState extends State<ModalBottomSheet>
     assert(notification.context != null);
     //Check if scrollController is used
     if (!_scrollController.hasClients) return;
-    //Check if there is more than 1 attached ScrollController e.g. swiping page in PageView
+
+    ScrollPosition scrollPosition;
     // ignore: invalid_use_of_protected_member
-    if (_scrollController.positions.length > 1) return;
-
-    if (_scrollController !=
-        Scrollable.of(notification.context!)!.widget.controller) return;
-
-    final scrollPosition = _scrollController.position;
+    if (_scrollController.positions.length > 1) {
+      // ignore: invalid_use_of_protected_member
+      scrollPosition = _scrollController.positions
+          .firstWhere((p) => p.isScrollingNotifier.value,
+              // ignore: invalid_use_of_protected_member
+              orElse: () => _scrollController.positions.first);
+    } else {
+      scrollPosition = _scrollController.position;
+    }
 
     if (scrollPosition.axis == Axis.horizontal) return;
 
