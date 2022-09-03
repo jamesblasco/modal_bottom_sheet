@@ -6,14 +6,16 @@ import 'package:flutter/services.dart';
 import '../../modal_bottom_sheet.dart';
 import '../bottom_sheet_route.dart';
 
-const Radius _default_bar_top_radius = Radius.circular(15);
+const Radius kDefaultBarTopRadius = Radius.circular(15);
 
 class BarBottomSheet extends StatelessWidget {
   final Widget child;
   final Widget? control;
   final Clip? clipBehavior;
+  final Color? backgroundColor;
   final double? elevation;
   final ShapeBorder? shape;
+  final SystemUiOverlayStyle? overlayStyle;
 
   const BarBottomSheet({
     Key? key,
@@ -21,13 +23,15 @@ class BarBottomSheet extends StatelessWidget {
     this.control,
     this.clipBehavior,
     this.shape,
+    this.backgroundColor,
     this.elevation,
+    this.overlayStyle,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle.light,
+      value: overlayStyle ?? SystemUiOverlayStyle.light,
       child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -53,10 +57,11 @@ class BarBottomSheet extends StatelessWidget {
                     RoundedRectangleBorder(
                       side: BorderSide(),
                       borderRadius: BorderRadius.only(
-                          topLeft: _default_bar_top_radius,
-                          topRight: _default_bar_top_radius),
+                          topLeft: kDefaultBarTopRadius,
+                          topRight: kDefaultBarTopRadius),
                     ),
                 clipBehavior: clipBehavior ?? Clip.hardEdge,
+                color: backgroundColor ?? Colors.white,
                 elevation: elevation ?? 2,
                 child: SizedBox(
                   width: double.infinity,
@@ -88,13 +93,9 @@ Future<T?> showBarModalBottomSheet<T>({
   bool enableDrag = true,
   Widget? topControl,
   Duration? duration,
+  RouteSettings? settings,
+  SystemUiOverlayStyle? overlayStyle,
 }) async {
-  assert(context != null);
-  assert(builder != null);
-  assert(expand != null);
-  assert(useRootNavigator != null);
-  assert(isDismissible != null);
-  assert(enableDrag != null);
   assert(debugCheckHasMediaQuery(context));
   assert(debugCheckHasMaterialLocalizations(context));
   final result = await Navigator.of(context, rootNavigator: useRootNavigator)
@@ -107,7 +108,9 @@ Future<T?> showBarModalBottomSheet<T>({
       control: topControl,
       clipBehavior: clipBehavior,
       shape: shape,
+      backgroundColor: backgroundColor,
       elevation: elevation,
+      overlayStyle: overlayStyle,
     ),
     secondAnimationController: secondAnimation,
     expanded: expand,
@@ -117,6 +120,7 @@ Future<T?> showBarModalBottomSheet<T>({
     enableDrag: enableDrag,
     animationCurve: animationCurve,
     duration: duration,
+    settings: settings,
   ));
   return result;
 }

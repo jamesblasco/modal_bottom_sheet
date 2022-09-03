@@ -1,4 +1,1 @@
-include: package:pedantic/analysis_options.yaml
-
-enable-experiment:
-  - extension-methods
+include: package:lints/recommended.yaml

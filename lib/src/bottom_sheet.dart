@@ -3,12 +3,8 @@
 // found in the LICENSE file.
 
 import 'dart:async';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:flutter/widgets.dart';
 import 'package:modal_bottom_sheet/src/utils/scroll_to_top_status_bar.dart';
 
 import 'package:modal_bottom_sheet/src/utils/bottom_sheet_suspended_curve.dart';
@@ -49,10 +45,7 @@ class ModalBottomSheet extends StatefulWidget {
     required this.expanded,
     required this.onClosing,
     required this.child,
-  })  : assert(enableDrag != null),
-        assert(onClosing != null),
-        assert(child != null),
-        super(key: key);
+  }) : super(key: key);
 
   /// The closeProgressThreshold parameter
   /// specifies when the bottom sheet will be dismissed when user drags it.
@@ -108,7 +101,7 @@ class ModalBottomSheet extends StatefulWidget {
   final ScrollController scrollController;
 
   @override
-  _ModalBottomSheetState createState() => _ModalBottomSheetState();
+  ModalBottomSheetState createState() => ModalBottomSheetState();
 
   /// Creates an [AnimationController] suitable for a
   /// [ModalBottomSheet.animationController].
@@ -128,7 +121,7 @@ class ModalBottomSheet extends StatefulWidget {
   }
 }
 
-class _ModalBottomSheetState extends State<ModalBottomSheet>
+class ModalBottomSheetState extends State<ModalBottomSheet>
     with TickerProviderStateMixin {
   final GlobalKey _childKey = GlobalKey(debugLabel: 'BottomSheet child');
 
@@ -231,24 +224,27 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
     // ignore: unawaited_futures
     _bounceDragController.reverse();
 
-    var canClose = true;
-    if (widget.shouldClose != null && hasReachedWillPopThreshold) {
-      _cancelClose();
-      canClose = await shouldClose();
-    }
-    if (canClose) {
-      // If speed is bigger than _minFlingVelocity try to close it
-      if (velocity > _minFlingVelocity) {
-        _close();
-      } else if (hasReachedCloseThreshold) {
-        if (widget.animationController.value > 0.0) {
-          // ignore: unawaited_futures
-          widget.animationController.fling(velocity: -1.0);
-        }
-        _close();
-      } else {
+    Future<void> tryClose() async {
+      if (widget.shouldClose != null) {
         _cancelClose();
+        bool canClose = await shouldClose();
+        if (canClose) {
+          _close();
+        }
+      } else {
+        _close();
       }
+    }
+
+    // If speed is bigger than _minFlingVelocity try to close it
+    if (velocity > _minFlingVelocity) {
+      tryClose();
+    } else if (hasReachedCloseThreshold) {
+      if (widget.animationController.value > 0.0) {
+        // ignore: unawaited_futures
+        widget.animationController.fling(velocity: -1.0);
+      }
+      tryClose();
     } else {
       _cancelClose();
     }
@@ -302,9 +298,8 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
 
       // Otherwise the calculate the velocity with a VelocityTracker
       if (_velocityTracker == null) {
-        //final pointerKind = defaultPointerDeviceKind(context);
-        // ignore: deprecated_member_use
-        _velocityTracker = VelocityTracker();
+        final pointerKind = defaultPointerDeviceKind(context);
+        _velocityTracker = VelocityTracker.withKind(pointerKind);
         _startTime = DateTime.now();
       }
 
@@ -493,5 +488,4 @@ PointerDeviceKind defaultPointerDeviceKind(BuildContext context) {
     case TargetPlatform.fuchsia:
       return PointerDeviceKind.unknown;
   }
-  return PointerDeviceKind.unknown;
 }
