@@ -74,7 +74,6 @@ Future<T?> showCupertinoModalBottomSheet<T>({
   required WidgetBuilder builder,
   Color? backgroundColor,
   double? elevation,
-  double? closeProgressThreshold,
   ShapeBorder? shape,
   Clip? clipBehavior,
   Color? barrierColor,
@@ -92,6 +91,7 @@ Future<T?> showCupertinoModalBottomSheet<T>({
   Color? transitionBackgroundColor,
   BoxShadow? shadow,
   SystemUiOverlayStyle? overlayStyle,
+  double? closeProgressThreshold,
 }) async {
   assert(debugCheckHasMediaQuery(context));
   final hasMaterialLocalizations =

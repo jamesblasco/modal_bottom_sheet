@@ -136,9 +136,10 @@ class ModalBottomSheetRoute<T> extends PageRoute<T> {
     required this.expanded,
     this.bounce = false,
     this.animationCurve,
-    this.duration,
+    Duration? duration,
     RouteSettings? settings,
-  }) : super(settings: settings);
+  })  : duration = duration ?? _bottomSheetDuration,
+        super(settings: settings);
 
   final double? closeProgressThreshold;
   final WidgetWithChildBuilder? containerBuilder;
@@ -150,13 +151,13 @@ class ModalBottomSheetRoute<T> extends PageRoute<T> {
   final bool enableDrag;
   final ScrollController? scrollController;
 
-  final Duration? duration;
+  final Duration duration;
 
   final AnimationController? secondAnimationController;
   final Curve? animationCurve;
 
   @override
-  Duration get transitionDuration => duration ?? _bottomSheetDuration;
+  Duration get transitionDuration => duration;
 
   @override
   bool get barrierDismissible => isDismissible;
@@ -244,6 +245,7 @@ Future<T?> showCustomModalBottomSheet<T>({
   bool enableDrag = true,
   Duration? duration,
   RouteSettings? settings,
+  double? closeProgressThreshold,
 }) async {
   assert(debugCheckHasMediaQuery(context));
   assert(debugCheckHasMaterialLocalizations(context));
@@ -268,6 +270,7 @@ Future<T?> showCustomModalBottomSheet<T>({
     animationCurve: animationCurve,
     duration: duration,
     settings: settings,
+    closeProgressThreshold: closeProgressThreshold,
   ));
   return result;
 }

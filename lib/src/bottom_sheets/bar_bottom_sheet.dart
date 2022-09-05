@@ -81,7 +81,6 @@ Future<T?> showBarModalBottomSheet<T>({
   Color? backgroundColor,
   double? elevation,
   ShapeBorder? shape,
-  double? closeProgressThreshold,
   Clip? clipBehavior,
   Color barrierColor = Colors.black87,
   bool bounce = true,
@@ -95,6 +94,7 @@ Future<T?> showBarModalBottomSheet<T>({
   Duration? duration,
   RouteSettings? settings,
   SystemUiOverlayStyle? overlayStyle,
+  double? closeProgressThreshold,
 }) async {
   assert(debugCheckHasMediaQuery(context));
   assert(debugCheckHasMaterialLocalizations(context));

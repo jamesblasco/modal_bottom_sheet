@@ -5,7 +5,6 @@ import 'dart:async';
 /// Shows a modal material design bottom sheet.
 Future<T?> showMaterialModalBottomSheet<T>({
   required BuildContext context,
-  double? closeProgressThreshold,
   required WidgetBuilder builder,
   Color? backgroundColor,
   double? elevation,
@@ -21,6 +20,7 @@ Future<T?> showMaterialModalBottomSheet<T>({
   bool enableDrag = true,
   Duration? duration,
   RouteSettings? settings,
+  double? closeProgressThreshold,
 }) async {
   assert(debugCheckHasMediaQuery(context));
   assert(debugCheckHasMaterialLocalizations(context));
