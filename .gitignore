@@ -131,5 +131,5 @@ venv/
 
 # Coverage
 coverage/
-sheet/coverage/
+sheet/coverage/**
 .test_coverage.dart
