@@ -1,3 +1,7 @@
+
+## 2.1.1 
++ Bug fixes
+
 ## 2.1.0 - Flutter 3.0
 + Migrates to Flutter 3.0
 + Use PageRoute to allow Hero animations
