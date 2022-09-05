@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'editor/editor_page.dart';
+import 'examples/sheet/bouncing_overflow_sheet.dart';
 import 'examples/sheet/bouncing_sheet.dart';
 import 'examples/sheet/clamped_sheet.dart';
 import 'examples/sheet/complex_snap_sheet.dart';
@@ -42,6 +43,7 @@ class SheetExamplesPage extends StatelessWidget {
             const SectionTitle('DRAG PHYSICS'),
             ExampleTile.sheet('Snap', SnapSheet()),
             ExampleTile.sheet('Bouncing', const BounceTopSheet()),
+            ExampleTile.sheet('Bouncing overflow', const BounceOverflowSheet()),
             ExampleTile.sheet(
                 'Clamped sheet (min and max extent)', ClampedSheet()),
             const SectionTitle('SCROLLING'),

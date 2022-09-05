@@ -209,8 +209,8 @@ void main() {
           );
         });
 
-        group('when overflowViewport does not appyBoundaryConditions', () {
-          test('top edge', () {
+        group('when overflowViewport', () {
+          test('does not appyBoundaryConditions top edge', () {
             const BouncingSheetPhysics physicsUnderTest =
                 BouncingSheetPhysics(overflowViewport: true);
 
@@ -230,7 +230,7 @@ void main() {
               isZero,
             );
           });
-          test('bottom edge', () {
+          test('does appyBoundaryConditions bottom edge', () {
             const BouncingSheetPhysics physicsUnderTest =
                 BouncingSheetPhysics(overflowViewport: true);
 
@@ -243,11 +243,11 @@ void main() {
             );
             expect(
               physicsUnderTest.applyBoundaryConditions(scrollMetrics, -11.0),
-              isZero,
+              -1,
             );
             expect(
               physicsUnderTest.applyBoundaryConditions(scrollMetrics, -9.0),
-              isZero,
+              0,
             );
           });
         });
@@ -308,12 +308,12 @@ void main() {
             axisDirection: AxisDirection.down,
           );
           expect(
-            physicsUnderTest.applyBoundaryConditions(scrollMetrics, 121.0),
+            physicsUnderTest.applyBoundaryConditions(scrollMetrics, 201.0),
             1,
           );
           expect(
-            physicsUnderTest.applyBoundaryConditions(scrollMetrics, 119.0),
-            isZero, 
+            physicsUnderTest.applyBoundaryConditions(scrollMetrics, 199.0),
+            isZero,
           );
         });
         test('bottom edge', () {
