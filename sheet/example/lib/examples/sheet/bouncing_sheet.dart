@@ -1,12 +1,11 @@
 import 'dart:async';
 
-import 'package:example/base_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:sheet/sheet.dart';
 
 class BounceTopSheet extends StatelessWidget {
-  const BounceTopSheet({Key? key}) : super(key: key);
+  const BounceTopSheet({super.key});
 
   @override
   Widget build(BuildContext context) {

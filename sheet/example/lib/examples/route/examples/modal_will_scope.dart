@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ModalWillScope extends StatelessWidget {
-  const ModalWillScope({Key? key}) : super(key: key);
+  const ModalWillScope({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,17 +13,17 @@ class ModalWillScope extends StatelessWidget {
         await showCupertinoDialog<void>(
             context: context,
             builder: (BuildContext context) => CupertinoAlertDialog(
-                  title: Text('Should Close?'),
+                  title: const Text('Should Close?'),
                   actions: <Widget>[
                     CupertinoButton(
-                      child: Text('Yes'),
+                      child: const Text('Yes'),
                       onPressed: () {
                         shouldClose = true;
                         Navigator.of(context).pop();
                       },
                     ),
                     CupertinoButton(
-                      child: Text('No'),
+                      child: const Text('No'),
                       onPressed: () {
                         shouldClose = false;
                         Navigator.of(context).pop();
@@ -35,8 +35,8 @@ class ModalWillScope extends StatelessWidget {
       },
       child: CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
-            leading: Container(), middle: Text('Modal Page')),
-        child: Center(),
+            leading: Container(), middle: const Text('Modal Page')),
+        child: const Center(),
       ),
     ));
   }

@@ -18,7 +18,7 @@ extension SheetChild on SheetChildType {
 }
 
 class EmptyWidget extends StatelessWidget {
-  const EmptyWidget({Key? key}) : super(key: key);
+  const EmptyWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +30,7 @@ class EmptyWidget extends StatelessWidget {
 }
 
 class ColumnWidget extends StatelessWidget {
-  const ColumnWidget({Key? key}) : super(key: key);
+  const ColumnWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +68,7 @@ class ColumnWidget extends StatelessWidget {
 }
 
 class ListWidget extends StatelessWidget {
-  const ListWidget({Key? key}) : super(key: key);
+  const ListWidget({super.key});
 
   @override
   Widget build(BuildContext context) {

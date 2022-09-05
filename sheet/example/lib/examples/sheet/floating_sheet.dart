@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sheet/sheet.dart';
 
-import 'package:example/base_scaffold.dart';
-
 class FloatingSheet extends StatefulWidget {
   @override
   _FitSheetState createState() => _FitSheetState();

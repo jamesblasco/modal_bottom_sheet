@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:sheet/route.dart';
 
 class ModalInsideModal extends StatelessWidget {
-  final bool reverse;
-
   const ModalInsideModal({Key? key, this.reverse = false}) : super(key: key);
+  final bool reverse;
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +13,7 @@ class ModalInsideModal extends StatelessWidget {
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,
         leading: Container(),
-        middle: Text('Modal Page'),
+        middle: const Text('Modal Page'),
       ),
       child: SafeArea(
         bottom: false,
@@ -22,16 +21,17 @@ class ModalInsideModal extends StatelessWidget {
           reverse: reverse,
           // shrinkWrap: true,
           controller: PrimaryScrollController.of(context),
-          physics: BouncingScrollPhysics(),
+          physics: const BouncingScrollPhysics(),
           children: ListTile.divideTiles(
               context: context,
-              tiles: List.generate(
+              tiles: List<Widget>.generate(
                 100,
-                (index) => ListTile(
+                (int index) => ListTile(
                   title: Text('Item $index'),
                   onTap: () => Navigator.of(context).push(
                     CupertinoSheetRoute<void>(
-                      builder: (context) => ModalInsideModal(reverse: reverse),
+                      builder: (BuildContext context) =>
+                          ModalInsideModal(reverse: reverse),
                     ),
                   ),
                 ),

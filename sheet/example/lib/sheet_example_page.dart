@@ -20,7 +20,7 @@ import 'examples/sheet/snap_sheet.dart';
 import 'examples/sheet/text_field.dart';
 
 class SheetExamplesPage extends StatelessWidget {
-  const SheetExamplesPage({Key? key}) : super(key: key);
+  const SheetExamplesPage({super.key});
 
   @override
   Widget build(BuildContext context) {

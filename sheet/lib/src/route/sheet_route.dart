@@ -19,9 +19,6 @@ const Color _kBarrierColor = Color(0x59000000);
 /// remains in memory. To free all the resources when this is not necessary, set
 /// [maintainState] to false.
 ///
-/// The `fullscreenDialog` property specifies whether the incoming route is a
-/// fullscreen modal dialog. On iOS, those routes animate from the bottom to the
-/// top rather than horizontally.
 ///
 /// The type `T` specifies the return type of the route which can be supplied as
 /// the route is popped from the stack via [Navigator.pop] by providing the
@@ -187,7 +184,7 @@ class SheetRoute<T> extends PageRoute<T> with DelegatedTransitionsRoute<T> {
         controller!.velocity <= 0;
   }
 
-  Widget buildSheet(BuildContext context) {
+  Widget buildSheet(BuildContext context, Widget child) {
     SheetPhysics? _physics = SnapSheetPhysics(
       stops: stops ?? <double>[0, 1],
       parent: physics,
@@ -201,7 +198,7 @@ class SheetRoute<T> extends PageRoute<T> with DelegatedTransitionsRoute<T> {
       fit: fit,
       physics: _physics,
       controller: sheetController,
-      child: Builder(builder: builder),
+      child: child,
     );
   }
 }
@@ -410,7 +407,7 @@ class __SheetRouteContainerState extends State<_SheetRouteContainer>
   void onSheetExtentUpdate() {
     if (_routeController.value != _sheetController.animation.value) {
       if (route.isCurrent &&
-        !_sheetController.position.preventingDrag &&
+          !_sheetController.position.preventingDrag &&
           route.shouldPreventPopForExtent(_sheetController.animation.value)) {
         preventPop();
         return;
@@ -491,11 +488,15 @@ class __SheetRouteContainerState extends State<_SheetRouteContainer>
     final SheetRoute<dynamic> route = widget.sheetRoute;
 
     return Semantics(
-        scopesRoute: true,
-        namesRoute: true,
-        label: route.sheetLabel,
-        explicitChildNodes: true,
-        child: route.buildSheet(context));
+      scopesRoute: true,
+      namesRoute: true,
+      label: route.sheetLabel,
+      explicitChildNodes: true,
+      child: route.buildSheet(
+        context,
+        Builder(builder: widget.sheetRoute.builder),
+      ),
+    );
   }
 }
 

@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:example/base_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:sheet/sheet.dart';
 

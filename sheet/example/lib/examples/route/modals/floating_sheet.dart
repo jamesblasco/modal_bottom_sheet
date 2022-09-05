@@ -3,16 +3,15 @@ import 'package:sheet/route.dart';
 import 'package:sheet/sheet.dart';
 
 class FloatingModal extends StatelessWidget {
-  final Widget child;
-  final Color? backgroundColor;
-
   const FloatingModal({Key? key, required this.child, this.backgroundColor})
       : super(key: key);
+  final Widget child;
+  final Color? backgroundColor;
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      minimum: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      minimum: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       child: Material(
         color: backgroundColor,
         clipBehavior: Clip.antiAlias,
@@ -27,10 +26,11 @@ class FloatingSheetRoute<T> extends SheetRoute<T> {
   FloatingSheetRoute({
     required WidgetBuilder builder,
   }) : super(
-          decorationBuilder: (context, child) {
-            return FloatingModal(child: child);
+          builder: (BuildContext context) {
+            return FloatingModal(
+              child: Builder(builder: builder),
+            );
           },
-          builder: builder,
           fit: SheetFit.loose,
         );
 }

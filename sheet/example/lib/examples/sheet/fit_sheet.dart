@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:example/base_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:sheet/sheet.dart';
@@ -33,14 +32,13 @@ class _FitSheetState extends State<FitSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return  Sheet(
-        elevation: 4,
-        child: Container(
-          height: 400,
-          child: const Text('hello'),
-        ),
-        controller: controller,
-   
+    return Sheet(
+      elevation: 4,
+      child: Container(
+        height: 400,
+        child: const Text('hello'),
+      ),
+      controller: controller,
     );
   }
 }

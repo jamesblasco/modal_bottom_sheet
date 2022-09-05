@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:sheet/sheet.dart';
 
-import 'package:example/base_scaffold.dart';
-
 class FitSnapSheet extends StatefulWidget {
   @override
   _FitSheetState createState() => _FitSheetState();
@@ -34,18 +32,17 @@ class _FitSheetState extends State<FitSnapSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return  Sheet(
-        elevation: 4,
-        physics: const SnapSheetPhysics(
-          stops: <double>[100, 300, 500],
-          relative: false,
-          parent: BouncingSheetPhysics(),
-        ),
-        child: Container(
-          height: 500,
-        ),
-        controller: controller,
-     
+    return Sheet(
+      elevation: 4,
+      physics: const SnapSheetPhysics(
+        stops: <double>[100, 300, 500],
+        relative: false,
+        parent: BouncingSheetPhysics(),
+      ),
+      child: Container(
+        height: 500,
+      ),
+      controller: controller,
     );
   }
 }

@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ModalFitWillScope extends StatelessWidget {
-  const ModalFitWillScope({Key? key}) : super(key: key);
+  const ModalFitWillScope({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,17 +13,17 @@ class ModalFitWillScope extends StatelessWidget {
         await showCupertinoDialog<void>(
             context: context,
             builder: (BuildContext context) => CupertinoAlertDialog(
-                  title: Text('Should Close?'),
+                  title: const Text('Should Close?'),
                   actions: <Widget>[
                     CupertinoButton(
-                      child: Text('Yes'),
+                      child: const Text('Yes'),
                       onPressed: () {
                         shouldClose = true;
                         Navigator.of(context).pop();
                       },
                     ),
                     CupertinoButton(
-                      child: Text('No'),
+                      child: const Text('No'),
                       onPressed: () {
                         shouldClose = false;
                         Navigator.of(context).pop();
@@ -37,13 +37,13 @@ class ModalFitWillScope extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           ListTile(
-            title: Text('Edit'),
-            leading: Icon(Icons.edit),
+            title: const Text('Edit'),
+            leading: const Icon(Icons.edit),
             onTap: () => Navigator.of(context).pop(),
           ),
           ListTile(
-            title: Text('Copy'),
-            leading: Icon(Icons.content_copy),
+            title: const Text('Copy'),
+            leading: const Icon(Icons.content_copy),
             onTap: () => Navigator.of(context).pop(),
           ),
           ListTile(
@@ -57,8 +57,8 @@ class ModalFitWillScope extends StatelessWidget {
             onTap: () => Navigator.of(context).pop(),
           ),
           ListTile(
-            title: Text('Delete'),
-            leading: Icon(Icons.delete),
+            title: const Text('Delete'),
+            leading: const Icon(Icons.delete),
             onTap: () => Navigator.of(context).pop(),
           )
         ],

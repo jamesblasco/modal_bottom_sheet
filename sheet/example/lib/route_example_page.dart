@@ -6,12 +6,12 @@ import 'package:example/examples/route/examples/modal_inside_modal.dart';
 import 'package:example/examples/route/examples/modal_will_scope.dart';
 import 'package:example/examples/route/examples/modal_with_navigator.dart';
 import 'package:example/examples/route/examples/modal_with_page_view.dart';
-import 'package:example/examples/route/navigation/cupertino_page.dart';
 import 'package:example/examples/route/modals/avatar_sheet.dart';
 import 'package:example/examples/route/modals/bar_sheet.dart';
 import 'package:example/examples/route/modals/dialog_sheet.dart';
 import 'package:example/examples/route/modals/floating_sheet.dart';
 import 'package:example/examples/route/modals/material_sheet.dart';
+import 'package:example/examples/route/navigation/cupertino_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sheet/route.dart';
@@ -20,7 +20,7 @@ import 'package:sheet/sheet.dart';
 import 'examples/route/navigation/go_router.dart';
 
 class RouteExamplePage extends StatelessWidget {
-  const RouteExamplePage({Key? key}) : super(key: key);
+  const RouteExamplePage({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -3,11 +3,10 @@ import 'package:sheet/route.dart';
 import 'package:sheet/sheet.dart';
 
 class DialogSheet extends StatelessWidget {
-  final Widget child;
-  final Color? backgroundColor;
-
   const DialogSheet({Key? key, required this.child, this.backgroundColor})
       : super(key: key);
+  final Widget child;
+  final Color? backgroundColor;
 
   @override
   Widget build(BuildContext context) {
@@ -44,10 +43,8 @@ class DialogSheetRoute<T> extends SheetRoute<T> {
   DialogSheetRoute({
     required WidgetBuilder builder,
   }) : super(
-          builder: (context) => DialogSheet(
-            child: Builder(
-              builder: builder,
-            ),
+          builder: (BuildContext context) => DialogSheet(
+            child: Builder(builder: builder),
           ),
           fit: SheetFit.loose,
         );

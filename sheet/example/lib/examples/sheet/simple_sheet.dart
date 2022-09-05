@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sheet/sheet.dart';
 
-import 'package:example/base_scaffold.dart';
-
 class SimpleSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

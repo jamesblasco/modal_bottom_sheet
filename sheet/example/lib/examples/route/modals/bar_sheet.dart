@@ -6,12 +6,6 @@ import 'package:sheet/sheet.dart';
 const Radius _default_bar_top_radius = Radius.circular(15);
 
 class BarBottomSheet extends StatelessWidget {
-  final Widget child;
-  final Widget? control;
-  final Clip? clipBehavior;
-  final double? elevation;
-  final ShapeBorder? shape;
-
   const BarBottomSheet(
       {Key? key,
       required this.child,
@@ -20,6 +14,11 @@ class BarBottomSheet extends StatelessWidget {
       this.shape,
       this.elevation})
       : super(key: key);
+  final Widget child;
+  final Widget? control;
+  final Clip? clipBehavior;
+  final double? elevation;
+  final ShapeBorder? shape;
 
   @override
   Widget build(BuildContext context) {
@@ -28,8 +27,8 @@ class BarBottomSheet extends StatelessWidget {
       child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(height: 12),
+          children: <Widget>[
+            const SizedBox(height: 12),
             SafeArea(
               bottom: false,
               child: control ??
@@ -41,13 +40,13 @@ class BarBottomSheet extends StatelessWidget {
                         borderRadius: BorderRadius.circular(6)),
                   ),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Flexible(
               flex: 1,
               fit: FlexFit.loose,
               child: Material(
                 shape: shape ??
-                    RoundedRectangleBorder(
+                    const RoundedRectangleBorder(
                       side: BorderSide(),
                       borderRadius: BorderRadius.only(
                           topLeft: _default_bar_top_radius,
@@ -70,29 +69,26 @@ class BarBottomSheet extends StatelessWidget {
 class BarSheetRoute<T> extends SheetRoute<T> {
   BarSheetRoute({
     required WidgetBuilder builder,
-    Color? backgroundColor,
     double? elevation,
     ShapeBorder? shape,
     Clip? clipBehavior,
     Color barrierColor = Colors.black87,
     SheetFit fit = SheetFit.expand,
     Curve? animationCurve,
-    bool useRootNavigator = false,
     bool isDismissible = true,
     bool enableDrag = true,
     Widget? topControl,
     Duration? duration,
   }) : super(
-          decorationBuilder: (context, child) {
+          builder: (BuildContext context) {
             return BarBottomSheet(
-              child: child,
+              child: Builder(builder: builder),
               control: topControl,
               clipBehavior: clipBehavior,
               shape: shape,
               elevation: elevation,
             );
           },
-          builder: builder,
           fit: fit,
           barrierDismissible: isDismissible,
           barrierColor: barrierColor,

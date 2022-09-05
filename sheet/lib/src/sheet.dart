@@ -65,7 +65,7 @@ typedef SheetDecorationBuilder = Widget Function(
 class Sheet extends StatelessWidget {
   /// Creates a material bottom sheet.
   const Sheet({
-    Key? key,
+    super.key,
     required this.child,
     this.controller,
     this.physics,
@@ -81,12 +81,11 @@ class Sheet extends StatelessWidget {
     this.resizable = false,
     this.padding = EdgeInsets.zero,
     this.minResizableExtent,
-  })  : decorationBuilder = null,
-        super(key: key);
+  }) : decorationBuilder = null;
 
   /// Creates a bottom sheet with no default appearance.
   const Sheet.raw({
-    Key? key,
+    super.key,
     required this.child,
     SheetDecorationBuilder? decorationBuilder,
     this.controller,
@@ -103,8 +102,7 @@ class Sheet extends StatelessWidget {
         shape = null,
         elevation = null,
         backgroundColor = null,
-        clipBehavior = null,
-        super(key: key);
+        clipBehavior = null;
 
   final Widget child;
 

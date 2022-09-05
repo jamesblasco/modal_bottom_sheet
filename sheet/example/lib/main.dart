@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
 }
 
 class BottomNavigationScaffold extends StatefulWidget {
-  const BottomNavigationScaffold({Key? key}) : super(key: key);
+  const BottomNavigationScaffold({super.key});
 
   @override
   State<BottomNavigationScaffold> createState() =>

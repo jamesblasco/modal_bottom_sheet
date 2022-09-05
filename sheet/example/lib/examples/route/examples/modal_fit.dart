@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sheet/sheet.dart';
 
 class ModalFit extends StatelessWidget {
-  const ModalFit({Key? key}) : super(key: key);
+  const ModalFit({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,13 +14,13 @@ class ModalFit extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               ListTile(
-                title: Text('Edit'),
-                leading: Icon(Icons.edit),
+                title: const Text('Edit'),
+                leading: const Icon(Icons.edit),
                 onTap: () => Navigator.of(context).pop(),
               ),
               ListTile(
-                title: Text('Copy'),
-                leading: Icon(Icons.content_copy),
+                title: const Text('Copy'),
+                leading: const Icon(Icons.content_copy),
                 onTap: () => Navigator.of(context).pop(),
               ),
               ListTile(
@@ -34,8 +34,8 @@ class ModalFit extends StatelessWidget {
                 onTap: () => Navigator.of(context).pop(),
               ),
               ListTile(
-                title: Text('Delete'),
-                leading: Icon(Icons.delete),
+                title: const Text('Delete'),
+                leading: const Icon(Icons.delete),
                 onTap: () => Navigator.of(context).pop(),
               )
             ],

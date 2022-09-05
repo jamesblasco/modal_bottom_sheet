@@ -6,9 +6,9 @@ class ScrollableSnapSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return DefaultSheetController(
       child: Sheet(
-        physics: SnapSheetPhysics(
+        physics: const SnapSheetPhysics(
           stops: <double>[0.2, 0.5, 1],
-          parent: const BouncingSheetPhysics(
+          parent: BouncingSheetPhysics(
             overflowViewport: true,
           ),
         ),

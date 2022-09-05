@@ -133,7 +133,7 @@ class CupertinoSheetRoute<T> extends SheetRoute<T> {
   bool get barrierDismissible => true;
 
   @override
-  Widget buildSheet(BuildContext context) {
+  Widget buildSheet(BuildContext context, Widget child) {
     SheetPhysics? _physics = BouncingSheetPhysics(
         parent: SnapSheetPhysics(
       stops: stops ?? <double>[0, 1],
@@ -153,7 +153,7 @@ class CupertinoSheetRoute<T> extends SheetRoute<T> {
       maxExtent: mediaQuery.size.height - topMargin,
       physics: _physics,
       controller: sheetController,
-      child: Builder(builder: builder),
+      child: child,
     );
   }
 

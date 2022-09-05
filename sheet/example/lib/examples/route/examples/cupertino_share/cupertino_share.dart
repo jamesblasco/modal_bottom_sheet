@@ -8,7 +8,7 @@ class CupertinoSharePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    final appBar = CupertinoNavigationBar(
+    final CupertinoNavigationBar appBar = CupertinoNavigationBar(
       middle: Column(
         children: const <Widget>[
           Text('New York', style: TextStyle(fontWeight: FontWeight.normal)),
@@ -92,7 +92,7 @@ class CupertinoSharePage extends StatelessWidget {
 }
 
 class PhotoShareBottomSheet extends StatelessWidget {
-  const PhotoShareBottomSheet({Key? key}) : super(key: key);
+  const PhotoShareBottomSheet({super.key});
 
   @override
   Widget build(BuildContext context) {
