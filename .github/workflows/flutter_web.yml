@@ -15,14 +15,14 @@ jobs:
         with:
           channel: 'dev'
       - run: |
-          cd example
+          cd modal_bottom_sheet/example
           flutter config --enable-web
           flutter pub get
       - run: |
-         cd example
+         cd modal_bottom_sheet/example
          flutter build web --release --dart-define=FLUTTER_WEB_USE_SKIA=true
       - run: |
-          cd example/build/web
+          cd modal_bottom_sheet/example/build/web
           git init
           git config --global user.email git@jaimeblasco.com
           git config --global user.name jamesblasco

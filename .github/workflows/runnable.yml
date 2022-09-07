@@ -30,8 +30,14 @@ jobs:
           dart --version
           flutter --version
       - name: Prepare dependencies
-        run: flutter pub get
+        run: |
+          cd modal_bottom_sheet
+          flutter pub get
       - name: Analyse the repo
-        run: flutter analyze lib
+        run: |
+          cd modal_bottom_sheet
+          flutter analyze lib
       - name: Run tests
-        run: flutter test
+        run: |
+          cd modal_bottom_sheet
+          flutter test

@@ -1,0 +1,23 @@
+name: sheet
+on:
+  push:
+    branches:
+      - master
+      - main
+  pull_request:
+    paths:
+      - ".github/workflows/sheet.yaml"
+      - "sheet/**"
+
+jobs:
+  build:
+    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/flutter_package.yml@v1
+    with:
+      working_directory: sheet
+      min_coverage: 60 # Working to reach 100% XD
+
+  pana:
+    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/pana.yml@v1
+    with:
+      working_directory: sheet
+      min_score: 110 # sheet is not in master yet
