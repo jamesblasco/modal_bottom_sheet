@@ -30,7 +30,7 @@ jobs:
         run: flutter build web --dart-define=FLUTTER_WEB_USE_SKIA=true
 
       - name: 🚀 Deploy to firebase hosting
-      - uses: FirebaseExtended/action-hosting-deploy@v0
+        uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_SHEET_PREVIEW }}'
