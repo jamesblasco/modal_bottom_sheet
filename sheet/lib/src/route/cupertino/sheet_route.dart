@@ -134,13 +134,13 @@ class CupertinoSheetRoute<T> extends SheetRoute<T> {
 
   @override
   Widget buildSheet(BuildContext context, Widget child) {
-    SheetPhysics? _physics = BouncingSheetPhysics(
+    SheetPhysics? effectivePhysics = BouncingSheetPhysics(
         parent: SnapSheetPhysics(
       stops: stops ?? <double>[0, 1],
       parent: physics,
     ));
     if (!draggable) {
-      _physics = const NeverDraggableSheetPhysics();
+      effectivePhysics = const NeverDraggableSheetPhysics();
     }
     final MediaQueryData mediaQuery = MediaQuery.of(context);
     final double topMargin =
@@ -151,7 +151,7 @@ class CupertinoSheetRoute<T> extends SheetRoute<T> {
       decorationBuilder: decorationBuilder,
       fit: fit,
       maxExtent: mediaQuery.size.height - topMargin,
-      physics: _physics,
+      physics: effectivePhysics,
       controller: sheetController,
       child: child,
     );

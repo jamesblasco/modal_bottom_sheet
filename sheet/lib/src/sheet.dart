@@ -430,8 +430,9 @@ class SheetController extends ScrollController {
   void relativeJumpTo(double offset) {
     assert(positions.isNotEmpty,
         'ScrollController not attached to any scroll views.');
-    for (final ScrollPosition position in positions)
+    for (final ScrollPosition position in positions) {
       (position as SheetPosition).relativeJumpTo(offset);
+    }
   }
 }
 
@@ -603,9 +604,7 @@ class SheetViewport extends SingleChildRenderObjectWidget {
     Widget? child,
     required this.fit,
     required this.clipBehavior,
-  })  : assert(axisDirection != null),
-        assert(clipBehavior != null),
-        super(key: key, child: child);
+  }) : super(key: key, child: child);
 
   final AxisDirection axisDirection;
   final ViewportOffset offset;
@@ -615,8 +614,8 @@ class SheetViewport extends SingleChildRenderObjectWidget {
   final SheetFit fit;
 
   @override
-  _RenderSheetViewport createRenderObject(BuildContext context) {
-    return _RenderSheetViewport(
+  RenderSheetViewport createRenderObject(BuildContext context) {
+    return RenderSheetViewport(
       axisDirection: axisDirection,
       offset: offset,
       clipBehavior: clipBehavior,
@@ -628,7 +627,7 @@ class SheetViewport extends SingleChildRenderObjectWidget {
 
   @override
   void updateRenderObject(
-      BuildContext context, _RenderSheetViewport renderObject) {
+      BuildContext context, RenderSheetViewport renderObject) {
     // Order dependency: The offset setter reads the axis direction.
     renderObject
       ..axisDirection = axisDirection
@@ -640,10 +639,10 @@ class SheetViewport extends SingleChildRenderObjectWidget {
   }
 }
 
-class _RenderSheetViewport extends RenderBox
+class RenderSheetViewport extends RenderBox
     with RenderObjectWithChildMixin<RenderBox>
     implements RenderAbstractViewport {
-  _RenderSheetViewport({
+  RenderSheetViewport({
     AxisDirection axisDirection = AxisDirection.down,
     required ViewportOffset offset,
     double cacheExtent = RenderAbstractViewport.defaultCacheExtent,
@@ -652,11 +651,7 @@ class _RenderSheetViewport extends RenderBox
     SheetFit fit = SheetFit.expand,
     double? minExtent,
     double? maxExtent,
-  })  : assert(axisDirection != null),
-        assert(offset != null),
-        assert(cacheExtent != null),
-        assert(clipBehavior != null),
-        _axisDirection = axisDirection,
+  })  : _axisDirection = axisDirection,
         _offset = offset,
         _fit = fit,
         _minExtent = minExtent,
@@ -669,7 +664,6 @@ class _RenderSheetViewport extends RenderBox
   AxisDirection get axisDirection => _axisDirection;
   AxisDirection _axisDirection;
   set axisDirection(AxisDirection value) {
-    assert(value != null);
     if (value == _axisDirection) return;
     _axisDirection = value;
     markNeedsLayout();
@@ -680,7 +674,6 @@ class _RenderSheetViewport extends RenderBox
   ViewportOffset get offset => _offset;
   ViewportOffset _offset;
   set offset(ViewportOffset value) {
-    assert(value != null);
     if (value == _offset) return;
     if (attached) _offset.removeListener(_hasDragged);
     _offset = value;
@@ -692,7 +685,6 @@ class _RenderSheetViewport extends RenderBox
   double get cacheExtent => _cacheExtent;
   double _cacheExtent;
   set cacheExtent(double value) {
-    assert(value != null);
     if (value == _cacheExtent) return;
     _cacheExtent = value;
     markNeedsLayout();
@@ -702,7 +694,6 @@ class _RenderSheetViewport extends RenderBox
   SheetFit get fit => _fit;
   SheetFit _fit;
   set fit(SheetFit value) {
-    assert(value != null);
     if (value == _fit) return;
     _fit = value;
     markNeedsLayout();
@@ -714,7 +705,6 @@ class _RenderSheetViewport extends RenderBox
   Clip get clipBehavior => _clipBehavior;
   Clip _clipBehavior = Clip.none;
   set clipBehavior(Clip value) {
-    assert(value != null);
     if (value != _clipBehavior) {
       _clipBehavior = value;
       markNeedsPaint();
@@ -884,7 +874,6 @@ class _RenderSheetViewport extends RenderBox
   Offset get _paintOffset => _paintOffsetForPosition(offset.pixels);
 
   Offset _paintOffsetForPosition(double position) {
-    assert(axisDirection != null);
     switch (axisDirection) {
       case AxisDirection.up:
         return Offset(0.0, position - child!.size.height + size.height);
@@ -947,8 +936,9 @@ class _RenderSheetViewport extends RenderBox
 
   @override
   Rect? describeApproximatePaintClip(RenderObject? child) {
-    if (child != null && _shouldClipAtPaintOffset(_paintOffset))
+    if (child != null && _shouldClipAtPaintOffset(_paintOffset)) {
       return Offset.zero & size;
+    }
     return null;
   }
 
@@ -971,8 +961,9 @@ class _RenderSheetViewport extends RenderBox
   RevealedOffset getOffsetToReveal(RenderObject target, double alignment,
       {Rect? rect}) {
     rect ??= target.paintBounds;
-    if (target is! RenderBox)
+    if (target is! RenderBox) {
       return RevealedOffset(offset: offset.pixels, rect: rect);
+    }
 
     final RenderBox targetBox = target;
     final Matrix4 transform = targetBox.getTransformTo(child);
@@ -983,7 +974,6 @@ class _RenderSheetViewport extends RenderBox
     final double targetMainAxisExtent;
     final double mainAxisExtent;
 
-    assert(axisDirection != null);
     switch (axisDirection) {
       case AxisDirection.up:
         mainAxisExtent = size.height;
@@ -1021,33 +1011,34 @@ class _RenderSheetViewport extends RenderBox
     Curve curve = Curves.ease,
   }) {
     return;
-    if (!offset.allowImplicitScrolling) {
-      return super.showOnScreen(
-        descendant: descendant,
-        rect: rect,
-        duration: duration,
-        curve: curve,
-      );
-    }
-
-    final Rect? newRect = RenderViewportBase.showInViewport(
-      descendant: descendant,
-      viewport: this,
-      offset: offset,
-      rect: rect,
-      duration: duration,
-      curve: curve,
-    );
-    super.showOnScreen(
-      rect: newRect,
-      duration: duration,
-      curve: curve,
-    );
+    // TODO(jaime): check showOnScreen method beheves when keyboard appears on
+    // the screen
+    // if (!offset.allowImplicitScrolling) {
+    //   return super.showOnScreen(
+    //     descendant: descendant,
+    //     rect: rect,
+    //     duration: duration,
+    //     curve: curve,
+    //   );
+    // }
+    //
+    // final Rect? newRect = RenderViewportBase.showInViewport(
+    //   descendant: descendant,
+    //   viewport: this,
+    //   offset: offset,
+    //   rect: rect,
+    //   duration: duration,
+    //   curve: curve,
+    // );
+    // super.showOnScreen(
+    //   rect: newRect,
+    //   duration: duration,
+    //   curve: curve,
+    // );
   }
 
   @override
   Rect describeSemanticsClip(RenderObject child) {
-    assert(axis != null);
     switch (axis) {
       case Axis.vertical:
         return Rect.fromLTRB(

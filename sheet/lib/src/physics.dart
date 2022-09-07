@@ -143,20 +143,27 @@ class BouncingSheetPhysics extends ScrollPhysics with SheetPhysics {
       return true;
     }());
     if (!overflowViewport) {
+      // overscroll
       if (position.viewportDimension <= position.pixels &&
-          position.pixels < value) // overscroll
+          position.pixels < value) {
         return value - position.pixels;
+      }
+      // hit top edge
       if (value < position.viewportDimension &&
-          position.viewportDimension < position.pixels) // hit top edge
+          position.viewportDimension < position.pixels) {
         return value - position.viewportDimension;
+      }
     }
+    // underscroll
     if (value < position.pixels &&
-        position.pixels <= position.minScrollExtent) // underscroll
+        position.pixels <= position.minScrollExtent) {
       return value - position.pixels;
-
+    }
+    // hit bottom edge
     if (position.pixels < position.maxScrollExtent &&
-        position.maxScrollExtent < value) // hit bottom edge
+        position.maxScrollExtent < value) {
       return value - position.maxScrollExtent;
+    }
     return 0.0;
   }
 
@@ -227,26 +234,34 @@ class NoMomentumSheetPhysics extends ScrollPhysics with SheetPhysics {
 
   @override
   double applyBoundaryConditions(ScrollMetrics position, double value) {
+    // underscroll
     if (value < position.pixels &&
-        position.pixels <= position.minScrollExtent) // underscroll
+        position.pixels <= position.minScrollExtent) {
       return value - position.pixels;
+    }
     if (position.maxScrollExtent <= position.pixels &&
-        position.pixels < value) // overscroll
+        position.pixels < value) {
+      // overscroll
       return value - position.pixels;
+    }
     if (value < position.minScrollExtent &&
-        position.minScrollExtent < position.pixels) // hit top edge
+        position.minScrollExtent < position.pixels) {
+      // hit top edge
       return value - position.minScrollExtent;
+    }
     if (position.pixels < position.maxScrollExtent &&
-        position.maxScrollExtent < value) // hit bottom edge
+        position.maxScrollExtent < value) {
+      // hit bottom edge
       return value - position.maxScrollExtent;
+    }
     return 0.0;
 
-    if (position.viewportDimension <= position.pixels &&
-        position.pixels < value) // hit top edge
-      return value - position.pixels;
-    if (position.pixels < 0 && position.pixels > value) // hit bottom edge
-      return value - position.pixels;
-    return 0.0;
+    // if (position.viewportDimension <= position.pixels &&
+    //     position.pixels < value) // hit top edge
+    //   return value - position.pixels;
+    // if (position.pixels < 0 && position.pixels > value) // hit bottom edge
+    //   return value - position.pixels;
+    // return 0.0;
   }
 
   @override
@@ -255,10 +270,11 @@ class NoMomentumSheetPhysics extends ScrollPhysics with SheetPhysics {
     final Tolerance tolerance = this.tolerance;
     if (position.outOfRange) {
       double? end;
-      if (position.pixels > position.maxScrollExtent)
+      if (position.pixels > position.maxScrollExtent) {
         end = position.maxScrollExtent;
-      if (position.pixels < position.minScrollExtent)
+      } else if (position.pixels < position.minScrollExtent) {
         end = position.minScrollExtent;
+      }
       assert(end != null);
       return ScrollSpringSimulation(
         spring,
@@ -306,11 +322,15 @@ class ClampingSheetPhysics extends ScrollPhysics with SheetPhysics {
       }
       return true;
     }());
+    // hit top edge
     if (position.viewportDimension <= position.pixels &&
-        position.pixels < value) // hit top edge
+        position.pixels < value) {
       return value - position.pixels;
-    if (position.pixels < 0 && position.pixels > value) // hit bottom edge
+    }
+    // hit bottom edge
+    if (position.pixels < 0 && position.pixels > value) {
       return value - position.pixels;
+    }
     return 0.0;
   }
 
@@ -320,10 +340,12 @@ class ClampingSheetPhysics extends ScrollPhysics with SheetPhysics {
     final Tolerance tolerance = this.tolerance;
     if (position.outOfRange) {
       double? end;
-      if (position.pixels > position.maxScrollExtent)
+      if (position.pixels > position.maxScrollExtent) {
         end = position.maxScrollExtent;
-      if (position.pixels < position.minScrollExtent)
+      }
+      if (position.pixels < position.minScrollExtent) {
         end = position.minScrollExtent;
+      }
       assert(end != null);
       return ScrollSpringSimulation(
         spring,
@@ -336,10 +358,12 @@ class ClampingSheetPhysics extends ScrollPhysics with SheetPhysics {
     if (velocity.abs() < tolerance.velocity) {
       return null;
     }
-    if (velocity > 0.0 && position.pixels >= position.maxScrollExtent)
+    if (velocity > 0.0 && position.pixels >= position.maxScrollExtent) {
       return null;
-    if (velocity < 0.0 && position.pixels <= position.minScrollExtent)
+    }
+    if (velocity < 0.0 && position.pixels <= position.minScrollExtent) {
       return null;
+    }
     return ClampingScrollSimulation(
       position: position.pixels,
       velocity: velocity,
@@ -477,9 +501,7 @@ class SnapSheetPhysics extends ScrollPhysics with SheetPhysics {
 
   int? _getPage(ScrollMetrics position) {
     assert(
-      !position.hasPixels ||
-          (position.minScrollExtent != null &&
-              position.maxScrollExtent != null),
+      !position.hasPixels || position.hasContentDimensions,
       'Page value is only available after content dimensions are established.',
     );
     return !position.hasPixels

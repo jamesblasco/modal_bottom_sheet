@@ -185,18 +185,18 @@ class SheetRoute<T> extends PageRoute<T> with DelegatedTransitionsRoute<T> {
   }
 
   Widget buildSheet(BuildContext context, Widget child) {
-    SheetPhysics? _physics = SnapSheetPhysics(
+    SheetPhysics? effectivePhysics = SnapSheetPhysics(
       stops: stops ?? <double>[0, 1],
       parent: physics,
     );
     if (!draggable) {
-      _physics = const NeverDraggableSheetPhysics();
+      effectivePhysics = const NeverDraggableSheetPhysics();
     }
     return Sheet.raw(
       initialExtent: initialExtent,
       decorationBuilder: decorationBuilder,
       fit: fit,
-      physics: _physics,
+      physics: effectivePhysics,
       controller: sheetController,
       child: child,
     );

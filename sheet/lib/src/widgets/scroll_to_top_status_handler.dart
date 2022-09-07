@@ -13,10 +13,10 @@ class ScrollToTopStatusBarHandler extends StatefulWidget {
   final Widget child;
 
   @override
-  _ScrollToTopStatusBarState createState() => _ScrollToTopStatusBarState();
+  ScrollToTopStatusBarState createState() => ScrollToTopStatusBarState();
 }
 
-class _ScrollToTopStatusBarState extends State<ScrollToTopStatusBarHandler> {
+class ScrollToTopStatusBarState extends State<ScrollToTopStatusBarHandler> {
   @override
   void initState() {
     super.initState();
