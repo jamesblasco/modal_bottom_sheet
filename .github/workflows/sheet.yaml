@@ -20,3 +20,4 @@ jobs:
     uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/pana.yml@v1
     with:
       working_directory: sheet
+      min_score: 110 # sheet is not in master yet
