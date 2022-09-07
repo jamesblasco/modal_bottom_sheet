@@ -1,21 +1,21 @@
-name: sheet
+name: modal_bottom_sheet
 on:
   push:
     branches:
       - main
   pull_request:
     paths:
-      - ".github/workflows/sheet.yaml"
-      - "sheet/**"
+      - ".github/workflows/modal_bottom_sheet.yaml"
+      - "modal_bottom_sheet/**"
 
 jobs:
   build:
     uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/flutter_package.yml@v1
     with:
-      working_directory: sheet
-      min_coverage: 60 # Working to reach 100% XD
+      working_directory: modal_bottom_sheet
+      min_coverage: 0 
 
   pana:
     uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/pana.yml@v1
     with:
-      working_directory: sheet
+      working_directory: modal_bottom_sheet
