@@ -1,0 +1,53 @@
+
+## Cupertino Modal BottomSheet
+
+iOS 13 came with an amazing new modal navigation and now it is available to use with Flutter.
+
+
+```dart
+showCupertinoModalBottomSheet(
+  context: context,
+  builder: (context) => Container(),
+)
+```
+See generic paramameter in the Material section above
+
+#### Cupertino specific params
+The optional `backgroundColor` parameters can be passed in to customize the backgroundColor cupertino bottom sheets.
+Useful if you want a blurred transparent background as the example Cupertino Photo Share
+
+### CAUTION!: To animate the previous route some changes are needed.
+> **Why?**
+> `MaterialPageRoute` and `CupertinoPageRoute` do not allow animated translation to/from routes that are not the same type. 
+
+
+Replace your current route class with `MaterialWithModalsPageRoute`.
+
+
+Notice this route type behaves the same as `MaterialPageRoute` and supports custom `PageTransitionsBuilder` and `PageTransitionsTheme`.
+
+
+It supports native features as bouncing, blurred background, dark mode, stacking modals and inside navigation.
+
+## Push new views inside the modal bottom sheet
+
+a. If you want to push a new modal bottom sheet just call `showCupertinoModalBottomSheet` again (works with both options)
+
+b. For inside navigaton add a new `Navigator` or `CupertinoTabScaffold` inside 
+
+c. Also it supports flutter features as WillPopScope to prevent the modal bottom to be closed.
+
+## Build other BottomSheets 
+
+Try `showBarModalBottomSheet` for a bottomSheet with the appearance used by Facebook or Slack
+
+Check in the example project `showAvatarModalBottomSheet` for how to create your own ModalBottomSheet
+
+## Questions
+
+[Ask a question](https://stackoverflow.com/questions/ask) and ping me @jamesblasco
+
+## Found an issue or have a proposal?
+
+[Create an issue](https://github.com/jamesblasco/modal_bottom_sheet/issues/new)
+

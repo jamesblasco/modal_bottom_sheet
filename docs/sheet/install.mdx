@@ -1,0 +1,32 @@
+
+# Getting started
+
+Learn how to add your own Sheet to your page
+
+
+## Install
+
+[Follow Instructions](https://pub.dev/packages/sheet#-installing-tab-)
+
+
+## Add bottom sheet
+
+```dart
+Scaffold(
+    body: Stack(
+        children: [
+            body,
+            Sheet(
+                child: MySheetContent()
+            )
+        ]
+    )
+)
+```
+
+We add the `Sheet` widget above the content we want to overlap. By default this widget 
+takes all the space available and handles the user interaction with the sheet
+
+> Notice Sheet uses material theming by default. You can remove it completely by using RawSheet 
+
+By default the sheet appears hidden, so you should be able to 
