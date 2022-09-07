@@ -1,4 +1,4 @@
-name: Sheet
+name: sheet
 on:
   push:
     branches:
@@ -8,8 +8,8 @@ on:
     paths:
       - ".github/workflows/sheet.yaml"
       - "sheet/**"
-jobs:
 
+jobs:
   build:
     uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/flutter_package.yml@v1
     with:
