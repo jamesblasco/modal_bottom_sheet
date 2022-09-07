@@ -1,4 +1,5 @@
 name: sheet - web preview PR
+on:
   pull_request:
     paths:
       - ".github/workflows/sheet-deploy-web-pull-request.yaml"
