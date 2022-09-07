@@ -1,0 +1,45 @@
+name: deploy web
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build Web
+    env:
+      my_secret: ${{secrets.commit_secret}}
+    defaults:
+      run:
+        working-directory: modal_bottom_sheet/example
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📚 Git Checkout
+        uses: actions/checkout@v3
+
+      - name: 🐦 Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          cache: true
+
+      - name: 📦 Install Dependencies
+        run: |
+          flutter pub global activate very_good_cli
+          very_good --analytics false
+          very_good packages get --recursive
+
+      - name: 🛠 Build web
+        run: flutter build web --dart-define=FLUTTER_WEB_USE_SKIA=true
+
+      - name: 🚀 Deploy to github pages
+        run: |
+          cd build/web
+          git init
+          git config --global user.email git@jaimeblasco.com
+          git config --global user.name jamesblasco
+          git status
+          git remote add origin https://${{secrets.commit_secret}}@github.com/jamesblasco/modal_bottom_sheet.git
+          git checkout -b gh-pages
+          git add --all
+          git commit -m "Update web"
+          git push origin gh-pages -f
