@@ -1,5 +1,8 @@
 name: sheet - web preview PR
-on: pull_request
+  pull_request:
+    paths:
+      - ".github/workflows/sheet-deploy-web-pull-request.yaml"
+      - "sheet/**"
 jobs:
   build_and_preview:
     if: '${{ github.event.pull_request.head.repo.full_name == github.repository }}'
