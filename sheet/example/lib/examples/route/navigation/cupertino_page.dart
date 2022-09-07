@@ -80,7 +80,6 @@ class _CupertinoBooksAppState extends State<CupertinoBooksApp> {
   }
 }
 
-
 class BooksListScreen extends StatelessWidget {
   const BooksListScreen({
     required this.books,

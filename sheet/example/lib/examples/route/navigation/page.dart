@@ -80,7 +80,6 @@ class _BooksAppState extends State<BooksApp> {
   }
 }
 
-
 class BooksListScreen extends StatelessWidget {
   const BooksListScreen({
     required this.books,

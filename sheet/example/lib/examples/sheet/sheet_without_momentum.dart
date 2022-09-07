@@ -1,6 +1,5 @@
 import 'dart:async';
 
-
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:sheet/sheet.dart';
@@ -33,14 +32,13 @@ class _NoMomentumSheetState extends State<NoMomentumSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return  Sheet(
-        minExtent: 100,
-        maxExtent: 400,
-        elevation: 4,
-        physics: const NoMomentumSheetPhysics(),
-        child: Container(),
-        controller: controller,
-     
+    return Sheet(
+      minExtent: 100,
+      maxExtent: 400,
+      elevation: 4,
+      physics: const NoMomentumSheetPhysics(),
+      child: Container(),
+      controller: controller,
     );
   }
 }
