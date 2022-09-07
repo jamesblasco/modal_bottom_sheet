@@ -1,6 +1,6 @@
 # Sheet
 
-A fully customizable draggable bottom sheet
+A fully customizable draggable bottom sheet for Flutter
 
 ## Getting Started
 
@@ -11,7 +11,7 @@ Sheet(
 )
 ```
 
-You can add it anywhere like
+You can add it above any widget 
 
 ```dart
 Stack(
@@ -26,7 +26,7 @@ Stack(
 ```
 
 
-Customize it like:
+The widget has several parameters that allow fully costumization of the sheet
 
 # Add an initial position
 Sheet(
@@ -90,7 +90,7 @@ will start translating instead of shrinking
 ```dart
 Sheet(
  initialExtent: 200,
- resizable:true
+ resizable: true
  child: Container(color: Colors.blue[100]),
 )
 ```
