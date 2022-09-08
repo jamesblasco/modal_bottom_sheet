@@ -272,7 +272,7 @@ class Sheet extends StatelessWidget {
                   offset: offset,
                   minExtent: minResizableExtent ?? 0,
                   child: Builder(
-                    key: const Key('_sheet_builder'),
+                    key: const Key('_sheet_child'),
                     builder: (BuildContext context) {
                       return decorationBuilder(
                         context,
@@ -284,45 +284,6 @@ class Sheet extends StatelessWidget {
               ),
             ),
           ),
-        );
-      },
-    );
-  }
-}
-
-class SheetMediaQuery extends StatelessWidget {
-  const SheetMediaQuery({Key? key, required this.child}) : super(key: key);
-
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    final SheetPosition position = Sheet.of(context)!.controller.position;
-    final EdgeInsets padding = MediaQuery.of(context).padding;
-    return LayoutBuilder(
-      builder: (
-        BuildContext context,
-        BoxConstraints constraints,
-      ) {
-        return AnimatedBuilder(
-          animation: position,
-          builder: (BuildContext context, Widget? child) {
-            final double pixels = position.hasPixels ? position.pixels : 0;
-            final double viewportDimension = position.hasViewportDimension
-                ? position.viewportDimension
-                : double.infinity;
-            final double top = math.max(
-              0.0,
-              padding.top - (viewportDimension - pixels),
-            );
-            return MediaQuery(
-              data: MediaQuery.of(context).copyWith(
-                padding: padding.copyWith(top: top),
-              ),
-              child: child!,
-            );
-          },
-          child: child,
         );
       },
     );
@@ -436,61 +397,6 @@ class SheetController extends ScrollController {
   }
 }
 
-typedef SheetControllerCallback = void Function(SheetController controller);
-
-class DefaultSheetController extends StatefulWidget {
-  const DefaultSheetController({Key? key, required this.child, this.onCreated})
-      : super(key: key);
-
-  final Widget child;
-
-  final SheetControllerCallback? onCreated;
-
-  static SheetController? of(BuildContext context) {
-    return context
-        .dependOnInheritedWidgetOfExactType<_InheritedSheetController>()
-        ?.controller;
-  }
-
-  @override
-  State<DefaultSheetController> createState() => _DefaultSheetControllerState();
-}
-
-class _DefaultSheetControllerState extends State<DefaultSheetController> {
-  late final SheetController controller = SheetController();
-
-  @override
-  void initState() {
-    widget.onCreated?.call(controller);
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return _InheritedSheetController(
-        child: widget.child, controller: controller);
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-}
-
-class _InheritedSheetController extends InheritedWidget {
-  const _InheritedSheetController(
-      {Key? key, required super.child, required this.controller})
-      : super(key: key);
-
-  final SheetController controller;
-
-  @override
-  bool updateShouldNotify(_InheritedSheetController oldWidget) {
-    return false;
-  }
-}
-
 /// A scroll position that manages scroll activities for
 /// [_SheetScrollController].
 ///
@@ -528,8 +434,11 @@ class SheetPosition extends ScrollPositionWithSingleContext {
   Future<void> relativeAnimateTo(double to,
       {required Duration duration, required Curve curve}) {
     assert(to >= 0 && to <= 1);
-    return super
-        .animateTo(to * maxScrollExtent, duration: duration, curve: curve);
+    return super.animateTo(
+      pixelsFromRelativeOffset(to, minScrollExtent, maxScrollExtent),
+      duration: duration,
+      curve: curve,
+    );
   }
 
   @override
@@ -541,7 +450,9 @@ class SheetPosition extends ScrollPositionWithSingleContext {
 
   void relativeJumpTo(double to) {
     assert(to >= 0 && to <= 1);
-    return super.jumpTo(to * maxScrollExtent);
+    final value =
+        pixelsFromRelativeOffset(to, minScrollExtent, maxScrollExtent);
+    return super.jumpTo(value);
   }
 
   @override
@@ -567,13 +478,21 @@ class SheetPosition extends ScrollPositionWithSingleContext {
 
   @override
   double setPixels(double newPixels) {
-    _controller.value = (newPixels / maxScrollExtent).clamp(0, 1);
+    _controller.value = relativeOffsetFromPixels(
+      newPixels,
+      minScrollExtent,
+      maxScrollExtent,
+    );
     return super.setPixels(newPixels);
   }
 
   @override
   void forcePixels(double value) {
-    _controller.value = (value / maxScrollExtent).clamp(0, 1);
+    _controller.value = relativeOffsetFromPixels(
+      value,
+      minScrollExtent,
+      maxScrollExtent,
+    );
     super.forcePixels(value);
   }
 
@@ -589,8 +508,33 @@ class SheetPosition extends ScrollPositionWithSingleContext {
     // Clamp initial extent to maxScrollExtent
     if (!hasContentDimensions) {
       correctPixels(pixels.clamp(minScrollExtent, maxScrollExtent));
+      _controller.value = relativeOffsetFromPixels(
+        pixels,
+        minScrollExtent,
+        maxScrollExtent,
+      );
     }
     return super.applyContentDimensions(minScrollExtent, maxScrollExtent);
+  }
+
+  static double relativeOffsetFromPixels(
+    double pixels,
+    double minScrollExtent,
+    double maxScrollExtent,
+  ) {
+    if (minScrollExtent == maxScrollExtent) return 1;
+    final value =
+        ((pixels - minScrollExtent) / (maxScrollExtent - minScrollExtent))
+            .clamp(0.0, 1.0);
+    return value;
+  }
+
+  static double pixelsFromRelativeOffset(
+    double offset,
+    double minScrollExtent,
+    double maxScrollExtent,
+  ) {
+    return minScrollExtent + offset * (maxScrollExtent - minScrollExtent);
   }
 }
 

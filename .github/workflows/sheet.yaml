@@ -13,7 +13,7 @@ jobs:
     uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/flutter_package.yml@v1
     with:
       working_directory: sheet
-      min_coverage: 60 # Working to reach 100% XD
+      min_coverage: 70 # Working to reach 100% XD
 
   pana:
     uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/pana.yml@v1
