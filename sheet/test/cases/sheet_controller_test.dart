@@ -9,132 +9,184 @@ import '../screen_size_test.dart';
 
 void main() {
   group('SheetController', () {
-    testWidgets('jumpTo', (WidgetTester tester) async {
-      final GlobalKey key = GlobalKey();
+    const curve = Curves.easeInOut;
+    const duration = Duration(milliseconds: 1);
+    const child = SizedBox(height: kScreenHeight);
 
-      await tester.pumpApp(
-        Sheet(
-          initialExtent: 200,
-          child: Container(
-            key: key,
-            height: kScreenRect.height,
+    group('jumpTo', () {
+      testWidgets('a custom extent - 400', (WidgetTester tester) async {
+        await tester.pumpApp(
+          Sheet(child: child),
+        );
+
+        tester.getSheetController().jumpTo(400);
+        expect(tester.getSheetExtent(), 400);
+      });
+
+      testWidgets('minExtent', (WidgetTester tester) async {
+        await tester.pumpApp(
+          Sheet(
+            minExtent: 100,
+            child: child,
           ),
-        ),
-      );
+        );
 
-      expect(tester.getSheetSize(), equals(kScreenRect.size));
-      expect(tester.getSheetTop(), equals(kScreenRect.bottom - 200));
+        tester.getSheetController().jumpTo(100);
+        expect(tester.getSheetExtent(), 100);
+      });
+      testWidgets('maxExtent', (WidgetTester tester) async {
+        await tester.pumpApp(
+          Sheet(
+            maxExtent: 400,
+            child: child,
+          ),
+        );
 
-      tester.getSheetController().jumpTo(400);
+        tester.getSheetController().jumpTo(400);
+        expect(tester.getSheetExtent(), 400);
+      });
 
-      expect(tester.getSheetSize(), equals(kScreenRect.size));
-      expect(tester.getSheetTop(), kScreenRect.height - 400);
+      testWidgets('less than 0 clamps to 0', (WidgetTester tester) async {
+        await tester.pumpApp(
+          Sheet(child: child),
+        );
 
-      tester.getSheetController().jumpTo(-100);
+        tester.getSheetController().jumpTo(-100);
+        expect(tester.getSheetExtent(), equals(0));
+      });
+      testWidgets('less than minExtent clamps to minExtent',
+          (WidgetTester tester) async {
+        await tester.pumpApp(
+          Sheet(
+            minExtent: 100,
+            initialExtent: 200,
+            child: child,
+          ),
+        );
+        expect(tester.getSheetExtent(), equals(200));
 
-      expect(tester.getSheetSize(), equals(kScreenRect.size));
-      expect(tester.getSheetTop(), equals(kScreenRect.height));
+        tester.getSheetController().jumpTo(100);
+        expect(tester.getSheetExtent(), equals(100));
+      });
 
-      tester.getSheetController().jumpTo(kScreenRect.height + 100);
+      testWidgets(
+          'more than than screenHeight clamps to screenHeight '
+          'if maxExtent is null', (WidgetTester tester) async {
+        await tester.pumpApp(
+          Sheet(
+            child: child,
+          ),
+        );
 
-      expect(tester.getSheetSize(), equals(kScreenRect.size));
-      expect(tester.getSheetTop(), equals(0));
+        tester.getSheetController().jumpTo(kScreenHeight + 100);
+        expect(tester.getSheetExtent(), equals(kScreenHeight));
+      });
+      testWidgets('more than maxExtent clamps to maxExtent',
+          (WidgetTester tester) async {
+        await tester.pumpApp(
+          Sheet(
+            maxExtent: 400,
+            child: child,
+          ),
+        );
+
+        tester.getSheetController().jumpTo(500);
+        expect(tester.getSheetExtent(), 400);
+      });
     });
 
     testWidgets('relativeJumpTo', (WidgetTester tester) async {
-      final GlobalKey key = GlobalKey();
-
       await tester.pumpApp(
         Sheet(
           initialExtent: 200,
           child: Container(
-            key: key,
-            height: kScreenRect.height,
+            height: kScreenHeight,
           ),
         ),
       );
 
-      expect(tester.getSheetSize(), equals(kScreenRect.size));
-      expect(tester.getSheetTop(), equals(kScreenRect.bottom - 200));
+      expect(tester.getSheetExtent(), equals(200));
 
       tester.getSheetController().relativeJumpTo(1);
-
-      expect(tester.getSheetSize(), equals(kScreenRect.size));
-      expect(tester.getSheetTop(), equals(0));
+      expect(tester.getSheetExtent(), equals(kScreenHeight));
 
       tester.getSheetController().relativeJumpTo(0.5);
-
-      expect(tester.getSheetSize(), equals(kScreenRect.size));
-      expect(tester.getSheetTop(), equals(kScreenRect.bottom / 2));
+      expect(tester.getSheetExtent(), equals(kScreenHeight / 2));
     });
 
     testWidgets('animateTo', (WidgetTester tester) async {
-      final GlobalKey key = GlobalKey();
-
       await tester.pumpApp(
         Sheet(
           initialExtent: 200,
           child: Container(
-            key: key,
-            height: kScreenRect.height,
+            height: kScreenHeight,
           ),
         ),
       );
 
-      expect(tester.getSheetSize(), equals(kScreenRect.size));
-      expect(tester.getSheetTop(), equals(kScreenRect.height - 200));
+      expect(tester.getSheetExtent(), equals(200));
 
-      tester.getSheetController().animateTo(400,
-          curve: Curves.easeInOut, duration: const Duration(milliseconds: 1));
+      tester
+          .getSheetController()
+          .animateTo(400, curve: curve, duration: duration);
+      await tester.pumpAndSettle();
+      final controller = tester.getSheetController();
+      expect(tester.getSheetExtent(), equals(400));
+
+      controller.animateTo(-100, curve: curve, duration: duration);
       await tester.pumpAndSettle();
 
-      expect(tester.getSheetSize(), equals(kScreenRect.size));
-      expect(tester.getSheetTop(), equals(kScreenRect.bottom - 400));
-
-      tester.getSheetController().animateTo(-100,
-          curve: Curves.easeInOut, duration: const Duration(milliseconds: 1));
+      expect(tester.getSheetExtent(), equals(0));
+      controller.animateTo(
+        kScreenHeight + 100,
+        curve: curve,
+        duration: duration,
+      );
       await tester.pumpAndSettle();
-
-      expect(tester.getSheetSize(), equals(kScreenRect.size));
-      expect(tester.getSheetTop(), equals(kScreenRect.bottom));
-      tester.getSheetController().animateTo(kScreenRect.height + 100,
-          curve: Curves.easeInOutCirc,
-          duration: const Duration(milliseconds: 1));
-      await tester.pumpAndSettle();
-
-      expect(tester.getSheetSize(), equals(kScreenRect.size));
-      expect(tester.getSheetTop(), equals(0));
+      expect(tester.getSheetExtent(), equals(kScreenHeight));
     });
 
     testWidgets('relativeAnimateTo', (WidgetTester tester) async {
-      final GlobalKey key = GlobalKey();
-
       await tester.pumpApp(
         Sheet(
           initialExtent: 200,
           child: Container(
-            key: key,
-            height: kScreenRect.height,
+            height: kScreenHeight,
           ),
         ),
       );
+      final controller = tester.getSheetController();
+      expect(tester.getSheetExtent(), equals(200));
 
-      expect(tester.getSheetSize(), equals(kScreenRect.size));
-      expect(tester.getSheetTop(), equals(kScreenRect.bottom - 200));
-
-      tester.getSheetController().relativeAnimateTo(1,
-          curve: Curves.easeInOut, duration: const Duration(milliseconds: 1));
+      controller.relativeAnimateTo(1, curve: curve, duration: duration);
       await tester.pumpAndSettle();
+      expect(tester.getSheetExtent(), equals(kScreenHeight));
 
-      expect(tester.getSheetSize(), equals(kScreenRect.size));
-      expect(tester.getSheetTop(), equals(0));
-
-      tester.getSheetController().relativeAnimateTo(0.5,
-          curve: Curves.easeInOut, duration: const Duration(milliseconds: 1));
+      controller.relativeAnimateTo(0.5, curve: curve, duration: duration);
       await tester.pumpAndSettle();
+      expect(tester.getSheetExtent(), equals(kScreenHeight * 0.5));
+    });
 
-      expect(tester.getSheetSize(), equals(kScreenRect.size));
-      expect(tester.getSheetTop(), equals(kScreenRect.bottom / 2));
+    testWidgets('relativeAnimateTo with min xtent',
+        (WidgetTester tester) async {
+      await tester.pumpApp(
+        Sheet(
+          initialExtent: 200,
+          child: Container(
+            height: kScreenHeight,
+          ),
+        ),
+      );
+      final controller = tester.getSheetController();
+      expect(tester.getSheetExtent(), equals(200));
+
+      controller.relativeAnimateTo(1, curve: curve, duration: duration);
+      await tester.pumpAndSettle();
+      expect(tester.getSheetExtent(), equals(kScreenHeight));
+
+      controller.relativeAnimateTo(0.5, curve: curve, duration: duration);
+      await tester.pumpAndSettle();
+      expect(tester.getSheetExtent(), equals(kScreenHeight * 0.5));
     });
   });
 }
