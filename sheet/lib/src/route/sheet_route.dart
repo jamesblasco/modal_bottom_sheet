@@ -129,9 +129,8 @@ class SheetRoute<T> extends PageRoute<T> with DelegatedTransitionsRoute<T> {
   @override
   AnimationController createAnimationController() {
     assert(_routeAnimationController == null);
-    assert(navigator?.overlay != null);
     _routeAnimationController = AnimationController(
-      vsync: navigator!.overlay!,
+      vsync: navigator!,
       duration: transitionDuration,
     );
     return _routeAnimationController!;
