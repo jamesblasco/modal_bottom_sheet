@@ -12,6 +12,7 @@ import 'examples/sheet/fit_resizable_sheet.dart';
 import 'examples/sheet/fit_sheet.dart';
 import 'examples/sheet/fit_sheet_snap.dart';
 import 'examples/sheet/floating_sheet.dart';
+import 'examples/sheet/fold_screen_sheet.dart';
 import 'examples/sheet/resizable_sheet.dart';
 import 'examples/sheet/scrollable_sheet.dart';
 import 'examples/sheet/scrollable_snap_sheet.dart';
@@ -55,6 +56,7 @@ class SheetExamplesPage extends StatelessWidget {
             ExampleTile.sheet(
                 'Fit, Resizable and Bouncing sheet', FitResizableSheet()),
             ExampleTile.sheet('Textfield sheet', TextFieldSheet()),
+            ExampleTile.sheet('Foldable screen', FoldableScreenFloatingSheet()),
             const ExampleTile(
                 title: 'Customizable sheet', page: SheetConfigurationPage()),
             const SectionTitle('SHOWCASE'),

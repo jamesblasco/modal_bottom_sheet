@@ -270,6 +270,14 @@ class RouteExamplePage extends StatelessWidget {
                       ),
                     ),
                     ListTile(
+                      title: const Text('Foldable Screen - Fit'),
+                      onTap: () => Navigator.of(context).push(
+                        FloatingSheetRoute<void>(
+                          builder: (BuildContext context) => const ModalFit(),
+                        ),
+                      ),
+                    ),
+                    ListTile(
                       title: const Text('Dialog Modal for tablet - Expanded'),
                       onTap: () => Navigator.of(context).push(
                         DialogSheetRoute<void>(

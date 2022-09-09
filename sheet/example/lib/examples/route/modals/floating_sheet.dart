@@ -10,13 +10,18 @@ class FloatingModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      minimum: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-      child: Material(
-        color: backgroundColor,
-        clipBehavior: Clip.antiAlias,
-        borderRadius: BorderRadius.circular(12),
-        child: child,
+    // DisplayFeatureSubScreen allows to display the modal in just
+    // one sub-screen of a foldable device.
+    return DisplayFeatureSubScreen(
+      anchorPoint: Offset.infinite,
+      child: SafeArea(
+        minimum: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        child: Material(
+          color: backgroundColor,
+          clipBehavior: Clip.antiAlias,
+          borderRadius: BorderRadius.circular(12),
+          child: child,
+        ),
       ),
     );
   }
