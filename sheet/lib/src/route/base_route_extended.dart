@@ -67,15 +67,13 @@ class _PageBasedMaterialPageRoute<T> extends MaterialExtendedPageRoute<T> {
   }) : super(
           settings: page,
           builder: (BuildContext context) => page.child,
-        ) {
-    assert(opaque);
-  }
+        );
 
   MaterialExtendedPage<T> get _page => settings as MaterialExtendedPage<T>;
 
   @override
   Widget buildContent(BuildContext context) {
-    return _page.child;
+    return builder(context);
   }
 
   @override
@@ -143,14 +141,17 @@ class CupertinoExtendedPage<T> extends Page<T> {
 class _PageBasedCupertinoPageRoute<T> extends CupertinoExtendedPageRoute<T> {
   _PageBasedCupertinoPageRoute({
     required CupertinoExtendedPage<T> page,
-  }) : super(builder: (BuildContext context) => page.child) {
-    assert(opaque);
-  }
+  }) : super(
+          settings: page,
+          builder: (BuildContext context) => page.child,
+        );
 
   CupertinoExtendedPage<T> get _page => settings as CupertinoExtendedPage<T>;
 
   @override
-  Widget buildContent(BuildContext context) => _page.child;
+  Widget buildContent(BuildContext context) {
+    return builder(context);
+  }
 
   @override
   String? get title => _page.title;

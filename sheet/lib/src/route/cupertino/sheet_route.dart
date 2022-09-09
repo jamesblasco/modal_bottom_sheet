@@ -214,7 +214,7 @@ class CupertinoSheetRoute<T> extends SheetRoute<T> {
       curve: Interval(0, initialExtent, curve: Curves.linear),
     );
 
-    return _CupertinoSheetBottomRouteTransition(
+    return CupertinoSheetBottomRouteTransition(
       body: child,
       sheetAnimation: delayAnimation,
       secondaryAnimation: secondaryAnimation,
@@ -223,8 +223,9 @@ class CupertinoSheetRoute<T> extends SheetRoute<T> {
 }
 
 /// Animation for previous route when a [CupertinoSheetRoute] enters/exits
-class _CupertinoSheetBottomRouteTransition extends StatelessWidget {
-  const _CupertinoSheetBottomRouteTransition({
+@visibleForTesting
+class CupertinoSheetBottomRouteTransition extends StatelessWidget {
+  const CupertinoSheetBottomRouteTransition({
     Key? key,
     required this.sheetAnimation,
     required this.secondaryAnimation,

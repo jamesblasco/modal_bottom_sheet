@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sheet/sheet.dart';
 
-import '../helpers.dart';
-import '../screen_size_test.dart';
+import '../../../helpers.dart';
+import '../../../screen_size_test.dart';
 
 void main() {
   group('Initial extent', () {

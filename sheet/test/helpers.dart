@@ -6,6 +6,13 @@ const Key _childKey = Key('_sheet_child');
 
 Finder findSheet() => find.byKey(_childKey);
 
+extension BuildContextWidgetTester on WidgetTester {
+  /// Gets context that can be used to push a new route into the root navigator
+  /// Useful when we need to test bottom sheets or alerts
+  BuildContext get contextForRootNavigator =>
+      firstElement(find.byType(Navigator));
+}
+
 extension SheetTester on WidgetTester {
   Future<void> pumpApp(Widget sheet, {VoidCallback? onButtonPressed}) async {
     await pumpWidget(
@@ -41,28 +48,28 @@ extension SheetTester on WidgetTester {
   }
 
   double getSheetTop() {
-    final Offset offset = getTopLeft(find.byKey(_childKey));
+    final Offset offset = getTopLeft(findSheet());
     return offset.dy;
   }
 
   double getSheetExtent() {
     final Rect rootRect = getRect(find.byType(Sheet));
-    final Offset offset = getTopLeft(find.byKey(_childKey));
+    final Offset offset = getTopLeft(findSheet());
     return rootRect.bottom - offset.dy;
   }
 
   SheetController getSheetController() {
-    final BuildContext context = element(find.byKey(_childKey));
+    final BuildContext context = element(findSheet());
     return Sheet.of(context)!.controller;
   }
 
   SheetPosition getSheetPosition() {
-    final BuildContext context = element(find.byKey(_childKey));
+    final BuildContext context = element(findSheet());
     return Sheet.of(context)!.position;
   }
 
   double getSheetHeight() {
-    final Size rect = getSize(find.byKey(_childKey));
+    final Size rect = getSize(findSheet());
     return rect.height;
   }
 
