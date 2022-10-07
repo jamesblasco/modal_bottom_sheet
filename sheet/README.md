@@ -1,4 +1,4 @@
-<img src="https://github.com/jamesblasco/modal_bottom_sheet/docs/assets/sheet.png?raw=true">
+<img src="https://github.com/jamesblasco/modal_bottom_sheet/blob/main/docs/assets/sheet.gif?raw=true">
 
 
 # Sheet Package
