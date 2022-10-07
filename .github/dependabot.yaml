@@ -1,0 +1,11 @@
+version: 2
+enable-beta-ecosystems: true
+updates:
+  - package-ecosystem: "pub"
+    directory: "/modal_bottom_sheet"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "pub"
+    directory: "/sheet"
+    schedule:
+      interval: "weekly"
