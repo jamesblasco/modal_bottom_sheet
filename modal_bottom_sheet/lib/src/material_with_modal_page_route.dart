@@ -1,8 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../modal_bottom_sheet.dart';
-import 'bottom_sheet_route.dart';
+import '../modal_bottom_sheet.dart' as modal_bottom_sheet;
 
 class MaterialWithModalsPageRoute<T> extends MaterialPageRoute<T> {
   /// Construct a MaterialPageRoute whose contents are defined by [builder].
@@ -20,7 +19,7 @@ class MaterialWithModalsPageRoute<T> extends MaterialPageRoute<T> {
             builder: builder,
             maintainState: maintainState);
 
-  ModalBottomSheetRoute? _nextModalRoute;
+  modal_bottom_sheet.ModalBottomSheetRoute? _nextModalRoute;
 
   @override
   bool canTransitionTo(TransitionRoute<dynamic> nextRoute) {
@@ -29,21 +28,16 @@ class MaterialWithModalsPageRoute<T> extends MaterialPageRoute<T> {
         (nextRoute is CupertinoPageRoute && !nextRoute.fullscreenDialog) ||
         (nextRoute is MaterialWithModalsPageRoute &&
             !nextRoute.fullscreenDialog) ||
-        (nextRoute is ModalBottomSheetRoute);
+        (nextRoute is modal_bottom_sheet.ModalBottomSheetRoute);
   }
 
   @override
   void didChangeNext(Route? nextRoute) {
-    if (nextRoute is ModalBottomSheetRoute) {
+    if (nextRoute is modal_bottom_sheet.ModalBottomSheetRoute) {
       _nextModalRoute = nextRoute;
     }
 
     super.didChangeNext(nextRoute);
-  }
-
-  @override
-  void didPopNext(Route nextRoute) {
-    super.didPopNext(nextRoute);
   }
 
   @override
