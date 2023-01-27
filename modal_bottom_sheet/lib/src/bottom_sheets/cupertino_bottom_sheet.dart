@@ -491,11 +491,6 @@ class _CupertinoScaffoldState extends State<CupertinoScaffold>
   }
 
   @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return CupertinoScaffoldInheirted(
       animation: animationController,

@@ -75,8 +75,7 @@ class _ModalBottomSheetState<T> extends State<_ModalBottomSheet<T>> {
   Widget build(BuildContext context) {
     assert(debugCheckHasMediaQuery(context));
     assert(widget.route._animationController != null);
-    final scrollController = PrimaryScrollController.of(context) ??
-        (_scrollController ??= ScrollController());
+    final scrollController = PrimaryScrollController.of(context);
     return ModalScrollController(
       controller: scrollController,
       child: Builder(
