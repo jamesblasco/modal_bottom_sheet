@@ -87,7 +87,7 @@ class ListWidget extends StatelessWidget {
             return Container(
               child: Text(
                 'Location',
-                style: Theme.of(context).textTheme.headline6,
+                style: Theme.of(context).textTheme.titleLarge,
               ),
               padding: const EdgeInsets.all(20),
               alignment: Alignment.center,

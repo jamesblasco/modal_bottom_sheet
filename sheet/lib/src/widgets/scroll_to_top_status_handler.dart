@@ -49,7 +49,8 @@ class ScrollToTopStatusBarState extends State<ScrollToTopStatusBarHandler> {
   }
 
   void _handleStatusBarTap(BuildContext context) {
-    final ScrollController? controller = PrimaryScrollController.of(context);
+    final ScrollController? controller =
+        PrimaryScrollController.maybeOf(context);
     if (controller != null && controller.hasClients) {
       controller.animateTo(
         0.0,

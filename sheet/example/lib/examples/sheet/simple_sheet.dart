@@ -14,8 +14,8 @@ class SimpleSheet extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             const SizedBox(height: 20),
-            Text('Title', style: Theme.of(context).textTheme.headline3),
-            Text('Subtitle', style: Theme.of(context).textTheme.headline6),
+            Text('Title', style: Theme.of(context).textTheme.displaySmall),
+            Text('Subtitle', style: Theme.of(context).textTheme.titleLarge),
           ],
         ),
       ),

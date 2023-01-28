@@ -75,7 +75,7 @@ class _ModalBottomSheetState<T> extends State<_ModalBottomSheet<T>> {
   Widget build(BuildContext context) {
     assert(debugCheckHasMediaQuery(context));
     assert(widget.route._animationController != null);
-    final scrollController = PrimaryScrollController.of(context) ??
+    final scrollController = PrimaryScrollController.maybeOf(context) ??
         (_scrollController ??= ScrollController());
     return ModalScrollController(
       controller: scrollController,
@@ -121,12 +121,6 @@ class _ModalBottomSheetState<T> extends State<_ModalBottomSheet<T>> {
     );
   }
 }
-
-@Deprecated(
-    'ModalBottomSheetRoute has been introduced in Flutter 3.7, to avoid name '
-    'conflicts, this class has been renamed to ModalSheetRoute in this '
-    'packages. ModalBottomSheetRoute will be removed in the next major version.')
-typedef ModalBottomSheetRoute<T> = ModalSheetRoute<T>;
 
 class ModalSheetRoute<T> extends PageRoute<T> {
   ModalSheetRoute({
