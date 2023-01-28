@@ -144,7 +144,7 @@ Future<T?> showCupertinoModalBottomSheet<T>({
   return result;
 }
 
-class CupertinoModalBottomSheetRoute<T> extends ModalBottomSheetRoute<T> {
+class CupertinoModalBottomSheetRoute<T> extends ModalSheetRoute<T> {
   final Radius topRadius;
 
   final Curve? previousRouteAnimationCurve;

@@ -19,7 +19,7 @@ class _ModalBottomSheet<T> extends StatefulWidget {
   }) : super(key: key);
 
   final double? closeProgressThreshold;
-  final ModalBottomSheetRoute<T> route;
+  final ModalSheetRoute<T> route;
   final bool expanded;
   final bool bounce;
   final bool enableDrag;
@@ -122,8 +122,14 @@ class _ModalBottomSheetState<T> extends State<_ModalBottomSheet<T>> {
   }
 }
 
-class ModalBottomSheetRoute<T> extends PageRoute<T> {
-  ModalBottomSheetRoute({
+@Deprecated(
+    'ModalBottomSheetRoute has been introduced in Flutter 3.7, to avoid name '
+    'conflicts, this class has been renamed to ModalSheetRoute in this '
+    'packages. ModalBottomSheetRoute will be removed in the next major version.')
+typedef ModalBottomSheetRoute<T> = ModalSheetRoute<T>;
+
+class ModalSheetRoute<T> extends PageRoute<T> {
+  ModalSheetRoute({
     this.closeProgressThreshold,
     this.containerBuilder,
     required this.builder,
@@ -211,11 +217,11 @@ class ModalBottomSheetRoute<T> extends PageRoute<T> {
 
   @override
   bool canTransitionTo(TransitionRoute<dynamic> nextRoute) =>
-      nextRoute is ModalBottomSheetRoute;
+      nextRoute is ModalSheetRoute;
 
   @override
   bool canTransitionFrom(TransitionRoute<dynamic> previousRoute) =>
-      previousRoute is ModalBottomSheetRoute || previousRoute is PageRoute;
+      previousRoute is ModalSheetRoute || previousRoute is PageRoute;
 
   Widget getPreviousRouteTransition(
     BuildContext context,
@@ -257,7 +263,7 @@ Future<T?> showCustomModalBottomSheet<T>({
       : '';
 
   final result = await Navigator.of(context, rootNavigator: useRootNavigator)
-      .push(ModalBottomSheetRoute<T>(
+      .push(ModalSheetRoute<T>(
     builder: builder,
     bounce: bounce,
     containerBuilder: containerWidget,
