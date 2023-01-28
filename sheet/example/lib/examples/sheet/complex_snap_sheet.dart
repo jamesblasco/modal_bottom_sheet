@@ -291,7 +291,7 @@ class MapSheet extends StatelessWidget {
                                   child: Text(
                                     'Latest near you',
                                     style:
-                                        Theme.of(context).textTheme.headline6,
+                                        Theme.of(context).textTheme.titleLarge,
                                   ),
                                   padding: EdgeInsets.all(20),
                                   alignment: Alignment.centerLeft,

@@ -1,4 +1,9 @@
 
+## 3.0.0-pre - Flutter 3.7
+
++ Migrates to Flutter 3.7 
++ ModalBottomSheetRoute has been renamed to ModalSheetRoute so it does not conflict with the new class from Flutter 3.7
+
 ## 2.1.1 
 + Bug fixes
 

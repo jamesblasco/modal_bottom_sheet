@@ -158,8 +158,8 @@ class BookDetailsScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Text(book.title, style: Theme.of(context).textTheme.headline6),
-            Text(book.author, style: Theme.of(context).textTheme.subtitle1),
+            Text(book.title, style: Theme.of(context).textTheme.titleLarge),
+            Text(book.author, style: Theme.of(context).textTheme.titleMedium),
           ],
         ),
       ),

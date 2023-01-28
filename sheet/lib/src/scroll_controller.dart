@@ -139,6 +139,7 @@ class SheetPrimaryScrollPosition extends ScrollPositionWithSingleContext {
             velocity,
           ),
           context.vsync,
+          true,
         ),
       );
 
@@ -178,6 +179,7 @@ class SheetPrimaryScrollPosition extends ScrollPositionWithSingleContext {
             velocity,
           ),
           context.vsync,
+          true,
         ),
       );
       return;
