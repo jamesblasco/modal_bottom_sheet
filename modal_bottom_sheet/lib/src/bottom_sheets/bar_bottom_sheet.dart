@@ -98,7 +98,7 @@ Future<T?> showBarModalBottomSheet<T>({
   assert(debugCheckHasMediaQuery(context));
   assert(debugCheckHasMaterialLocalizations(context));
   final result = await Navigator.of(context, rootNavigator: useRootNavigator)
-      .push(modal_bottom_sheet.ModalBottomSheetRoute<T>(
+      .push(modal_bottom_sheet.ModalSheetRoute<T>(
     builder: builder,
     bounce: bounce,
     closeProgressThreshold: closeProgressThreshold,
