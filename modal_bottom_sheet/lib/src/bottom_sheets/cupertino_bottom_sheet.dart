@@ -144,7 +144,7 @@ Future<T?> showCupertinoModalBottomSheet<T>({
   return result;
 }
 
-class CupertinoModalBottomSheetRoute<T> extends ModalBottomSheetRoute<T> {
+class CupertinoModalBottomSheetRoute<T> extends CustomModalBottomSheetRoute<T> {
   final Radius topRadius;
 
   final Curve? previousRouteAnimationCurve;
@@ -488,11 +488,6 @@ class _CupertinoScaffoldState extends State<CupertinoScaffold>
     animationController =
         AnimationController(duration: Duration(milliseconds: 350), vsync: this);
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 
   @override

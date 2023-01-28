@@ -19,7 +19,7 @@ class _ModalBottomSheet<T> extends StatefulWidget {
   }) : super(key: key);
 
   final double? closeProgressThreshold;
-  final ModalBottomSheetRoute<T> route;
+  final CustomModalBottomSheetRoute<T> route;
   final bool expanded;
   final bool bounce;
   final bool enableDrag;
@@ -75,8 +75,7 @@ class _ModalBottomSheetState<T> extends State<_ModalBottomSheet<T>> {
   Widget build(BuildContext context) {
     assert(debugCheckHasMediaQuery(context));
     assert(widget.route._animationController != null);
-    final scrollController = PrimaryScrollController.of(context) ??
-        (_scrollController ??= ScrollController());
+    final scrollController = PrimaryScrollController.of(context);
     return ModalScrollController(
       controller: scrollController,
       child: Builder(
@@ -122,8 +121,8 @@ class _ModalBottomSheetState<T> extends State<_ModalBottomSheet<T>> {
   }
 }
 
-class ModalBottomSheetRoute<T> extends PageRoute<T> {
-  ModalBottomSheetRoute({
+class CustomModalBottomSheetRoute<T> extends PageRoute<T> {
+  CustomModalBottomSheetRoute({
     this.closeProgressThreshold,
     this.containerBuilder,
     required this.builder,
@@ -211,11 +210,11 @@ class ModalBottomSheetRoute<T> extends PageRoute<T> {
 
   @override
   bool canTransitionTo(TransitionRoute<dynamic> nextRoute) =>
-      nextRoute is ModalBottomSheetRoute;
+      nextRoute is CustomModalBottomSheetRoute;
 
   @override
   bool canTransitionFrom(TransitionRoute<dynamic> previousRoute) =>
-      previousRoute is ModalBottomSheetRoute || previousRoute is PageRoute;
+      previousRoute is CustomModalBottomSheetRoute || previousRoute is PageRoute;
 
   Widget getPreviousRouteTransition(
     BuildContext context,
@@ -257,7 +256,7 @@ Future<T?> showCustomModalBottomSheet<T>({
       : '';
 
   final result = await Navigator.of(context, rootNavigator: useRootNavigator)
-      .push(ModalBottomSheetRoute<T>(
+      .push(CustomModalBottomSheetRoute<T>(
     builder: builder,
     bounce: bounce,
     containerBuilder: containerWidget,
