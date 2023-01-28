@@ -1,3 +1,3 @@
-## [0.0.1] - TODO: Add release date.
+# [1.0.0-pre] - Adds support for Flutter 3.7
 
-* TODO: Describe initial release.
+* This version requires Flutter 3.7 as the new framework version contains several breaking changes that affect the package
