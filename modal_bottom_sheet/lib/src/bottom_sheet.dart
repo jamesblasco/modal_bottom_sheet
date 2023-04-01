@@ -366,16 +366,13 @@ class ModalBottomSheetState extends State<ModalBottomSheet>
       );
     }
 
-    final mediaQuery = MediaQuery.of(context);
-
     child = AnimatedBuilder(
       animation: widget.animationController,
       builder: (context, Widget? child) {
         assert(child != null);
         final animationValue = animationCurve.transform(
-            mediaQuery.accessibleNavigation
-                ? 1.0
-                : widget.animationController.value);
+          widget.animationController.value,
+        );
 
         final draggableChild = !widget.enableDrag
             ? child
