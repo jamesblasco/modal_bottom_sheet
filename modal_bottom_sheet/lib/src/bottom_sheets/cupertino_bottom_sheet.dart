@@ -48,19 +48,20 @@ class _CupertinoBottomSheetContainer extends StatelessWidget {
   final Color? backgroundColor;
   final Radius topRadius;
   final BoxShadow? shadow;
-  final SystemUiOverlayStyle overlayStyle;
+  final SystemUiOverlayStyle? overlayStyle;
 
   const _CupertinoBottomSheetContainer({
     Key? key,
     required this.child,
     this.backgroundColor,
     required this.topRadius,
-    required this.overlayStyle,
+    this.overlayStyle,
     this.shadow,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final scopedOverlayStyle = overlayStyle;
     final topSafeAreaPadding = MediaQuery.of(context).padding.top;
     final topPadding = _kPreviousPageVisibleOffset + topSafeAreaPadding;
 
@@ -68,28 +69,32 @@ class _CupertinoBottomSheetContainer extends StatelessWidget {
     BoxShadow(blurRadius: 10, color: Colors.black12, spreadRadius: 5);
     final backgroundColor = this.backgroundColor ??
         CupertinoTheme.of(context).scaffoldBackgroundColor;
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: overlayStyle,
-      child: Padding(
-        padding: EdgeInsets.only(top: topPadding),
-        child: ClipRRect(
-          borderRadius: BorderRadius.vertical(top: topRadius),
-          child: Container(
-            decoration:
-                BoxDecoration(color: backgroundColor, boxShadow: [shadow]),
-            width: double.infinity,
-            child: MediaQuery.removePadding(
-              context: context,
-              removeTop: true, //Remove top Safe Area
-              child: CupertinoUserInterfaceLevel(
-                data: CupertinoUserInterfaceLevelData.elevated,
-                child: child,
-              ),
+    Widget bottomSheetContainer = Padding(
+      padding: EdgeInsets.only(top: topPadding),
+      child: ClipRRect(
+        borderRadius: BorderRadius.vertical(top: topRadius),
+        child: Container(
+          decoration:
+              BoxDecoration(color: backgroundColor, boxShadow: [shadow]),
+          width: double.infinity,
+          child: MediaQuery.removePadding(
+            context: context,
+            removeTop: true, //Remove top Safe Area
+            child: CupertinoUserInterfaceLevel(
+              data: CupertinoUserInterfaceLevelData.elevated,
+              child: child,
             ),
           ),
         ),
       ),
     );
+    if (scopedOverlayStyle != null) {
+      bottomSheetContainer = AnnotatedRegion<SystemUiOverlayStyle>(
+        value: scopedOverlayStyle,
+        child: bottomSheetContainer,
+      );
+    }
+    return bottomSheetContainer;
   }
 }
 
@@ -124,9 +129,6 @@ Future<T?> showCupertinoModalBottomSheet<T>({
   final barrierLabel = hasMaterialLocalizations
       ? MaterialLocalizations.of(context).modalBarrierDismissLabel
       : '';
-  final transitionBackgroundColor =
-      CupertinoScaffold.of(context)!.transitionBackgroundColor;
-  final overlayStyle = overlayStyleFromColor(transitionBackgroundColor);
   final result =
       await Navigator.of(context, rootNavigator: useRootNavigator).push(
     CupertinoModalBottomSheetRoute<T>(
