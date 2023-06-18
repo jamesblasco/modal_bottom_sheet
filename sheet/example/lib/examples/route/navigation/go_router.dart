@@ -66,7 +66,7 @@ class _GoRouterBooksAppState extends State<GoRouterBooksApp> {
               name: 'book',
               path: 'book/:bid',
               pageBuilder: (BuildContext context, GoRouterState state) {
-                final String id = state.params['bid']!;
+                final String id = state.pathParameters['bid']!;
                 final Book? book =
                     books.firstWhereOrNull((Book b) => b.id == id);
                 return CupertinoSheetPage<void>(
@@ -76,8 +76,8 @@ class _GoRouterBooksAppState extends State<GoRouterBooksApp> {
                   ),
                 );
               },
-              redirect: (GoRouterState state) {
-                final String id = state.params['bid']!;
+              redirect: (context, state) {
+                final String id = state.pathParameters['bid']!;
                 final Book? book =
                     books.firstWhereOrNull((Book b) => b.id == id);
                 if (book == null) {

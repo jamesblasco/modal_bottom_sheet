@@ -21,14 +21,14 @@ enum SheetFit {
   /// The constraints passed to the child from the sheet are loosened.
   ///
   /// For example, if the sheet has expand constraints with 600 high, this would allow the child of the sheet to have any
-  /// height from zero to maximun available.
+  /// height from zero to maximum available.
   loose,
 
   /// The constraints passed to the stack from its parent are tightened to the
   /// biggest size allowed.
   ///
   /// For example, if the sheet has loose constraints with a height in the
-  /// range 0 to 600, then the child of the shhet would all be sized
+  /// range 0 to 600, then the child of the sheet would all be sized
   /// as 600 high.
   expand,
 }
@@ -54,7 +54,7 @@ typedef SheetDecorationBuilder = Widget Function(
 ///
 /// By default the bottom sheet inherits the values provided by the
 /// material theme and prioritize the ones passed in the constructor.
-/// Use [Sheet.raw] if you wish to remove the Material appareance and
+/// Use [Sheet.raw] if you wish to remove the Material appearance and
 /// build your own
 ///
 /// See also:
@@ -115,7 +115,7 @@ class Sheet extends StatelessWidget {
   /// Empty space to surround the [child].
   final EdgeInsets padding;
 
-  /// The inital height to use when displaying the widget.
+  /// The initial height to use when displaying the widget.
   ///
   /// This value will be clamped between [minExtent] and [maxExtent]
   ///
@@ -129,12 +129,12 @@ class Sheet extends StatelessWidget {
 
   /// The maximum height to use when displaying the widget.
   ///
-  /// This value will be clamped to be as maximun the parent container's height
+  /// This value will be clamped to be as maximum the parent container's height
   ///
   /// The default value is `double.infinity`.
   final double? maxExtent;
 
-  /// The height area of the minimun interaction zone to allow to
+  /// The height area of the minimum interaction zone to allow to
   /// drag up the sheet when it is closed
   ///
   /// The default value is `0`.
@@ -148,10 +148,10 @@ class Sheet extends StatelessWidget {
   /// The default value is `false`.
   final bool resizable;
 
-  /// If resizable true, the minimun height that the sheet can be.
+  /// If resizable true, the minimum height that the sheet can be.
   /// The content of the sheet will be resized to fit the
   /// available visible space until this value, after that will be
-  /// translated keeping this minimun height.
+  /// translated keeping this minimum height.
   ///
   /// The default value is `0`.
   final double? minResizableExtent;
@@ -212,7 +212,7 @@ class Sheet extends StatelessWidget {
   /// will be [Clip.none].
   final Clip? clipBehavior;
 
-  /// Wraps the child in a custom sheet decoration appareance
+  /// Wraps the child in a custom sheet decoration appearance
   /// If null, the sheet has material appareance
   ///
   /// The default value is null.
@@ -222,8 +222,7 @@ class Sheet extends StatelessWidget {
     return child;
   }
 
-  @override
-  Widget build(BuildContext context) {
+  Widget decorationBuild(BuildContext context, Widget child) {
     final SheetDecorationBuilder decorationBuilder = this.decorationBuilder ??
         (BuildContext context, Widget child) {
           final BottomSheetThemeData bottomSheetTheme =
@@ -244,6 +243,11 @@ class Sheet extends StatelessWidget {
             child: child,
           );
         };
+    return decorationBuilder(context, child);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final SheetController? effectiveController =
         controller ?? DefaultSheetController.of(context);
     final double? initialExtent =
@@ -254,7 +258,7 @@ class Sheet extends StatelessWidget {
       physics: physics,
       controller: effectiveController,
       axisDirection: AxisDirection.down,
-      scrollBehavior: SheetBehaviour(),
+      scrollBehavior: SheetBehavior(),
       viewportBuilder: (BuildContext context, ViewportOffset offset) {
         return _DefaultSheetScrollController(
           child: ScrollToTopStatusBarHandler(
@@ -274,10 +278,7 @@ class Sheet extends StatelessWidget {
                   child: Builder(
                     key: const Key('_sheet_child'),
                     builder: (BuildContext context) {
-                      return decorationBuilder(
-                        context,
-                        child,
-                      );
+                      return decorationBuild(context, child);
                     },
                   ),
                 ),
@@ -317,12 +318,7 @@ class _DefaultSheetScrollController extends StatelessWidget {
 ///  * [SheetPosition], which manages the positioning logic for
 ///    this controller.
 class SheetController extends ScrollController {
-  SheetController({
-    String? debugLabel,
-  }) : super(
-          debugLabel: debugLabel,
-          initialScrollOffset: 0,
-        );
+  SheetController({super.debugLabel}) : super(initialScrollOffset: 0);
 
   final ProxyAnimation _animation = ProxyAnimation();
   Animation<double> get animation => _animation;
@@ -411,20 +407,13 @@ class SheetController extends ScrollController {
 ///  * [_SheetScrollController], which uses this as its [ScrollPosition].
 class SheetPosition extends ScrollPositionWithSingleContext {
   SheetPosition({
-    required ScrollPhysics physics,
-    required SheetContext context,
-    double initialPixels = 0.0,
-    bool keepScrollOffset = true,
-    ScrollPosition? oldPosition,
-    String? debugLabel,
-  }) : super(
-          physics: physics,
-          context: context,
-          initialPixels: initialPixels,
-          keepScrollOffset: keepScrollOffset,
-          oldPosition: oldPosition,
-          debugLabel: debugLabel,
-        );
+    required super.physics,
+    required SheetContext super.context,
+    super.initialPixels = 0.0,
+    super.keepScrollOffset = true,
+    super.oldPosition,
+    super.debugLabel,
+  });
 
   late final SheetPrimaryScrollController _scrollController =
       SheetPrimaryScrollController(sheetContext: context as SheetContext);
@@ -540,15 +529,15 @@ class SheetPosition extends ScrollPositionWithSingleContext {
 
 class SheetViewport extends SingleChildRenderObjectWidget {
   const SheetViewport({
-    Key? key,
+    super.key,
     this.axisDirection = AxisDirection.down,
     required this.offset,
     this.minExtent,
     this.maxExtent,
-    Widget? child,
+    super.child,
     required this.fit,
     required this.clipBehavior,
-  }) : super(key: key, child: child);
+  });
 
   final AxisDirection axisDirection;
   final ViewportOffset offset;
@@ -801,13 +790,13 @@ class RenderSheetViewport extends RenderBox
         minHeight = overflowHeight;
       }
 
-      final BoxConstraints childContstraints = BoxConstraints(
+      final BoxConstraints childConstraints = BoxConstraints(
         minHeight: minHeight,
         maxHeight: maxHeight,
         minWidth: constraints.minWidth,
         maxWidth: constraints.maxWidth,
       );
-      child!.layout(childContstraints, parentUsesSize: true);
+      child!.layout(childConstraints, parentUsesSize: true);
       size = constraints.biggest;
     }
 
@@ -955,7 +944,7 @@ class RenderSheetViewport extends RenderBox
     Curve curve = Curves.ease,
   }) {
     return;
-    // TODO(jaime): check showOnScreen method beheves when keyboard appears on
+    // TODO(jaime): check showOnScreen method behaves when keyboard appears on
     // the screen
     // if (!offset.allowImplicitScrolling) {
     //   return super.showOnScreen(

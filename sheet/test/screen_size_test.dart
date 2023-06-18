@@ -11,7 +11,6 @@ void main() {
   testWidgets('defaultTestSize', (WidgetTester tester) async {
     final Size testSize =
         tester.view.physicalSize / tester.view.devicePixelRatio;
-
     expect(testSize, equals(kScreenSize));
   });
 }

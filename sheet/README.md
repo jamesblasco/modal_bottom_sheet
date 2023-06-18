@@ -47,7 +47,7 @@ Stack(
 ```
 
 
-The widget has several parameters that allow fully costumization of the sheet
+The widget has several parameters that allow fully customization of the sheet
 
 #### Add an initial position
 
@@ -60,7 +60,7 @@ Sheet(
 )
 ```
 
-#### Clamp the sheet between a min and maximun values
+#### Clamp the sheet between a min and maximum values
 
 You can set a `minExtent` and `maxExtent` to limit the position of the Sheet between those values
 
@@ -89,9 +89,9 @@ Sheet(
 
 #### Fit modes
 
-By default the sheet height will be the minimun between the max available height and the one recommended by the child.
+By default the sheet height will be the minimum between the max available height and the one recommended by the child.
 
-It is possible to force the sheet child to be the maxium size available by setting  `SheetFit.expand`
+It is possible to force the sheet child to be the maximum size available by setting  `SheetFit.expand`
 
 ```dart
 Sheet(
@@ -104,7 +104,7 @@ Sheet(
 #### Resizable
 
 By default the sheet has a fixed sized and it is vertically translated according to the user drag.
-It is posible to make the sheet change the height of the child by setting `resize: true`
+It is possible to make the sheet change the height of the child by setting `resize: true`
 This will force the child to fit the available visual space.
 
 ```dart
@@ -131,7 +131,7 @@ Sheet(
 
 #### Control the position of the sheet
 
-It is possible to pass a `SheetController` to control programatically the position of the sheet.
+It is possible to pass a `SheetController` to control programmatically the position of the sheet.
 
 ```dart
 SheetController controller = SheetController();
