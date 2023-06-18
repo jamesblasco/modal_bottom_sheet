@@ -504,29 +504,3 @@ extension on double {
     return ratio * (this - fromLow) + offset;
   }
 }
-
-class _SheetRouteSimulation extends Simulation {
-  final SheetController _controller;
-  final double initialExtent;
-
-  _SheetRouteSimulation(this._controller, this.initialExtent);
-  @override
-  double dx(double time) {
-    return 0;
-  }
-
-  @override
-  bool isDone(double time) {
-    return _controller.animation.value == 0;
-  }
-
-  @override
-  double x(double time) {
-    return _controller.animation.value.mapDistance(
-      fromLow: 0,
-      fromHigh: initialExtent,
-      toLow: 0,
-      toHigh: 1,
-    );
-  }
-}
