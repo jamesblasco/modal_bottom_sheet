@@ -73,7 +73,7 @@ class _PageBasedMaterialPageRoute<T> extends MaterialExtendedPageRoute<T> {
 
   @override
   Widget buildContent(BuildContext context) {
-    return builder(context);
+    return _page.child;
   }
 
   @override
@@ -150,7 +150,7 @@ class _PageBasedCupertinoPageRoute<T> extends CupertinoExtendedPageRoute<T> {
 
   @override
   Widget buildContent(BuildContext context) {
-    return builder(context);
+    return _page.child;
   }
 
   @override

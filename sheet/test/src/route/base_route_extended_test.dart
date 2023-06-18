@@ -55,6 +55,36 @@ void main() {
       expect(find.text('child'), findsOneWidget);
     });
 
+    testWidgets('navigating to different routes keeping the same page',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(MaterialApp(
+        builder: (context, child) {
+          return Navigator(
+            pages: [
+              MaterialExtendedPage(child: Text('first child')),
+            ],
+            onPopPage: (route, result) => false,
+          );
+        },
+      ));
+      await tester.pumpAndSettle();
+      expect(find.text('first child'), findsOneWidget);
+
+      await tester.pumpWidget(MaterialApp(
+        builder: (context, child) {
+          return Navigator(
+            pages: [
+              MaterialExtendedPage(child: Text('second child')),
+            ],
+            onPopPage: (route, result) => false,
+          );
+        },
+      ));
+
+      await tester.pumpAndSettle();
+      expect(find.text('second child'), findsOneWidget);
+    });
+
     testWidgets('route is a MaterialExtendedPageRoute',
         (WidgetTester tester) async {
       await tester.pumpWidget(MaterialApp(
@@ -154,6 +184,36 @@ void main() {
       ));
       await tester.pumpAndSettle();
       expect(find.text('child'), findsOneWidget);
+    });
+
+    testWidgets('navigating to different routes keeping the same page',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(MaterialApp(
+        builder: (context, child) {
+          return Navigator(
+            pages: [
+              CupertinoExtendedPage(child: Text('first child')),
+            ],
+            onPopPage: (route, result) => false,
+          );
+        },
+      ));
+      await tester.pumpAndSettle();
+      expect(find.text('first child'), findsOneWidget);
+
+      await tester.pumpWidget(MaterialApp(
+        builder: (context, child) {
+          return Navigator(
+            pages: [
+              CupertinoExtendedPage(child: Text('second child')),
+            ],
+            onPopPage: (route, result) => false,
+          );
+        },
+      ));
+
+      await tester.pumpAndSettle();
+      expect(find.text('second child'), findsOneWidget);
     });
 
     testWidgets('route is a CupertinoExtendedPageRoute',
