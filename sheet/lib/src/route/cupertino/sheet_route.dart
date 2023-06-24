@@ -70,8 +70,7 @@ class _CupertinoSheetDecorationBuilder extends StatelessWidget {
             clipBehavior: Clip.hardEdge,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.vertical(top: topRadius),
-              color: backgroundColor ??
-                  CupertinoColors.systemBackground.resolveFrom(context),
+              color: backgroundColor ?? CupertinoColors.systemBackground.resolveFrom(context),
             ),
             child: MediaQuery.removePadding(
               context: context,
@@ -93,15 +92,16 @@ class _CupertinoSheetDecorationBuilder extends StatelessWidget {
 ///
 /// * [CupertinoSheetPage], which is the [Page] version of this class
 class CupertinoSheetRoute<T> extends SheetRoute<T> {
-  CupertinoSheetRoute(
-      {required WidgetBuilder builder,
-      List<double>? stops,
-      double initialStop = 1,
-      RouteSettings? settings,
-      Color? backgroundColor,
-      bool maintainState = true,
-      super.fit})
-      : super(
+  CupertinoSheetRoute({
+    required WidgetBuilder builder,
+    List<double>? stops,
+    double initialStop = 1,
+    RouteSettings? settings,
+    Color? backgroundColor,
+    bool maintainState = true,
+    super.fit,
+    super.draggable = true,
+  }) : super(
           builder: (BuildContext context) {
             return _CupertinoSheetDecorationBuilder(
               child: Builder(builder: builder),
@@ -115,9 +115,6 @@ class CupertinoSheetRoute<T> extends SheetRoute<T> {
           initialExtent: initialStop,
           maintainState: maintainState,
         );
-
-  @override
-  bool get draggable => true;
 
   final SheetController _sheetController = SheetController();
 
@@ -144,8 +141,7 @@ class CupertinoSheetRoute<T> extends SheetRoute<T> {
     }
     final MediaQueryData mediaQuery = MediaQuery.of(context);
     final double topMargin =
-        math.max(_kSheetMinimalOffset, mediaQuery.padding.top) +
-            _kPreviousRouteVisibleOffset;
+        math.max(_kSheetMinimalOffset, mediaQuery.padding.top) + _kPreviousRouteVisibleOffset;
     return Sheet.raw(
       initialExtent: initialExtent,
       decorationBuilder: decorationBuilder,
@@ -175,10 +171,8 @@ class CupertinoSheetRoute<T> extends SheetRoute<T> {
       builder: (BuildContext context, Widget? child) {
         final double progress = secondaryAnimation.value;
         final double scale = 1 - progress / 10;
-        final double distanceWithScale =
-            (topOffset + _kPreviousRouteVisibleOffset) * 0.9;
-        final Offset offset =
-            Offset(0, progress * (topOffset - distanceWithScale));
+        final double distanceWithScale = (topOffset + _kPreviousRouteVisibleOffset) * 0.9;
+        final Offset offset = Offset(0, progress * (topOffset - distanceWithScale));
         return Transform.translate(
           offset: offset,
           child: Transform.scale(
@@ -192,14 +186,13 @@ class CupertinoSheetRoute<T> extends SheetRoute<T> {
   }
 
   @override
-  bool canDriveSecondaryTransitionForPreviousRoute(
-      Route<dynamic> previousRoute) {
+  bool canDriveSecondaryTransitionForPreviousRoute(Route<dynamic> previousRoute) {
     return previousRoute is! CupertinoSheetRoute;
   }
 
   @override
-  Widget buildSecondaryTransitionForPreviousRoute(BuildContext context,
-      Animation<double> secondaryAnimation, Widget child) {
+  Widget buildSecondaryTransitionForPreviousRoute(
+      BuildContext context, Animation<double> secondaryAnimation, Widget child) {
     final Animation<double> delayAnimation = CurvedAnimation(
       parent: _sheetController.animation,
       curve: Interval(
@@ -244,8 +237,8 @@ class CupertinoSheetBottomRouteTransition extends StatelessWidget {
   Radius _getRadiusForDevice(MediaQueryData mediaQuery) {
     final double topPadding = mediaQuery.padding.top;
     // Round corners for iPhone devices from X to the newest version
-    final bool isRoundedDevice = defaultTargetPlatform == TargetPlatform.iOS &&
-        topPadding > _kRoundedDeviceStatusBarHeight;
+    final bool isRoundedDevice =
+        defaultTargetPlatform == TargetPlatform.iOS && topPadding > _kRoundedDeviceStatusBarHeight;
     return isRoundedDevice ? _kRoundedDeviceRadius : Radius.zero;
   }
 
