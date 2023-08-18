@@ -392,6 +392,8 @@ class SheetState extends State<SheetScrollable>
 
   @override
   void didChangeDependencies() {
+    _devicePixelRatio = MediaQuery.maybeDevicePixelRatioOf(context) ??
+        View.of(context).devicePixelRatio;
     _updatePosition();
     super.didChangeDependencies();
   }
@@ -558,6 +560,10 @@ class SheetState extends State<SheetScrollable>
 
   @override
   TickerProvider get vsync => this;
+
+  @override
+  double get devicePixelRatio => _devicePixelRatio;
+  late double _devicePixelRatio;
 
   @override
   @protected
