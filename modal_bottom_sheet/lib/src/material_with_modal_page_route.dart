@@ -40,11 +40,6 @@ class MaterialWithModalsPageRoute<T> extends MaterialPageRoute<T> {
   }
 
   @override
-  void didPopNext(Route nextRoute) {
-    super.didPopNext(nextRoute);
-  }
-
-  @override
   bool didPop(T? result) {
     _nextModalRoute = null;
     return super.didPop(result);
