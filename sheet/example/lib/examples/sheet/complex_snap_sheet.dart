@@ -70,7 +70,7 @@ class _AdvancedSnapSheetPageState extends State<AdvancedSnapSheetPage>
   }
 }
 
-class MapAppBar extends StatefulWidget with PreferredSizeWidget {
+class MapAppBar extends StatefulWidget implements PreferredSizeWidget {
   const MapAppBar({Key? key, required this.controller}) : super(key: key);
   final SheetController controller;
   @override

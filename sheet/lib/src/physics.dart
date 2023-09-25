@@ -169,7 +169,7 @@ class BouncingSheetPhysics extends ScrollPhysics with SheetPhysics {
   @override
   Simulation? createBallisticSimulation(
       ScrollMetrics position, double velocity) {
-    final Tolerance tolerance = this.tolerance;
+    final Tolerance tolerance = toleranceFor(position);
     if (position.outOfRange) {
       return BouncingScrollSimulation(
         spring: const SpringDescription(
@@ -266,7 +266,7 @@ class NoMomentumSheetPhysics extends ScrollPhysics with SheetPhysics {
   @override
   Simulation? createBallisticSimulation(
       ScrollMetrics position, double velocity) {
-    final Tolerance tolerance = this.tolerance;
+    final Tolerance tolerance = toleranceFor(position);
     if (position.outOfRange) {
       double? end;
       if (position.pixels > position.maxScrollExtent) {
@@ -336,7 +336,7 @@ class ClampingSheetPhysics extends ScrollPhysics with SheetPhysics {
   @override
   Simulation? createBallisticSimulation(
       ScrollMetrics position, double velocity) {
-    final Tolerance tolerance = this.tolerance;
+    final Tolerance tolerance = toleranceFor(position);
     if (position.outOfRange) {
       double? end;
       if (position.pixels > position.maxScrollExtent) {
@@ -443,7 +443,7 @@ class SnapSheetPhysics extends ScrollPhysics with SheetPhysics {
     // if ((velocity <= 0.0 && position.pixels <= position.minScrollExtent) ||
     //     (velocity >= 0.0 && position.pixels >= position.maxScrollExtent))
     //   return super.createBallisticSimulation(position, velocity);
-    final Tolerance tolerance = this.tolerance;
+    final Tolerance tolerance = toleranceFor(position);
     final double target = _getTargetPixels(position, tolerance, velocity);
     if (target != position.pixels) {
       return ScrollSpringSimulation(
