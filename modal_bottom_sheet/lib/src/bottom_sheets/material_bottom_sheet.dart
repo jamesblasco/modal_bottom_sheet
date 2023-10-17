@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart' hide ModalBottomSheetRoute;
+import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 /// Shows a modal material design bottom sheet.
@@ -26,7 +26,7 @@ Future<T?> showMaterialModalBottomSheet<T>({
   assert(debugCheckHasMediaQuery(context));
   assert(debugCheckHasMaterialLocalizations(context));
   final result = await Navigator.of(context, rootNavigator: useRootNavigator)
-      .push(ModalBottomSheetRoute<T>(
+      .push(ModalSheetRoute<T>(
     builder: builder,
     closeProgressThreshold: closeProgressThreshold,
     containerBuilder: _materialContainerBuilder(

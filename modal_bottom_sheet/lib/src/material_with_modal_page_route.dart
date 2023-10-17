@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart' hide ModalBottomSheetRoute;
+import 'package:flutter/material.dart';
 
 import '../modal_bottom_sheet.dart';
 import 'bottom_sheet_route.dart';
@@ -20,7 +20,7 @@ class MaterialWithModalsPageRoute<T> extends MaterialPageRoute<T> {
             builder: builder,
             maintainState: maintainState);
 
-  ModalBottomSheetRoute? _nextModalRoute;
+  ModalSheetRoute? _nextModalRoute;
 
   @override
   bool canTransitionTo(TransitionRoute<dynamic> nextRoute) {
@@ -29,12 +29,12 @@ class MaterialWithModalsPageRoute<T> extends MaterialPageRoute<T> {
         (nextRoute is CupertinoPageRoute && !nextRoute.fullscreenDialog) ||
         (nextRoute is MaterialWithModalsPageRoute &&
             !nextRoute.fullscreenDialog) ||
-        (nextRoute is ModalBottomSheetRoute);
+        (nextRoute is ModalSheetRoute);
   }
 
   @override
   void didChangeNext(Route? nextRoute) {
-    if (nextRoute is ModalBottomSheetRoute) {
+    if (nextRoute is ModalSheetRoute) {
       _nextModalRoute = nextRoute;
     }
 
