@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart' hide ModalBottomSheetRoute;
 import 'package:flutter/services.dart';
 
+import '../../modal_bottom_sheet.dart';
+
 const Radius kDefaultBarTopRadius = Radius.circular(15);
 
 class BarBottomSheet extends StatelessWidget {
