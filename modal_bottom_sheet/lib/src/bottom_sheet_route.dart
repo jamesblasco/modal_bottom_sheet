@@ -180,7 +180,7 @@ class ModalSheetRoute<T> extends PageRoute<T> {
   AnimationController createAnimationController() {
     assert(_animationController == null);
     _animationController = ModalBottomSheet.createAnimationController(
-      navigator!.overlay!,
+      navigator!,
       duration: transitionDuration,
     );
     return _animationController!;
