@@ -43,7 +43,7 @@ class SheetScrollable extends StatefulWidget {
   ///
   /// The [axisDirection] and [viewportBuilder] arguments must not be null.
   const SheetScrollable({
-    Key? key,
+    super.key,
     this.axisDirection = AxisDirection.down,
     this.controller,
     this.physics,
@@ -55,8 +55,7 @@ class SheetScrollable extends StatefulWidget {
     this.scrollBehavior,
     this.initialExtent,
     this.minInteractionExtent = 0,
-  })  : assert(semanticChildCount == null || semanticChildCount >= 0),
-        super(key: key);
+  }) : assert(semanticChildCount == null || semanticChildCount >= 0);
 
   /// The direction in which this widget scrolls.
   ///
@@ -285,11 +284,10 @@ class SheetScrollable extends StatefulWidget {
 // ScrollableState.build() always rebuilds its _ScrollableScope.
 class _ScrollableScope extends InheritedWidget {
   const _ScrollableScope({
-    Key? key,
     required this.scrollable,
     required this.position,
-    required Widget child,
-  }) : super(key: key, child: child);
+    required super.child,
+  });
 
   final SheetState scrollable;
   final ScrollPosition position;
@@ -772,13 +770,12 @@ class SheetState extends State<SheetScrollable>
 /// scrollable children.
 class _ScrollSemantics extends SingleChildRenderObjectWidget {
   const _ScrollSemantics({
-    Key? key,
+    super.key,
     required this.position,
     required this.allowImplicitScrolling,
     required this.semanticChildCount,
-    Widget? child,
-  })  : assert(semanticChildCount == null || semanticChildCount >= 0),
-        super(key: key, child: child);
+    super.child,
+  })  : assert(semanticChildCount == null || semanticChildCount >= 0);
 
   final ScrollPosition position;
   final bool allowImplicitScrolling;

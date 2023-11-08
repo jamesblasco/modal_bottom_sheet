@@ -33,7 +33,7 @@ typedef WidgetWithChildBuilder = Widget Function(
 class ModalBottomSheet extends StatefulWidget {
   /// Creates a bottom sheet.
   const ModalBottomSheet({
-    Key? key,
+    super.key,
     required this.animationController,
     this.animationCurve,
     this.enableDrag = true,
@@ -48,8 +48,7 @@ class ModalBottomSheet extends StatefulWidget {
     double? closeProgressThreshold,
     this.willPopThreshold = _willPopThreshold,
   })  : closeProgressThreshold =
-            closeProgressThreshold ?? _closeProgressThreshold,
-        super(key: key);
+            closeProgressThreshold ?? _closeProgressThreshold;
 
   /// The closeProgressThreshold parameter
   /// specifies when the bottom sheet will be dismissed when user drags it.

@@ -51,13 +51,12 @@ class _CupertinoBottomSheetContainer extends StatelessWidget {
   final SystemUiOverlayStyle? overlayStyle;
 
   const _CupertinoBottomSheetContainer({
-    Key? key,
     required this.child,
     this.backgroundColor,
     required this.topRadius,
     this.overlayStyle,
     this.shadow,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -178,44 +177,29 @@ class CupertinoModalBottomSheetRoute<T> extends ModalSheetRoute<T> {
   final SystemUiOverlayStyle? overlayStyle;
 
   CupertinoModalBottomSheetRoute({
-    required WidgetBuilder builder,
-    WidgetWithChildBuilder? containerBuilder,
-    double? closeProgressThreshold,
-    String? barrierLabel,
+    required super.builder,
+    super.containerBuilder,
+    super.closeProgressThreshold,
+    super.barrierLabel,
     double? elevation,
     ShapeBorder? shape,
     Clip? clipBehavior,
-    AnimationController? secondAnimationController,
-    Curve? animationCurve,
-    Color? modalBarrierColor,
-    bool bounce = true,
-    bool isDismissible = true,
-    bool enableDrag = true,
-    required bool expanded,
-    Duration? duration,
-    RouteSettings? settings,
-    ScrollController? scrollController,
+    super.secondAnimationController,
+    super.animationCurve,
+    super.modalBarrierColor,
+    super.bounce = true,
+    super.isDismissible,
+    super.enableDrag,
+    required super.expanded,
+    super.duration,
+    super.settings,
+    super.scrollController,
     this.boxShadow = _kDefaultBoxShadow,
     this.transitionBackgroundColor,
     this.topRadius = _kDefaultTopRadius,
     this.previousRouteAnimationCurve,
     this.overlayStyle,
-  }) : super(
-          closeProgressThreshold: closeProgressThreshold,
-          scrollController: scrollController,
-          containerBuilder: containerBuilder,
-          builder: builder,
-          bounce: bounce,
-          barrierLabel: barrierLabel,
-          secondAnimationController: secondAnimationController,
-          modalBarrierColor: modalBarrierColor,
-          isDismissible: isDismissible,
-          enableDrag: enableDrag,
-          expanded: expanded,
-          settings: settings,
-          animationCurve: animationCurve,
-          duration: duration,
-        );
+  });
 
   @override
   Widget buildTransitions(
@@ -264,13 +248,12 @@ class _CupertinoModalTransition extends StatelessWidget {
   final Widget body;
 
   const _CupertinoModalTransition({
-    Key? key,
     required this.secondaryAnimation,
     required this.body,
     required this.topRadius,
     this.backgroundColor = Colors.black,
     this.animationCurve,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -431,12 +414,12 @@ class CupertinoScaffold extends StatefulWidget {
   final SystemUiOverlayStyle? overlayStyle;
 
   const CupertinoScaffold({
-    Key? key,
+    super.key,
     required this.body,
     this.topRadius = _kDefaultTopRadius,
     this.transitionBackgroundColor = Colors.black,
     this.overlayStyle,
-  }) : super(key: key);
+  });
 
   @override
   State<StatefulWidget> createState() => _CupertinoScaffoldState();

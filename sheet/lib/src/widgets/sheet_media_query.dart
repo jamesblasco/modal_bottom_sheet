@@ -11,7 +11,7 @@ import 'dart:math' as math;
 /// If the sheet is fully expanded to the top of the screen the top padding
 ///   will be the same as the parent top safe area.
 class SheetMediaQuery extends StatelessWidget {
-  const SheetMediaQuery({Key? key, required this.child}) : super(key: key);
+  const SheetMediaQuery({super.key, required this.child});
 
   final Widget child;
 

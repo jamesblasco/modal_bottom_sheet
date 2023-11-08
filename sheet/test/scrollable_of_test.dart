@@ -8,8 +8,7 @@ import 'package:sheet/sheet.dart';
 
 class ScrollPositionListener extends StatefulWidget {
   const ScrollPositionListener(
-      {Key? key, required this.child, required this.log})
-      : super(key: key);
+      {super.key, required this.child, required this.log});
 
   final Widget child;
   final ValueChanged<String> log;

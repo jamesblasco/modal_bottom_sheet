@@ -8,7 +8,7 @@ const Duration _bottomSheetDuration = Duration(milliseconds: 400);
 
 class _ModalBottomSheet<T> extends StatefulWidget {
   const _ModalBottomSheet({
-    Key? key,
+    super.key,
     this.closeProgressThreshold,
     required this.route,
     this.secondAnimationController,
@@ -16,7 +16,7 @@ class _ModalBottomSheet<T> extends StatefulWidget {
     this.expanded = false,
     this.enableDrag = true,
     this.animationCurve,
-  }) : super(key: key);
+  });
 
   final double? closeProgressThreshold;
   final ModalSheetRoute<T> route;
@@ -137,9 +137,8 @@ class ModalSheetRoute<T> extends PageRoute<T> {
     this.bounce = false,
     this.animationCurve,
     Duration? duration,
-    RouteSettings? settings,
-  })  : duration = duration ?? _bottomSheetDuration,
-        super(settings: settings);
+    super.settings,
+  })  : duration = duration ?? _bottomSheetDuration;
 
   final double? closeProgressThreshold;
   final WidgetWithChildBuilder? containerBuilder;

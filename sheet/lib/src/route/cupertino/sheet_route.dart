@@ -222,11 +222,11 @@ class CupertinoSheetRoute<T> extends SheetRoute<T> {
 @visibleForTesting
 class CupertinoSheetBottomRouteTransition extends StatelessWidget {
   const CupertinoSheetBottomRouteTransition({
-    Key? key,
+    super.key,
     required this.sheetAnimation,
     required this.secondaryAnimation,
     required this.body,
-  }) : super(key: key);
+  });
 
   final Widget body;
 
@@ -319,10 +319,10 @@ class CupertinoSheetPage<T> extends Page<T> {
   const CupertinoSheetPage({
     required this.child,
     this.maintainState = true,
-    LocalKey? key,
-    String? name,
-    Object? arguments,
-  }) : super(key: key, name: name, arguments: arguments);
+    super.key,
+    super.name,
+    super.arguments,
+  });
 
   /// The content to be shown in the [Route] created by this page.
   final Widget child;
@@ -343,17 +343,13 @@ class CupertinoSheetPage<T> extends Page<T> {
 class _PageBasedCupertinoSheetRoute<T> extends CupertinoSheetRoute<T> {
   _PageBasedCupertinoSheetRoute({
     required CupertinoSheetPage<T> page,
-    List<double>? stops,
-    double initialStop = 1,
-    Color? backgroundColor,
-    bool maintainState = true,
+    super.stops,
+    super.initialStop,
+    super.backgroundColor,
+    super.maintainState,
   }) : super(
           settings: page,
           builder: (BuildContext context) => page.child,
-          initialStop: initialStop,
-          backgroundColor: backgroundColor,
-          stops: stops,
-          maintainState: maintainState,
         );
 
   CupertinoSheetPage<T> get _page => settings as CupertinoSheetPage<T>;

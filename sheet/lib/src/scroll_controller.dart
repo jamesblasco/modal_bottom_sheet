@@ -17,13 +17,10 @@ import 'package:sheet/sheet.dart';
 ///    descendants.
 class SheetPrimaryScrollController extends ScrollController {
   SheetPrimaryScrollController({
-    double initialScrollOffset = 0.0,
-    String? debugLabel,
+    super.initialScrollOffset,
+    super.debugLabel,
     required this.sheetContext,
-  }) : super(
-          debugLabel: debugLabel,
-          initialScrollOffset: initialScrollOffset,
-        );
+  });
 
   final SheetContext sheetContext;
 
@@ -43,7 +40,7 @@ class SheetPrimaryScrollController extends ScrollController {
 }
 
 class _SheetScrollActivity extends ScrollActivity {
-  _SheetScrollActivity(SheetPosition delegate) : super(delegate);
+  _SheetScrollActivity(SheetPosition super.delegate);
 
   @override
   bool get isScrolling => true;
@@ -69,21 +66,14 @@ class _SheetScrollActivity extends ScrollActivity {
 ///  * [_SheetScrollController], which uses this as its [ScrollPosition].
 class SheetPrimaryScrollPosition extends ScrollPositionWithSingleContext {
   SheetPrimaryScrollPosition({
-    required ScrollPhysics physics,
-    required ScrollContext context,
-    double initialPixels = 0.0,
-    bool keepScrollOffset = true,
+    required super.physics,
+    required super.context,
+    double super.initialPixels,
+    super.keepScrollOffset,
     required this.sheetContext,
-    ScrollPosition? oldPosition,
-    String? debugLabel,
-  }) : super(
-          physics: physics,
-          context: context,
-          initialPixels: initialPixels,
-          keepScrollOffset: keepScrollOffset,
-          oldPosition: oldPosition,
-          debugLabel: debugLabel,
-        );
+    super.oldPosition,
+    super.debugLabel,
+  });
 
   final SheetContext sheetContext;
   SheetPosition get sheetPosition => sheetContext.position;

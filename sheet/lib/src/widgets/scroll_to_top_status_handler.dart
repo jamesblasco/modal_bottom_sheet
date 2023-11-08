@@ -6,9 +6,9 @@ import 'package:flutter/widgets.dart';
 /// Extracted from [Scaffold] and used in [Sheet]
 class ScrollToTopStatusBarHandler extends StatefulWidget {
   const ScrollToTopStatusBarHandler({
-    Key? key,
+    super.key,
     required this.child,
-  }) : super(key: key);
+  });
 
   final Widget child;
 
