@@ -3,7 +3,7 @@ import 'package:sheet/sheet.dart';
 
 typedef SheetControllerCallback = void Function(SheetController controller);
 
-/// A widget that injets a [SheetController] that can be used by
+/// A widget that injects a [SheetController] that can be used by
 /// any [Sheet] children
 ///
 /// It is useful for creating initial animations

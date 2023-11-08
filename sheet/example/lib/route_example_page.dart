@@ -17,6 +17,7 @@ import 'package:flutter/material.dart';
 import 'package:sheet/route.dart';
 import 'package:sheet/sheet.dart';
 
+import 'examples/route/examples/modal_with_nested_scroll.dart';
 import 'examples/route/navigation/go_router.dart';
 
 class RouteExamplePage extends StatelessWidget {
@@ -251,15 +252,14 @@ class RouteExamplePage extends StatelessWidget {
                       ),
                     ),
 
-                    // TODO(jaime): It does not work for nested scroll yet
-                    // ListTile(
-                    //   title: Text('Modal with Nested Scroll'),
-                    //   onTap: () => Navigator.of(context).push(
-                    //     CupertinoSheetRoute<void>(
-                    //       builder: (context) => NestedScrollModal(),
-                    //     ),
-                    //   ),
-                    // ),
+                    ListTile(
+                      title: Text('Modal with Nested Scroll'),
+                      onTap: () => Navigator.of(context).push(
+                        CupertinoSheetRoute<void>(
+                          builder: (context) => NestedScrollModal(),
+                        ),
+                      ),
+                    ),
                     ListTile(
                       title: const Text('Modal with PageView'),
                       onTap: () => Navigator.of(context).push(

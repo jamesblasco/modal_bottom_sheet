@@ -77,21 +77,21 @@ void main() {
 
       test('overscroll is progressively harder', () {
         final ScrollMetrics lessOverscrolledPosition = FixedScrollMetrics(
-          devicePixelRatio: 1,
           minScrollExtent: 0.0,
           maxScrollExtent: 1000.0,
           pixels: -20.0,
           viewportDimension: 100.0,
           axisDirection: AxisDirection.down,
+          devicePixelRatio: 1,
         );
 
         final ScrollMetrics moreOverscrolledPosition = FixedScrollMetrics(
           minScrollExtent: 0.0,
-          devicePixelRatio: 1,
           maxScrollExtent: 1000.0,
           pixels: -40.0,
           viewportDimension: 100.0,
           axisDirection: AxisDirection.down,
+          devicePixelRatio: 1,
         );
 
         final double lessOverscrollApplied = physicsUnderTest
@@ -116,11 +116,11 @@ void main() {
       test('easing an overscroll still has resistance', () {
         final ScrollMetrics overscrolledPosition = FixedScrollMetrics(
           minScrollExtent: 0.0,
-          devicePixelRatio: 1,
           maxScrollExtent: 1000.0,
           pixels: -20.0,
           viewportDimension: 100.0,
           axisDirection: AxisDirection.down,
+          devicePixelRatio: 1,
         );
 
         final double easingApplied = physicsUnderTest.applyPhysicsToUserOffset(
@@ -154,10 +154,10 @@ void main() {
         final ScrollMetrics overscrolledPosition = FixedScrollMetrics(
           minScrollExtent: 0.0,
           maxScrollExtent: 1000.0,
-          devicePixelRatio: 1,
           pixels: -20.0,
           viewportDimension: 100.0,
           axisDirection: AxisDirection.down,
+          devicePixelRatio: 1,
         );
 
         final double easingApplied = physicsUnderTest.applyPhysicsToUserOffset(

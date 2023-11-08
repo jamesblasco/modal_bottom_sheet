@@ -196,11 +196,11 @@ class SheetScrollable extends StatefulWidget {
 
   /// {@macro flutter.widgets.shadow.scrollBehavior}
   ///
-  /// [SheetBehaviour]s also provide [SheetPhysics]. If an explicit
+  /// [SheetBehavior]s also provide [SheetPhysics]. If an explicit
   /// [ScrollPhysics] is provided in [physics], it will take precedence,
   /// followed by [scrollBehavior], and then the inherited ancestor
-  /// [SheetBehaviour].
-  final SheetBehaviour? scrollBehavior;
+  /// [SheetBehavior].
+  final SheetBehavior? scrollBehavior;
 
   final double? initialExtent;
 
@@ -328,7 +328,7 @@ class SheetState extends State<SheetScrollable>
   @override
   AxisDirection get axisDirection => widget.axisDirection;
 
-  late SheetBehaviour _configuration;
+  late SheetBehavior _configuration;
   ScrollPhysics? _physics;
   SheetController? _fallbackScrollController;
 
@@ -339,7 +339,7 @@ class SheetState extends State<SheetScrollable>
 
   // Only call this from places that will definitely trigger a rebuild.
   void _updatePosition() {
-    _configuration = widget.scrollBehavior ?? SheetBehaviour();
+    _configuration = widget.scrollBehavior ?? SheetBehavior();
     _physics = _configuration.getScrollPhysics(context);
     if (widget.physics != null) {
       _physics = widget.physics!.applyTo(_physics);
