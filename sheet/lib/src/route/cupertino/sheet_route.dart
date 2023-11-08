@@ -93,15 +93,16 @@ class _CupertinoSheetDecorationBuilder extends StatelessWidget {
 ///
 /// * [CupertinoSheetPage], which is the [Page] version of this class
 class CupertinoSheetRoute<T> extends SheetRoute<T> {
-  CupertinoSheetRoute(
-      {required WidgetBuilder builder,
-      List<double>? stops,
-      double initialStop = 1,
-      RouteSettings? settings,
-      Color? backgroundColor,
-      bool maintainState = true,
-      super.fit})
-      : super(
+  CupertinoSheetRoute({
+    required WidgetBuilder builder,
+    List<double>? stops,
+    double initialStop = 1,
+    RouteSettings? settings,
+    Color? backgroundColor,
+    bool maintainState = true,
+    super.fit,
+    super.draggable = true,
+  }) : super(
           builder: (BuildContext context) {
             return _CupertinoSheetDecorationBuilder(
               child: Builder(builder: builder),
@@ -115,9 +116,6 @@ class CupertinoSheetRoute<T> extends SheetRoute<T> {
           initialExtent: initialStop,
           maintainState: maintainState,
         );
-
-  @override
-  bool get draggable => true;
 
   final SheetController _sheetController = SheetController();
 
