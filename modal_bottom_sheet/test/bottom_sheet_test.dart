@@ -90,10 +90,9 @@ Finder _textButtonWithText(String text) {
 
 class _TestWidget extends StatefulWidget {
   const _TestWidget({
-    Key? key,
     this.onInitState,
     this.onDispose,
-  }) : super(key: key);
+  });
 
   final VoidCallback? onInitState;
   final VoidCallback? onDispose;

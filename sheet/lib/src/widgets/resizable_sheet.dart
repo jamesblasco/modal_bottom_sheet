@@ -14,12 +14,12 @@ import 'package:sheet/sheet.dart';
 ///  * [Sheet], that uses this widget to allow resizable sheet child
 class ResizableSheetChild extends SingleChildRenderObjectWidget {
   const ResizableSheetChild({
-    Key? key,
+    super.key,
     this.minExtent = 0,
     required this.offset,
-    required Widget child,
+    required Widget super.child,
     required this.resizable,
-  }) : super(key: key, child: child);
+  });
 
   final double minExtent;
   final bool resizable;

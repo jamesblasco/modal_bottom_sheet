@@ -13,7 +13,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  mocktail: ^0.3.0
-  lints: ^2.1.1
+  mocktail: ^1.0.1
+  lints: ^3.0.0
 
 flutter:

@@ -350,8 +350,7 @@ class _PageBasedSheetRoute<T> extends SheetRoute<T> {
 }
 
 class _SheetRouteContainer extends StatefulWidget {
-  const _SheetRouteContainer({Key? key, required this.sheetRoute})
-      : super(key: key);
+  const _SheetRouteContainer({required this.sheetRoute});
 
   final SheetRoute<dynamic> sheetRoute;
   @override

@@ -10,15 +10,11 @@ class MaterialWithModalsPageRoute<T> extends MaterialPageRoute<T> {
   /// The values of [builder], [maintainState], and [fullScreenDialog] must not
   /// be null.
   MaterialWithModalsPageRoute({
-    required WidgetBuilder builder,
-    RouteSettings? settings,
-    bool maintainState = true,
-    bool fullscreenDialog = false,
-  }) : super(
-            settings: settings,
-            fullscreenDialog: fullscreenDialog,
-            builder: builder,
-            maintainState: maintainState);
+    required super.builder,
+    super.settings,
+    super.maintainState,
+    super.fullscreenDialog,
+  });
 
   ModalSheetRoute? _nextModalRoute;
 

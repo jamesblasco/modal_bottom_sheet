@@ -17,8 +17,7 @@ mixin SheetPhysics on ScrollPhysics {
 /// Sheet physics that does not allow the user to drag a sheet.
 class NeverDraggableSheetPhysics extends NeverScrollableScrollPhysics
     with SheetPhysics {
-  const NeverDraggableSheetPhysics({ScrollPhysics? parent})
-      : super(parent: parent);
+  const NeverDraggableSheetPhysics({super.parent});
 
   @override
   NeverDraggableSheetPhysics applyTo(ScrollPhysics? ancestor) {
@@ -30,8 +29,7 @@ class NeverDraggableSheetPhysics extends NeverScrollableScrollPhysics
 class AlwaysDraggableSheetPhysics extends AlwaysScrollableScrollPhysics
     with SheetPhysics {
   /// Creates scroll physics that always lets the user scroll.
-  const AlwaysDraggableSheetPhysics({ScrollPhysics? parent})
-      : super(parent: parent);
+  const AlwaysDraggableSheetPhysics({super.parent});
 
   @override
   AlwaysDraggableSheetPhysics applyTo(ScrollPhysics? ancestor) {
@@ -43,9 +41,9 @@ class AlwaysDraggableSheetPhysics extends AlwaysScrollableScrollPhysics
 class BouncingSheetPhysics extends ScrollPhysics with SheetPhysics {
   /// Creates sheet physics that bounce back from the edge.
   const BouncingSheetPhysics({
-    ScrollPhysics? parent,
+    super.parent,
     this.overflowViewport = false,
-  }) : super(parent: parent);
+  });
 
   final bool overflowViewport;
 
@@ -169,7 +167,6 @@ class BouncingSheetPhysics extends ScrollPhysics with SheetPhysics {
   @override
   Simulation? createBallisticSimulation(
       ScrollMetrics position, double velocity) {
-   
     if (position.outOfRange) {
       return BouncingScrollSimulation(
         spring: const SpringDescription(
@@ -223,8 +220,8 @@ class BouncingSheetPhysics extends ScrollPhysics with SheetPhysics {
 class NoMomentumSheetPhysics extends ScrollPhysics with SheetPhysics {
   /// Creates sheet physics that has no momentum after the user stops dragging.
   const NoMomentumSheetPhysics({
-    ScrollPhysics? parent,
-  }) : super(parent: parent);
+    super.parent,
+  });
 
   @override
   NoMomentumSheetPhysics applyTo(ScrollPhysics? ancestor) {
@@ -289,8 +286,8 @@ class NoMomentumSheetPhysics extends ScrollPhysics with SheetPhysics {
 class ClampingSheetPhysics extends ScrollPhysics with SheetPhysics {
   /// Creates sheet physics that has no momentum after the user stops dragging.
   const ClampingSheetPhysics({
-    ScrollPhysics? parent,
-  }) : super(parent: parent);
+    super.parent,
+  });
 
   @override
   ClampingSheetPhysics applyTo(ScrollPhysics? ancestor) {
@@ -384,10 +381,10 @@ class ClampingSheetPhysics extends ScrollPhysics with SheetPhysics {
 class SnapSheetPhysics extends ScrollPhysics with SheetPhysics {
   /// Creates snapping physics for a [Sheet].
   const SnapSheetPhysics({
-    ScrollPhysics? parent,
+    super.parent,
     this.stops = const <double>[],
     this.relative = true,
-  }) : super(parent: parent);
+  });
 
   /// Positions where the sheet could be snapped once the user stops
   /// dragging

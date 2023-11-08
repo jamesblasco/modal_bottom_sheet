@@ -14,8 +14,7 @@ typedef SheetControllerCallback = void Function(SheetController controller);
 ///
 ///
 class DefaultSheetController extends StatefulWidget {
-  const DefaultSheetController({Key? key, required this.child, this.onCreated})
-      : super(key: key);
+  const DefaultSheetController({super.key, required this.child, this.onCreated});
 
   final Widget child;
 
@@ -56,8 +55,7 @@ class _DefaultSheetControllerState extends State<DefaultSheetController> {
 
 class _InheritedSheetController extends InheritedWidget {
   const _InheritedSheetController(
-      {Key? key, required super.child, required this.controller})
-      : super(key: key);
+      {required super.child, required this.controller});
 
   final SheetController controller;
 

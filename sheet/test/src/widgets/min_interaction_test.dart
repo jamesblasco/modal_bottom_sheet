@@ -32,7 +32,7 @@ void main() {
   late VoidCallback mockOnTap;
 
   setUp(() {
-    mockOnTap = MockVoidCallback();
+    mockOnTap = MockVoidCallback().call;
     when(mockOnTap).thenAnswer((_) {});
   });
 

@@ -292,8 +292,7 @@ class Sheet extends StatelessWidget {
 }
 
 class _DefaultSheetScrollController extends StatelessWidget {
-  const _DefaultSheetScrollController({Key? key, required this.child})
-      : super(key: key);
+  const _DefaultSheetScrollController({required this.child});
 
   final Widget child;
 
