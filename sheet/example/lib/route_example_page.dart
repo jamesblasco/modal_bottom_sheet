@@ -313,11 +313,10 @@ class RouteExamplePage extends StatelessWidget {
 class SectionTitle extends StatelessWidget {
   final String title;
 
-  // ignore: sort_constructors_first
   const SectionTitle(
     this.title, {
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
   @override
   Widget build(BuildContext context) {
     return Padding(

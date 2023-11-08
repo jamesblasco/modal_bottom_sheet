@@ -47,7 +47,7 @@ class ModalBottomSheet extends StatefulWidget {
     this.minFlingVelocity = _minFlingVelocity,
     double? closeProgressThreshold,
     this.willPopThreshold = _willPopThreshold,
-  })  : closeProgressThreshold =
+  }) : closeProgressThreshold =
             closeProgressThreshold ?? _closeProgressThreshold;
 
   /// The closeProgressThreshold parameter
@@ -231,7 +231,6 @@ class ModalBottomSheetState extends State<ModalBottomSheet>
 
     if (_dismissUnderway || !isDragging) return;
     isDragging = false;
-    // ignore: unawaited_futures
     _bounceDragController.reverse();
 
     Future<void> tryClose() async {
@@ -251,7 +250,6 @@ class ModalBottomSheetState extends State<ModalBottomSheet>
       tryClose();
     } else if (hasReachedCloseThreshold) {
       if (widget.animationController.value > 0.0) {
-        // ignore: unawaited_futures
         widget.animationController.fling(velocity: -1.0);
       }
       tryClose();
@@ -273,13 +271,11 @@ class ModalBottomSheetState extends State<ModalBottomSheet>
     if (!_scrollController.hasClients) return;
 
     ScrollPosition scrollPosition;
-    // ignore: invalid_use_of_protected_member
+
     if (_scrollController.positions.length > 1) {
-      // ignore: invalid_use_of_protected_member
-      scrollPosition = _scrollController.positions
-          .firstWhere((p) => p.isScrollingNotifier.value,
-              // ignore: invalid_use_of_protected_member
-              orElse: () => _scrollController.positions.first);
+      scrollPosition = _scrollController.positions.firstWhere(
+          (p) => p.isScrollingNotifier.value,
+          orElse: () => _scrollController.positions.first);
     } else {
       scrollPosition = _scrollController.position;
     }

@@ -93,7 +93,7 @@ class CupertinoSharePage extends StatelessWidget {
 }
 
 class PhotoShareBottomSheet extends StatelessWidget {
-  const PhotoShareBottomSheet({Key? key}) : super(key: key);
+  const PhotoShareBottomSheet({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -539,9 +539,9 @@ final actions2 = [
 ];
 
 extension ListUtils<T> on List<T> {
-  List<T> addItemInBetween<A extends T>(A item) => this.length == 0
+  List<T> addItemInBetween<A extends T>(A item) => isEmpty
       ? this
-      : (this.fold([], (r, element) => [...r, element, item])..removeLast());
+      : (fold([], (r, element) => [...r, element, item])..removeLast());
 }
 
 class SimpleSliverDelegate extends SliverPersistentHeaderDelegate {

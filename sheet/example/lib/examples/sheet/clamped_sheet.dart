@@ -6,7 +6,7 @@ import 'package:sheet/sheet.dart';
 
 class ClampedSheet extends StatefulWidget {
   @override
-  _ClampedSheetState createState() => _ClampedSheetState();
+  State<ClampedSheet> createState() => _ClampedSheetState();
 }
 
 class _ClampedSheetState extends State<ClampedSheet> {

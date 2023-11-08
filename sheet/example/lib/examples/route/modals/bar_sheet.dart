@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sheet/route.dart';
-import 'package:sheet/sheet.dart';
 
-const Radius _default_bar_top_radius = Radius.circular(15);
+const Radius _defaultBarTopRadius = Radius.circular(15);
 
 class BarBottomSheet extends StatelessWidget {
   const BarBottomSheet(
-      {Key? key,
+      {super.key,
       required this.child,
       this.control,
       this.clipBehavior,
       this.shape,
-      this.elevation})
-      : super(key: key);
+      this.elevation});
   final Widget child;
   final Widget? control;
   final Clip? clipBehavior;
@@ -49,8 +47,8 @@ class BarBottomSheet extends StatelessWidget {
                     const RoundedRectangleBorder(
                       side: BorderSide(),
                       borderRadius: BorderRadius.only(
-                          topLeft: _default_bar_top_radius,
-                          topRight: _default_bar_top_radius),
+                          topLeft: _defaultBarTopRadius,
+                          topRight: _defaultBarTopRadius),
                     ),
                 clipBehavior: clipBehavior ?? Clip.hardEdge,
                 elevation: elevation ?? 2,
@@ -72,13 +70,13 @@ class BarSheetRoute<T> extends SheetRoute<T> {
     double? elevation,
     ShapeBorder? shape,
     Clip? clipBehavior,
-    Color barrierColor = Colors.black87,
-    SheetFit fit = SheetFit.expand,
-    Curve? animationCurve,
+    Color super.barrierColor = Colors.black87,
+    super.fit,
+    super.animationCurve,
     bool isDismissible = true,
     bool enableDrag = true,
     Widget? topControl,
-    Duration? duration,
+    super.duration,
   }) : super(
           builder: (BuildContext context) {
             return BarBottomSheet(
@@ -89,11 +87,7 @@ class BarSheetRoute<T> extends SheetRoute<T> {
               elevation: elevation,
             );
           },
-          fit: fit,
           barrierDismissible: isDismissible,
-          barrierColor: barrierColor,
           draggable: enableDrag,
-          animationCurve: animationCurve,
-          duration: duration,
         );
 }

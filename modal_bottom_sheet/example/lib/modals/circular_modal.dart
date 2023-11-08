@@ -11,11 +11,10 @@ class AvatarBottomSheet extends StatelessWidget {
   final SystemUiOverlayStyle? overlayStyle;
 
   const AvatarBottomSheet(
-      {Key? key,
+      {super.key,
       required this.child,
       required this.animation,
-      this.overlayStyle})
-      : super(key: key);
+      this.overlayStyle});
 
   @override
   Widget build(BuildContext context) {
