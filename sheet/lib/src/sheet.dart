@@ -4,7 +4,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:sheet/src/widgets/resizable_sheet.dart';
-import 'package:sheet/src/widgets/scroll_to_top_status_handler.dart';
+import 'package:sheet/src/widgets/status_bar_gesture_detector.dart';
 
 import '../sheet.dart';
 
@@ -261,7 +261,7 @@ class Sheet extends StatelessWidget {
       scrollBehavior: SheetBehavior(),
       viewportBuilder: (BuildContext context, ViewportOffset offset) {
         return _DefaultSheetScrollController(
-          child: ScrollToTopStatusBarHandler(
+          child: StatusBarGestureDetector.scrollToTop(
             child: SheetViewport(
               clipBehavior: Clip.antiAlias,
               axisDirection: AxisDirection.down,
@@ -894,8 +894,12 @@ class RenderSheetViewport extends RenderBox
   }
 
   @override
-  RevealedOffset getOffsetToReveal(RenderObject target, double alignment,
-      {Rect? rect, Axis? axis}) {
+  RevealedOffset getOffsetToReveal(
+    RenderObject target,
+    double alignment, {
+    Axis? axis,
+    Rect? rect,
+  }) {
     rect ??= target.paintBounds;
     if (target is! RenderBox) {
       return RevealedOffset(offset: offset.pixels, rect: rect);

@@ -408,9 +408,15 @@ class ModalBottomSheetState extends State<ModalBottomSheet>
       child: RepaintBoundary(child: child),
     );
 
-    return ScrollToTopStatusBarHandler(
+    return StatusBarGestureDetector(
       child: child,
-      scrollController: _scrollController,
+      onTap: (context) {
+        _scrollController.animateTo(
+          0.0,
+          duration: const Duration(milliseconds: 1000),
+          curve: Curves.easeOutCirc,
+        );
+      },
     );
   }
 }

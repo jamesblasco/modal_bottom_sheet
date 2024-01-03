@@ -10,8 +10,7 @@ class ExampleTile extends StatelessWidget {
   });
 
   ExampleTile.sheet(this.title, Widget sheet, {this.leading})
-      : page = BaseScaffold(title: Text(title), sheet: sheet),
-        super();
+      : page = BaseScaffold(title: Text(title), sheet: sheet);
 
   final String title;
   final Widget page;

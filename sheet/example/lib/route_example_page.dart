@@ -19,6 +19,7 @@ import 'package:sheet/sheet.dart';
 
 import 'examples/route/examples/modal_with_nested_scroll.dart';
 import 'examples/route/navigation/go_router.dart';
+import 'examples/route/navigation/go_router_advanced.dart';
 
 class RouteExamplePage extends StatelessWidget {
   const RouteExamplePage({super.key});
@@ -81,6 +82,16 @@ class RouteExamplePage extends StatelessWidget {
                       onTap: () => Navigator.of(context).push(
                         MaterialExtendedPageRoute<void>(
                           builder: (BuildContext context) => GoRouterBooksApp(),
+                        ),
+                      ),
+                    ),
+                    ListTile(
+                      title: const Text('Go router - ShellRoutes'),
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute<void>(
+                          fullscreenDialog: true,
+                          builder: (BuildContext context) =>
+                              AdvancedGoRouterBooksApp(),
                         ),
                       ),
                     ),
