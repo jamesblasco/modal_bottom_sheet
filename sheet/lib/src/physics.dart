@@ -414,6 +414,16 @@ class SnapSheetPhysics extends ScrollPhysics with SheetPhysics {
         (old.relative != relative || !listEquals(old.stops, stops));
   }
 
+  @override
+  double adjustPositionForNewDimensions(
+      {required ScrollMetrics oldPosition,
+      required ScrollMetrics newPosition,
+      required bool isScrolling,
+      required double velocity}) {
+    final Tolerance tolerance = toleranceFor(newPosition);
+    return _getTargetPixels(newPosition, tolerance, velocity);
+  }
+
   double _getTargetPixels(
       ScrollMetrics position, Tolerance tolerance, double velocity) {
     int page = _getPage(position) ?? 0;
