@@ -317,7 +317,11 @@ class _DefaultSheetScrollController extends StatelessWidget {
 ///  * [SheetPosition], which manages the positioning logic for
 ///    this controller.
 class SheetController extends ScrollController {
-  SheetController({super.debugLabel}) : super(initialScrollOffset: 0);
+  SheetController({
+    super.debugLabel,
+    super.onAttach,
+    super.onDetach,
+  }) : super(initialScrollOffset: 0);
 
   final ProxyAnimation _animation = ProxyAnimation();
   Animation<double> get animation => _animation;
