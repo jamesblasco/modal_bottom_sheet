@@ -19,6 +19,8 @@ class SheetPrimaryScrollController extends ScrollController {
   SheetPrimaryScrollController({
     super.initialScrollOffset,
     super.debugLabel,
+    super.onAttach,
+    super.onDetach,
     required this.sheetContext,
   });
 
