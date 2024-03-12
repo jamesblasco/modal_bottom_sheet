@@ -1,4 +1,1 @@
-
-
-enable-experiment:
-  - extension-methods
+include: package:lints/recommended.yaml

@@ -3,8 +3,7 @@ import 'package:sheet/route.dart';
 import 'package:sheet/sheet.dart';
 
 class FloatingModal extends StatelessWidget {
-  const FloatingModal({Key? key, required this.child, this.backgroundColor})
-      : super(key: key);
+  const FloatingModal({super.key, required this.child, this.backgroundColor});
   final Widget child;
   final Color? backgroundColor;
 

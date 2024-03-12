@@ -3,7 +3,7 @@ import 'package:sheet/sheet.dart';
 
 class FloatingSheet extends StatefulWidget {
   @override
-  _FitSheetState createState() => _FitSheetState();
+  State<FloatingSheet> createState() => _FitSheetState();
 }
 
 class _FitSheetState extends State<FloatingSheet> {

@@ -343,6 +343,9 @@ class _PageBasedSheetRoute<T> extends SheetRoute<T> {
   SheetPage<T> get _page => settings as SheetPage<T>;
 
   @override
+  WidgetBuilder get builder => (context) => _page.child;
+
+  @override
   bool get maintainState => _page.maintainState;
 
   @override

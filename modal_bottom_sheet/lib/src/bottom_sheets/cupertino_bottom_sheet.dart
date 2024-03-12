@@ -395,7 +395,7 @@ class CupertinoScaffoldInheirted extends InheritedWidget {
     required super.child,
     this.topRadius,
     required this.transitionBackgroundColor,
-  }) : super();
+  });
 
   @override
   bool updateShouldNotify(InheritedWidget oldWidget) {

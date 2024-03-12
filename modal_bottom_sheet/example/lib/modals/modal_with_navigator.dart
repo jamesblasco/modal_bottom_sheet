@@ -3,30 +3,30 @@ import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class ModalWithNavigator extends StatelessWidget {
-  const ModalWithNavigator({Key? key}) : super(key: key);
+  const ModalWithNavigator({super.key});
 
   @override
-  Widget build(BuildContext rootContext) {
+  Widget build(BuildContext context) {
     return Material(
         child: Navigator(
       onGenerateRoute: (_) => MaterialPageRoute(
-        builder: (context2) => Builder(
-          builder: (context) => CupertinoPageScaffold(
+        builder: (childContext) => Builder(
+          builder: (childContext2) => CupertinoPageScaffold(
             navigationBar: CupertinoNavigationBar(
                 leading: Container(), middle: Text('Modal Page')),
             child: SafeArea(
               bottom: false,
               child: ListView(
                 shrinkWrap: true,
-                controller: ModalScrollController.of(context),
+                controller: ModalScrollController.of(childContext2),
                 children: ListTile.divideTiles(
-                  context: context,
+                  context: childContext2,
                   tiles: List.generate(
                       100,
                       (index) => ListTile(
                             title: Text('Item'),
                             onTap: () {
-                              Navigator.of(context).push(
+                              Navigator.of(childContext2).push(
                                 MaterialPageRoute(
                                   builder: (context) => CupertinoPageScaffold(
                                     navigationBar: CupertinoNavigationBar(
@@ -37,7 +37,7 @@ class ModalWithNavigator extends StatelessWidget {
                                       children: <Widget>[
                                         MaterialButton(
                                           onPressed: () =>
-                                              Navigator.of(rootContext).pop(),
+                                              Navigator.of(context).pop(),
                                           child: Text('touch here'),
                                         )
                                       ],

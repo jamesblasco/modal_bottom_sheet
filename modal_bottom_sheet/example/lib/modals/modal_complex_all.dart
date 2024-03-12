@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class ComplexModal extends StatelessWidget {
-  const ComplexModal({Key? key}) : super(key: key);
+  const ComplexModal({super.key});
 
   @override
   Widget build(BuildContext context) {

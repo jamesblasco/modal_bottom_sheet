@@ -6,7 +6,7 @@ import 'package:sheet/sheet.dart';
 
 class FitSnapSheet extends StatefulWidget {
   @override
-  _FitSheetState createState() => _FitSheetState();
+  State<FitSnapSheet> createState() => _FitSheetState();
 }
 
 class _FitSheetState extends State<FitSnapSheet> {

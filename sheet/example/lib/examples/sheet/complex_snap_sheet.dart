@@ -8,7 +8,7 @@ import 'package:sheet/sheet.dart';
 
 class AdvancedSnapSheetPage extends StatefulWidget {
   @override
-  _AdvancedSnapSheetPageState createState() => _AdvancedSnapSheetPageState();
+  State<AdvancedSnapSheetPage> createState() => _AdvancedSnapSheetPageState();
 }
 
 class _AdvancedSnapSheetPageState extends State<AdvancedSnapSheetPage>
@@ -71,7 +71,7 @@ class _AdvancedSnapSheetPageState extends State<AdvancedSnapSheetPage>
 }
 
 class MapAppBar extends StatefulWidget implements PreferredSizeWidget {
-  const MapAppBar({Key? key, required this.controller}) : super(key: key);
+  const MapAppBar({super.key, required this.controller});
   final SheetController controller;
   @override
   Size get preferredSize => Size.fromHeight(kToolbarHeight);
@@ -174,7 +174,7 @@ class _MapAppBarState extends State<MapAppBar> {
 }
 
 class FloatingButtons extends StatelessWidget {
-  const FloatingButtons({Key? key, required this.controller}) : super(key: key);
+  const FloatingButtons({super.key, required this.controller});
   final SheetController controller;
   @override
   Widget build(BuildContext context) {
@@ -225,7 +225,7 @@ class FloatingButtons extends StatelessWidget {
 }
 
 class MapSheet extends StatelessWidget {
-  const MapSheet({Key? key, required this.controller}) : super(key: key);
+  const MapSheet({super.key, required this.controller});
   final SheetController controller;
   @override
   Widget build(BuildContext context) {

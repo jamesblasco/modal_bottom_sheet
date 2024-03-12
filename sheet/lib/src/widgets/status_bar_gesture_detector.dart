@@ -13,6 +13,22 @@ class StatusBarGestureDetector extends StatefulWidget {
     required this.onTap,
   });
 
+  const StatusBarGestureDetector.scrollToTop({
+    super.key,
+    required this.child,
+  }) : onTap = _scrollToTopBarTap;
+
+  static void _scrollToTopBarTap(BuildContext context) {
+    final controller = PrimaryScrollController.maybeOf(context);
+    if (controller != null && controller.hasClients) {
+      controller.animateTo(
+        0.0,
+        duration: const Duration(milliseconds: 1000),
+        curve: Curves.easeOutCirc,
+      );
+    }
+  }
+
   final Widget child;
 
   final StatusBarGestureDetectorCallback onTap;

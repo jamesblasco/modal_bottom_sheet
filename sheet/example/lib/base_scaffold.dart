@@ -3,15 +3,14 @@ import 'package:flutter/material.dart';
 
 class ExampleTile extends StatelessWidget {
   const ExampleTile({
-    Key? key,
+    super.key,
     required this.title,
     required this.page,
     this.leading,
-  }) : super(key: key);
+  });
 
   ExampleTile.sheet(this.title, Widget sheet, {this.leading})
-      : page = BaseScaffold(title: Text(title), sheet: sheet),
-        super();
+      : page = BaseScaffold(title: Text(title), sheet: sheet);
 
   final String title;
   final Widget page;
@@ -33,11 +32,11 @@ class ExampleTile extends StatelessWidget {
 
 class BaseScaffold extends StatelessWidget {
   const BaseScaffold({
-    Key? key,
+    super.key,
     this.sheet,
     this.title,
     this.appBarTrailingButton,
-  }) : super(key: key);
+  });
 
   final Widget? sheet;
   final Widget? title;

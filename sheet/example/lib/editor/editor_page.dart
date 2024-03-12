@@ -142,7 +142,7 @@ class FilterEditor extends StatelessWidget {
                     ),
                   ),
                 ],
-              ).toList(),
+              ),
               const SectionTitle('Appareance'),
               ...ListTile.divideTiles(
                 context: context,
@@ -221,7 +221,7 @@ class FilterEditor extends StatelessWidget {
                         }),
                   ),
                 ],
-              ).toList(),
+              ),
               const SectionTitle('Physics'),
               ...ListTile.divideTiles(
                 context: context,
@@ -251,7 +251,7 @@ class FilterEditor extends StatelessWidget {
                     ),
                   ),
                 ],
-              ).toList(),
+              ),
             ]),
       ),
     );
@@ -259,8 +259,7 @@ class FilterEditor extends StatelessWidget {
 }
 
 class NumTextField extends StatelessWidget {
-  const NumTextField({Key? key, this.onChanged, this.maxNumber = 999})
-      : super(key: key);
+  const NumTextField({super.key, this.onChanged, this.maxNumber = 999});
   final ValueChanged<int?>? onChanged;
   final int maxNumber;
   @override
@@ -318,8 +317,8 @@ class NumericalRangeFormatter extends TextInputFormatter {
 class SectionTitle extends StatelessWidget {
   const SectionTitle(
     this.text, {
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final String text;
 

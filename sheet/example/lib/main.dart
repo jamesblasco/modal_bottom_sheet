@@ -1,27 +1,27 @@
 import 'package:example/route_example_page.dart';
 import 'package:example/sheet_example_page.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sheet/route.dart';
 
 void main() => runApp(MyApp());
 
+final goRouter = GoRouter(routes: [
+  GoRoute(
+    path: '/',
+    pageBuilder: (context, state) =>
+        MaterialExtendedPage<void>(child: const BottomNavigationScaffold()),
+  ),
+]);
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       theme: ThemeData(platform: TargetPlatform.iOS),
       debugShowCheckedModeBanner: false,
       title: 'BottomSheet Modals',
-      onGenerateRoute: (RouteSettings settings) {
-        if (settings.name == '/') {
-          return MaterialExtendedPageRoute<void>(
-            builder: (BuildContext context) {
-              return const BottomNavigationScaffold();
-            },
-          );
-        }
-        return null;
-      },
+      routerConfig: goRouter,
     );
   }
 }
