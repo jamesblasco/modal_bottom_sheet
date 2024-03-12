@@ -185,6 +185,7 @@ class ModalSheetRoute<T> extends PageRoute<T> {
     return _animationController!;
   }
 
+  // ignore: deprecated_member_use
   bool get _hasScopedWillPopCallback => hasScopedWillPopCallback;
 
   @override

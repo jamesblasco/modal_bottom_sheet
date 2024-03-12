@@ -46,8 +46,11 @@ class ModalBottomSheet extends StatefulWidget {
     required this.child,
     this.minFlingVelocity = _minFlingVelocity,
     double? closeProgressThreshold,
-    this.willPopThreshold = _willPopThreshold,
-  }) : closeProgressThreshold =
+    @Deprecated('Use preventPopThreshold instead') double? willPopThreshold,
+    double? preventPopThreshold,
+  })  : preventPopThreshold =
+            preventPopThreshold ?? willPopThreshold ?? _willPopThreshold,
+        closeProgressThreshold =
             closeProgressThreshold ?? _closeProgressThreshold;
 
   /// The closeProgressThreshold parameter
@@ -107,9 +110,9 @@ class ModalBottomSheet extends StatefulWidget {
   /// Determines how fast the sheet should be flinged before closing.
   final double minFlingVelocity;
 
-  /// The willPopThreshold parameter
+  /// The preventPopThreshold parameter
   /// Determines how far the sheet should be flinged before closing.
-  final double willPopThreshold;
+  final double preventPopThreshold;
 
   @override
   ModalBottomSheetState createState() => ModalBottomSheetState();
