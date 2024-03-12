@@ -1,10 +1,10 @@
 name: sheet
 description: A fully customizable draggable bottom sheet.
-version: 1.0.0-pre
+version: 1.0.0
 homepage: https://github.com/jamesblasco/modal_bottom_sheet
 
 environment:
-  sdk: ">=3.0.0 <4.0.0"
+  sdk: ">=3.3.0 <4.0.0"
 
 dependencies:
   flutter:
@@ -14,7 +14,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  mocktail: ^1.0.1
+  mocktail: ^1.0.3
   lints: ^3.0.0
 
 flutter:
