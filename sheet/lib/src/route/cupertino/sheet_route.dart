@@ -101,6 +101,8 @@ class CupertinoSheetRoute<T> extends SheetRoute<T> {
     Color? backgroundColor,
     super.maintainState = true,
     super.fit,
+    super.barrierColor = Colors.transparent,
+    this.effectivePhysics,
   }) : super(
           builder: (BuildContext context) {
             return _CupertinoSheetDecorationBuilder(
@@ -113,6 +115,8 @@ class CupertinoSheetRoute<T> extends SheetRoute<T> {
           initialExtent: initialStop,
         );
 
+  final SheetPhysics? effectivePhysics;
+
   @override
   bool get draggable => true;
 
@@ -124,34 +128,38 @@ class CupertinoSheetRoute<T> extends SheetRoute<T> {
   }
 
   @override
-  Color? get barrierColor => Colors.transparent;
-
-  @override
   bool get barrierDismissible => true;
 
   @override
   Widget buildSheet(BuildContext context, Widget child) {
-    SheetPhysics? effectivePhysics = BouncingSheetPhysics(
-        parent: SnapSheetPhysics(
-      stops: stops ?? <double>[0, 1],
-      parent: physics,
-    ));
-    if (!draggable) {
-      effectivePhysics = const NeverDraggableSheetPhysics();
-    }
     final MediaQueryData mediaQuery = MediaQuery.of(context);
     final double topMargin =
-        math.max(_kSheetMinimalOffset, mediaQuery.padding.top) +
-            _kPreviousRouteVisibleOffset;
+        math.max(_kSheetMinimalOffset, mediaQuery.padding.top) + _kPreviousRouteVisibleOffset;
     return Sheet.raw(
       initialExtent: initialExtent,
       decorationBuilder: decorationBuilder,
       fit: fit,
       maxExtent: mediaQuery.size.height - topMargin,
-      physics: effectivePhysics,
+      physics: _prepareSheetPhysics(),
       controller: sheetController,
       child: child,
     );
+  }
+
+  SheetPhysics _prepareSheetPhysics() {
+    if (effectivePhysics != null) {
+      return effectivePhysics!;
+    } else {
+      if (!draggable) {
+        return const NeverDraggableSheetPhysics();
+      } else {
+        return BouncingSheetPhysics(
+            parent: SnapSheetPhysics(
+          stops: stops ?? <double>[0, 1],
+          parent: physics,
+        ));
+      }
+    }
   }
 
   @override
@@ -320,6 +328,8 @@ class CupertinoSheetPage<T> extends Page<T> {
   const CupertinoSheetPage({
     required this.child,
     this.maintainState = true,
+    this.barrierColor,
+    this.effectivePhysics,
     super.key,
     super.name,
     super.arguments,
@@ -331,9 +341,16 @@ class CupertinoSheetPage<T> extends Page<T> {
   /// {@macro flutter.widgets.modalRoute.maintainState}
   final bool maintainState;
 
+  final Color? barrierColor;
+  final SheetPhysics? effectivePhysics;
+
   @override
   Route<T> createRoute(BuildContext context) {
-    return _PageBasedCupertinoSheetRoute<T>(page: this);
+    return _PageBasedCupertinoSheetRoute<T>(
+      page: this,
+      barrierColor: barrierColor,
+      effectivePhysics: effectivePhysics,
+    );
   }
 }
 
@@ -348,6 +365,8 @@ class _PageBasedCupertinoSheetRoute<T> extends CupertinoSheetRoute<T> {
     super.initialStop,
     super.backgroundColor,
     super.maintainState,
+    super.barrierColor,
+    super.effectivePhysics,
   }) : super(
           settings: page,
           builder: (BuildContext context) {
