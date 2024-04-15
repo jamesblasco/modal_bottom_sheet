@@ -116,6 +116,9 @@ class SheetPrimaryScrollPosition extends ScrollPositionWithSingleContext {
 
   @override
   void goBallistic(double velocity) {
+
+    if (!sheetPosition.firstAnimationCompleted) return;
+
     if (sheetPosition.preventingDrag) {
       goIdle();
       return;

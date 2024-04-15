@@ -422,6 +422,7 @@ class __SheetRouteContainerState extends State<_SheetRouteContainer>
   void onRouteAnimationUpdate() {
     if (_routeController.isCompleted) {
       _firstAnimation = false;
+      _sheetController.position.onFirstAnimationCompleted();
     }
     if (!_routeController.isAnimating) {
       return;

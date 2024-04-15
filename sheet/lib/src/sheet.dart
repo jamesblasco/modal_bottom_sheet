@@ -418,6 +418,14 @@ class SheetPosition extends ScrollPositionWithSingleContext {
     super.debugLabel,
   });
 
+  bool get firstAnimationCompleted => _firstAnimationCompleted;
+
+  bool _firstAnimationCompleted = false;
+
+  void onFirstAnimationCompleted() {
+    _firstAnimationCompleted = true;
+  }
+
   late final SheetPrimaryScrollController _scrollController =
       SheetPrimaryScrollController(sheetContext: context as SheetContext);
 
