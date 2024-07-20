@@ -16,6 +16,7 @@ class _ModalBottomSheet<T> extends StatefulWidget {
     this.expanded = false,
     this.enableDrag = true,
     this.animationCurve,
+    this.secondAnimationCurve,
   });
 
   final double? closeProgressThreshold;
@@ -25,6 +26,7 @@ class _ModalBottomSheet<T> extends StatefulWidget {
   final bool enableDrag;
   final AnimationController? secondAnimationController;
   final Curve? animationCurve;
+  final Curve? secondAnimationCurve;
 
   @override
   _ModalBottomSheetState<T> createState() => _ModalBottomSheetState<T>();
@@ -112,6 +114,7 @@ class _ModalBottomSheetState<T> extends State<_ModalBottomSheet<T>> {
                 bounce: widget.bounce,
                 scrollController: scrollController,
                 animationCurve: widget.animationCurve,
+                secondAnimationCurve: widget.secondAnimationCurve,
               ),
             );
           },
@@ -136,6 +139,7 @@ class ModalSheetRoute<T> extends PageRoute<T> {
     required this.expanded,
     this.bounce = false,
     this.animationCurve,
+    this.secondAnimationCurve,
     Duration? duration,
     super.settings,
   })  : duration = duration ?? _bottomSheetDuration;
@@ -154,6 +158,7 @@ class ModalSheetRoute<T> extends PageRoute<T> {
 
   final AnimationController? secondAnimationController;
   final Curve? animationCurve;
+  final Curve? secondAnimationCurve;
 
   @override
   Duration get transitionDuration => duration;
@@ -204,6 +209,7 @@ class ModalSheetRoute<T> extends PageRoute<T> {
         bounce: bounce,
         enableDrag: enableDrag,
         animationCurve: animationCurve,
+        secondAnimationCurve: secondAnimationCurve,
       ),
     );
     return bottomSheet;
@@ -240,6 +246,7 @@ Future<T?> showCustomModalBottomSheet<T>({
   bool expand = false,
   AnimationController? secondAnimation,
   Curve? animationCurve,
+  Curve? secondAnimationCurve,
   bool useRootNavigator = false,
   bool isDismissible = true,
   bool enableDrag = true,
@@ -268,6 +275,7 @@ Future<T?> showCustomModalBottomSheet<T>({
     modalBarrierColor: barrierColor,
     enableDrag: enableDrag,
     animationCurve: animationCurve,
+    secondAnimationCurve: secondAnimationCurve,
     duration: duration,
     settings: settings,
     closeProgressThreshold: closeProgressThreshold,
