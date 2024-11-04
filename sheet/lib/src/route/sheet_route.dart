@@ -373,11 +373,18 @@ class __SheetRouteContainerState extends State<_SheetRouteContainer>
     _routeController.addListener(onRouteAnimationUpdate);
     _sheetController.addListener(onSheetExtentUpdate);
     WidgetsBinding.instance.addPostFrameCallback((Duration timeStamp) {
-      _sheetController.relativeAnimateTo(
+      _sheetController
+          .relativeAnimateTo(
         route.initialExtent,
         duration: route.transitionDuration,
         curve: route.animationCurve ?? Curves.easeOut,
-      );
+      )
+          .then((_) {
+        if (_sheetController.hasClients) {
+          (_sheetController.position.context as SheetContext)
+              .initialAnimationFinished = true;
+        }
+      });
     });
     super.initState();
   }
