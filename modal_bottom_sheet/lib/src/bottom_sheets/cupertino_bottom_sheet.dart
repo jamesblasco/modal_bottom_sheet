@@ -285,8 +285,8 @@ class _CupertinoModalTransition extends StatelessWidget {
               ? 0.0
               : (1 - progress) * startRoundCorner + progress * topRadius.x;
           return Stack(
-            children: <Widget>[
-              ColoredBox(color: backgroundColor),
+            children: [
+              Positioned.fill(child: ColoredBox(color: backgroundColor)),
               Transform.translate(
                 offset: Offset(0, yOffset),
                 child: Transform.scale(
