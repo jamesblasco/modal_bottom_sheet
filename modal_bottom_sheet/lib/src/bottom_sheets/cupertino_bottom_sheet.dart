@@ -274,20 +274,23 @@ class _CupertinoModalTransition extends StatelessWidget {
       // we insert below. Since all other content is pushed down, the background
       // color will always be the one visible behind the status bar.
       value: overlayStyleFromColor(backgroundColor),
-      child: AnimatedBuilder(
-        animation: curvedAnimation,
-        child: body,
-        builder: (context, child) {
-          final progress = curvedAnimation.value;
-          final yOffset = progress * paddingTop;
-          final scale = 1 - progress / 10;
-          final radius = progress == 0
-              ? 0.0
-              : (1 - progress) * startRoundCorner + progress * topRadius.x;
-          return Stack(
-            children: [
-              Positioned.fill(child: ColoredBox(color: backgroundColor)),
-              Transform.translate(
+      child: Stack(
+        children: [
+          Positioned.fill(child: ColoredBox(color: backgroundColor)),
+          AnimatedBuilder(
+            animation: curvedAnimation,
+            child: CupertinoUserInterfaceLevel(
+              data: CupertinoUserInterfaceLevelData.base,
+              child: body,
+            ),
+            builder: (context, child) {
+              final progress = curvedAnimation.value;
+              final yOffset = progress * paddingTop;
+              final scale = 1 - progress / 10;
+              final radius = progress == 0
+                  ? 0.0
+                  : (1 - progress) * startRoundCorner + progress * topRadius.x;
+              return Transform.translate(
                 offset: Offset(0, yOffset),
                 child: Transform.scale(
                   scale: scale,
@@ -302,19 +305,16 @@ class _CupertinoModalTransition extends StatelessWidget {
                             context,
                             curvedAnimation,
                           ),
-                          child: CupertinoUserInterfaceLevel(
-                            data: CupertinoUserInterfaceLevelData.base,
-                            child: child!,
-                          ),
+                          child: child!,
                         ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ],
-          );
-        },
+              );
+            },
+          ),
+        ],
       ),
     );
   }
