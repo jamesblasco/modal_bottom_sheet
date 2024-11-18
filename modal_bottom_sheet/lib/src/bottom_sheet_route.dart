@@ -96,10 +96,21 @@ class _ModalBottomSheetState<T> extends State<_ModalBottomSheet<T>> {
                 expanded: widget.route.expanded,
                 containerBuilder: widget.route.containerBuilder,
                 animationController: widget.route._animationController!,
-                shouldClose: widget.route._hasScopedWillPopCallback
+                shouldClose: widget.route.popDisposition ==
+                            RoutePopDisposition.doNotPop ||
+                        widget.route._hasScopedWillPopCallback
                     ? () async {
+                        // ignore: deprecated_member_use
                         final willPop = await widget.route.willPop();
-                        return willPop != RoutePopDisposition.doNotPop;
+                        final popDisposition = widget.route.popDisposition;
+                        final shouldClose =
+                            !(willPop == RoutePopDisposition.doNotPop ||
+                                popDisposition == RoutePopDisposition.doNotPop);
+                        popDisposition == RoutePopDisposition.doNotPop;
+                        if (!shouldClose) {
+                          widget.route.onPopInvoked(false);
+                        }
+                        return shouldClose;
                       }
                     : null,
                 onClosing: () {
@@ -138,7 +149,7 @@ class ModalSheetRoute<T> extends PageRoute<T> {
     this.animationCurve,
     Duration? duration,
     super.settings,
-  })  : duration = duration ?? _bottomSheetDuration;
+  }) : duration = duration ?? _bottomSheetDuration;
 
   final double? closeProgressThreshold;
   final WidgetWithChildBuilder? containerBuilder;

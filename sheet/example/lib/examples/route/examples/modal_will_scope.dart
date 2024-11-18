@@ -7,31 +7,35 @@ class ModalWillScope extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-        child: WillPopScope(
-      onWillPop: () async {
-        bool shouldClose = true;
-        await showCupertinoDialog<void>(
+        child: PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) async {
+        if (didPop) {
+          return;
+        }
+        final sheetNavigator = Navigator.of(context);
+        showCupertinoDialog<void>(
             context: context,
-            builder: (BuildContext context) => CupertinoAlertDialog(
-                  title: const Text('Should Close?'),
-                  actions: <Widget>[
-                    CupertinoButton(
-                      child: const Text('Yes'),
-                      onPressed: () {
-                        shouldClose = true;
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                    CupertinoButton(
-                      child: const Text('No'),
-                      onPressed: () {
-                        shouldClose = false;
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  ],
-                ));
-        return shouldClose;
+            builder: (BuildContext context) {
+              return CupertinoAlertDialog(
+                title: const Text('Should Close?'),
+                actions: <Widget>[
+                  CupertinoButton(
+                    child: const Text('Yes'),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      sheetNavigator.pop();
+                    },
+                  ),
+                  CupertinoButton(
+                    child: const Text('No'),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              );
+            });
       },
       child: CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(

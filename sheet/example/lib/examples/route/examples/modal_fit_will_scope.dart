@@ -7,10 +7,12 @@ class ModalFitWillScope extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-        child: WillPopScope(
-      onWillPop: () async {
-        bool shouldClose = true;
-        await showCupertinoDialog<void>(
+        child: PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) {
+        if (didPop) return;
+        final sheetNavigator = Navigator.of(context);
+        showCupertinoDialog<void>(
             context: context,
             builder: (BuildContext context) => CupertinoAlertDialog(
                   title: const Text('Should Close?'),
@@ -18,20 +20,18 @@ class ModalFitWillScope extends StatelessWidget {
                     CupertinoButton(
                       child: const Text('Yes'),
                       onPressed: () {
-                        shouldClose = true;
                         Navigator.of(context).pop();
+                        sheetNavigator.pop();
                       },
                     ),
                     CupertinoButton(
                       child: const Text('No'),
                       onPressed: () {
-                        shouldClose = false;
                         Navigator.of(context).pop();
                       },
                     ),
                   ],
                 ));
-        return shouldClose;
       },
       child: Column(
         mainAxisSize: MainAxisSize.min,

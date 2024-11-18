@@ -3,7 +3,7 @@ import 'package:sheet/sheet.dart';
 
 class FoldableScreenFloatingSheet extends StatefulWidget {
   @override
-  State<FoldableScreenFloatingSheet>  createState() => _FitSheetState();
+  State<FoldableScreenFloatingSheet> createState() => _FitSheetState();
 }
 
 class _FitSheetState extends State<FoldableScreenFloatingSheet> {
