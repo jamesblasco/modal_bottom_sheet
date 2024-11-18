@@ -234,8 +234,8 @@ class RouteExamplePage extends StatelessWidget {
                       ),
                     ),
                     ListTile(
-                      title: const Text(
-                          'Cupertino Navigator + Scroll + WillPopScope'),
+                      title:
+                          const Text('Cupertino Navigator + Scroll + PopScope'),
                       onTap: () => Navigator.of(context).push(
                         CupertinoSheetRoute<void>(
                           builder: (BuildContext context) =>
@@ -244,7 +244,7 @@ class RouteExamplePage extends StatelessWidget {
                       ),
                     ),
                     ListTile(
-                      title: const Text('Modal with WillPopScope'),
+                      title: const Text('Modal with PopScope'),
                       onTap: () => Navigator.of(context).push(
                         CupertinoSheetRoute<void>(
                           builder: (BuildContext context) =>
@@ -253,7 +253,7 @@ class RouteExamplePage extends StatelessWidget {
                       ),
                     ),
                     ListTile(
-                      title: const Text('Modal Fit with WillPopScope'),
+                      title: const Text('Modal Fit with PopScope'),
                       onTap: () => Navigator.of(context).push(
                         CupertinoSheetRoute<void>(
                           fit: SheetFit.loose,

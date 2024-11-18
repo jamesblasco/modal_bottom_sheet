@@ -208,8 +208,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               builder: (context) => ModalWithNavigator(),
                             )),
                     ListTile(
-                      title:
-                          Text('Cupertino Navigator + Scroll + WillPopScope'),
+                      title: Text('Cupertino Navigator + Scroll + PopScope'),
                       onTap: () => showCupertinoModalBottomSheet(
                         expand: true,
                         context: context,
@@ -218,7 +217,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                     ),
                     ListTile(
-                      title: Text('Modal with WillPopScope'),
+                      title: Text('Modal with PopScope'),
                       onTap: () => showCupertinoModalBottomSheet(
                         expand: true,
                         context: context,

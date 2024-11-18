@@ -20,7 +20,7 @@ Why not `showModalBottomSheet`?
 Inspired by `showModalBottomSheet`, it completes with some must-need features:
 
 - Support for inside scrollview + dragging down to close (`showModalBottomSheet` won't work correctly with scrollviews. 
-- Support for `WillPopScope` to prevent closing the dialog.
+- Support for `PopScope` and `WillPopScope` to prevent closing the dialog.
 - Support for scroll to top when tapping status bar (iOS only)
 - Support for top SafeArea (not supported by showModalBottomSheet)
 - Cupertino modal bottom sheet

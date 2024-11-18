@@ -182,7 +182,8 @@ class SheetRoute<T> extends PageRoute<T> with DelegatedTransitionsRoute<T> {
   @protected
   bool shouldPreventPopForExtent(double extent) {
     return extent < willPopThreshold &&
-        hasScopedWillPopCallback &&
+        (hasScopedWillPopCallback ||
+            popDisposition == RoutePopDisposition.doNotPop) &&
         controller!.velocity <= 0;
   }
 
@@ -466,20 +467,24 @@ class __SheetRouteContainerState extends State<_SheetRouteContainer>
       duration: const Duration(milliseconds: 400),
       curve: Curves.easeInOut,
     );
-
-    route.willPop().then(
-      (RoutePopDisposition disposition) {
-        if (disposition == RoutePopDisposition.pop) {
-          _sheetController.relativeAnimateTo(
-            0,
-            duration: const Duration(milliseconds: 400),
-            curve: Curves.easeInOut,
-          );
-        } else {
-          _sheetController.position.stopPreventingDrag();
-        }
-      },
-    );
+    if (route.popDisposition == RoutePopDisposition.doNotPop) {
+      _sheetController.position.stopPreventingDrag();
+      route.onPopInvoked(false);
+    } else {
+      route.willPop().then(
+        (RoutePopDisposition disposition) {
+          if (disposition == RoutePopDisposition.pop) {
+            _sheetController.relativeAnimateTo(
+              0,
+              duration: const Duration(milliseconds: 400),
+              curve: Curves.easeInOut,
+            );
+          } else {
+            _sheetController.position.stopPreventingDrag();
+          }
+        },
+      );
+    }
   }
 
   @override
