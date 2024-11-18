@@ -13,11 +13,10 @@ import 'package:flutter/widgets.dart';
 class ModalScrollController extends InheritedWidget {
   /// Creates a widget that associates a [ScrollController] with a subtree.
   ModalScrollController({
-    Key? key,
+    super.key,
     required this.controller,
     required Widget child,
   }) : super(
-          key: key,
           child: PrimaryScrollController(
             controller: controller,
             child: child,

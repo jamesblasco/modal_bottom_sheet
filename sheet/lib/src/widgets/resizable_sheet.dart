@@ -14,12 +14,12 @@ import 'package:sheet/sheet.dart';
 ///  * [Sheet], that uses this widget to allow resizable sheet child
 class ResizableSheetChild extends SingleChildRenderObjectWidget {
   const ResizableSheetChild({
-    Key? key,
+    super.key,
     this.minExtent = 0,
     required this.offset,
-    required Widget child,
+    required Widget super.child,
     required this.resizable,
-  }) : super(key: key, child: child);
+  });
 
   final double minExtent;
   final bool resizable;
@@ -118,27 +118,15 @@ class RenderResizableSheetChildBox extends RenderShiftedBox {
       return;
     }
 
-    // The height of the child will be the maximun between the offset pixels
+    // The height of the child will be the maximum between the offset pixels
     // and the minExtent
-    final double extent = max(_offset.pixels, minExtent);
-
+    final double extend = max(_offset.pixels, minExtent);
     child!.layout(
-      BoxConstraints(
-        maxHeight: extent,
-        minHeight: extent,
-        minWidth: constraints.minWidth,
-        maxWidth: constraints.maxWidth,
-      ),
+      constraints.copyWith(maxHeight: extend, minHeight: extend),
       parentUsesSize: true,
     );
 
-    if (!constraints.hasTightHeight) {
-      size = Size(
-          child!.size.width, constraints.constrainHeight(child!.size.height));
-      childParentData.offset = Offset.zero;
-    } else {
-      size = constraints.biggest;
-      childParentData.offset = Offset.zero;
-    }
+    size = constraints.biggest;
+    childParentData.offset = Offset.zero;
   }
 }

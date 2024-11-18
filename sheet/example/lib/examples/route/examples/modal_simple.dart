@@ -2,8 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class SimpleModal extends StatelessWidget {
-  const SimpleModal({Key? key, required this.scrollController})
-      : super(key: key);
+  const SimpleModal({super.key, required this.scrollController});
   final ScrollController scrollController;
 
   @override

@@ -3,7 +3,7 @@ import 'package:sheet/sheet.dart';
 
 typedef SheetControllerCallback = void Function(SheetController controller);
 
-/// A widget that injets a [SheetController] that can be used by
+/// A widget that injects a [SheetController] that can be used by
 /// any [Sheet] children
 ///
 /// It is useful for creating initial animations
@@ -14,8 +14,11 @@ typedef SheetControllerCallback = void Function(SheetController controller);
 ///
 ///
 class DefaultSheetController extends StatefulWidget {
-  const DefaultSheetController({Key? key, required this.child, this.onCreated})
-      : super(key: key);
+  const DefaultSheetController({
+    super.key,
+    required this.child,
+    this.onCreated,
+  });
 
   final Widget child;
 
@@ -44,7 +47,9 @@ class _DefaultSheetControllerState extends State<DefaultSheetController> {
   @override
   Widget build(BuildContext context) {
     return _InheritedSheetController(
-        child: widget.child, controller: controller);
+      child: widget.child,
+      controller: controller,
+    );
   }
 
   @override
@@ -55,9 +60,10 @@ class _DefaultSheetControllerState extends State<DefaultSheetController> {
 }
 
 class _InheritedSheetController extends InheritedWidget {
-  const _InheritedSheetController(
-      {Key? key, required super.child, required this.controller})
-      : super(key: key);
+  const _InheritedSheetController({
+    required super.child,
+    required this.controller,
+  });
 
   final SheetController controller;
 

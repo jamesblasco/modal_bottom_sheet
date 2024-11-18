@@ -10,17 +10,13 @@ class MaterialWithModalsPageRoute<T> extends MaterialPageRoute<T> {
   /// The values of [builder], [maintainState], and [fullScreenDialog] must not
   /// be null.
   MaterialWithModalsPageRoute({
-    required WidgetBuilder builder,
-    RouteSettings? settings,
-    bool maintainState = true,
-    bool fullscreenDialog = false,
-  }) : super(
-            settings: settings,
-            fullscreenDialog: fullscreenDialog,
-            builder: builder,
-            maintainState: maintainState);
+    required super.builder,
+    super.settings,
+    super.maintainState,
+    super.fullscreenDialog,
+  });
 
-  ModalBottomSheetRoute? _nextModalRoute;
+  ModalSheetRoute? _nextModalRoute;
 
   @override
   bool canTransitionTo(TransitionRoute<dynamic> nextRoute) {
@@ -29,21 +25,16 @@ class MaterialWithModalsPageRoute<T> extends MaterialPageRoute<T> {
         (nextRoute is CupertinoPageRoute && !nextRoute.fullscreenDialog) ||
         (nextRoute is MaterialWithModalsPageRoute &&
             !nextRoute.fullscreenDialog) ||
-        (nextRoute is ModalBottomSheetRoute);
+        (nextRoute is ModalSheetRoute);
   }
 
   @override
   void didChangeNext(Route? nextRoute) {
-    if (nextRoute is ModalBottomSheetRoute) {
+    if (nextRoute is ModalSheetRoute) {
       _nextModalRoute = nextRoute;
     }
 
     super.didChangeNext(nextRoute);
-  }
-
-  @override
-  void didPopNext(Route nextRoute) {
-    super.didPopNext(nextRoute);
   }
 
   @override

@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:meta/meta.dart';
 import 'package:sheet/route.dart';
 import 'package:sheet/sheet.dart';
 
@@ -26,7 +27,7 @@ const Radius _kCupertinoSheetTopRadius = Radius.circular(10.0);
 const Radius _kRoundedDeviceRadius = Radius.circular(38.5);
 
 /// Minimal distance from the top of the screen to the top of the previous route
-/// It will be used ff the top safearea is less than this value.
+/// It will be used ff the top safe area is less than this value.
 /// In iPhones the top SafeArea is more or equal to this distance.
 const double _kSheetMinimalOffset = 10;
 
@@ -38,18 +39,17 @@ const double _kRoundedDeviceStatusBarHeight = 20;
 const Curve _kCupertinoSheetCurve = Curves.easeOutExpo;
 const Curve _kCupertinoTransitionCurve = Curves.linear;
 
-/// Wraps the child into a cupertino modal sheet appareance. This is used to
+/// Wraps the child into a cupertino modal sheet appearance. This is used to
 /// create a [SheetRoute].
 ///
 /// Clip the child widget to rectangle with top rounded corners and adds
 /// top padding and top safe area.
 class _CupertinoSheetDecorationBuilder extends StatelessWidget {
   const _CupertinoSheetDecorationBuilder({
-    Key? key,
     required this.child,
     required this.topRadius,
     this.backgroundColor,
-  }) : super(key: key);
+  });
 
   /// The child contained by the modal sheet
   final Widget child;
@@ -86,7 +86,7 @@ class _CupertinoSheetDecorationBuilder extends StatelessWidget {
 }
 
 /// A modal route that overlays a widget over the current route and animates
-/// it from the bottom with a cupertino modal sheet appareance
+/// it from the bottom with a cupertino modal sheet appearance
 ///
 /// Clip the child widget to rectangle with top rounded corners and adds
 /// top padding and top safe area.
@@ -95,11 +95,11 @@ class _CupertinoSheetDecorationBuilder extends StatelessWidget {
 class CupertinoSheetRoute<T> extends SheetRoute<T> {
   CupertinoSheetRoute({
     required WidgetBuilder builder,
-    List<double>? stops,
+    super.stops,
     double initialStop = 1,
-    RouteSettings? settings,
+    super.settings,
     Color? backgroundColor,
-    bool maintainState = true,
+    super.maintainState = true,
     super.fit,
     super.draggable = true,
   }) : super(
@@ -110,11 +110,8 @@ class CupertinoSheetRoute<T> extends SheetRoute<T> {
               topRadius: _kCupertinoSheetTopRadius,
             );
           },
-          settings: settings,
           animationCurve: _kCupertinoSheetCurve,
-          stops: stops,
           initialExtent: initialStop,
-          maintainState: maintainState,
         );
 
   final SheetController _sheetController = SheetController();
@@ -221,14 +218,14 @@ class CupertinoSheetRoute<T> extends SheetRoute<T> {
 }
 
 /// Animation for previous route when a [CupertinoSheetRoute] enters/exits
-@visibleForTesting
+@internal
 class CupertinoSheetBottomRouteTransition extends StatelessWidget {
   const CupertinoSheetBottomRouteTransition({
-    Key? key,
+    super.key,
     required this.sheetAnimation,
     required this.secondaryAnimation,
     required this.body,
-  }) : super(key: key);
+  });
 
   final Widget body;
 
@@ -237,7 +234,7 @@ class CupertinoSheetBottomRouteTransition extends StatelessWidget {
 
   // Currently iOS does not provide any way to detect the radius of the
   // screen device. Right not we detect if the safe area has the size
-  // for the device that contain a notch as they are the ones rigth
+  // for the device that contain a notch as they are the ones right
   // now that has corners with radius
   Radius _getRadiusForDevice(MediaQueryData mediaQuery) {
     final double topPadding = mediaQuery.padding.top;
@@ -303,7 +300,7 @@ class CupertinoSheetBottomRouteTransition extends StatelessWidget {
 }
 
 /// A modal page that overlays a widget over the current route and animates
-/// it from the bottom with a cupertino modal sheet appareance
+/// it from the bottom with a cupertino modal sheet appearance
 ///
 /// Clip the child widget to rectangle with top rounded corners and adds
 /// top padding and top safe area.
@@ -321,10 +318,10 @@ class CupertinoSheetPage<T> extends Page<T> {
   const CupertinoSheetPage({
     required this.child,
     this.maintainState = true,
-    LocalKey? key,
-    String? name,
-    Object? arguments,
-  }) : super(key: key, name: name, arguments: arguments);
+    super.key,
+    super.name,
+    super.arguments,
+  });
 
   /// The content to be shown in the [Route] created by this page.
   final Widget child;
@@ -345,17 +342,16 @@ class CupertinoSheetPage<T> extends Page<T> {
 class _PageBasedCupertinoSheetRoute<T> extends CupertinoSheetRoute<T> {
   _PageBasedCupertinoSheetRoute({
     required CupertinoSheetPage<T> page,
-    List<double>? stops,
-    double initialStop = 1,
-    Color? backgroundColor,
-    bool maintainState = true,
+    super.stops,
+    super.initialStop,
+    super.backgroundColor,
+    super.maintainState,
   }) : super(
           settings: page,
-          builder: (BuildContext context) => page.child,
-          initialStop: initialStop,
-          backgroundColor: backgroundColor,
-          stops: stops,
-          maintainState: maintainState,
+          builder: (BuildContext context) {
+            return (ModalRoute.of(context)!.settings as CupertinoSheetPage<T>)
+                .child;
+          },
         );
 
   CupertinoSheetPage<T> get _page => settings as CupertinoSheetPage<T>;

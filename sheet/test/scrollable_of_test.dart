@@ -2,14 +2,13 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sheet/sheet.dart';
 
 class ScrollPositionListener extends StatefulWidget {
   const ScrollPositionListener(
-      {Key? key, required this.child, required this.log})
-      : super(key: key);
+      {super.key, required this.child, required this.log});
 
   final Widget child;
   final ValueChanged<String> log;
@@ -55,9 +54,8 @@ void main() {
     // ScrollController's ScrollPosition to be rebuilt.
 
     Widget buildFrame(SheetPhysics? physics) {
-      return Directionality(
-        textDirection: TextDirection.ltr,
-        child: Sheet(
+      return MaterialApp(
+        home: Sheet(
           controller: controller,
           physics: physics,
           child: ScrollPositionListener(

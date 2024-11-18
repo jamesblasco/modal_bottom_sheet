@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:sheet/route.dart';
 
 class ModalInsideModal extends StatelessWidget {
-  const ModalInsideModal({Key? key, this.reverse = false}) : super(key: key);
+  const ModalInsideModal({super.key, this.reverse = false});
   final bool reverse;
 
   @override

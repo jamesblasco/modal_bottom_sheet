@@ -5,7 +5,7 @@ import 'package:sheet/sheet.dart';
 
 class FitResizableSheet extends StatefulWidget {
   @override
-  _FitSheetState createState() => _FitSheetState();
+  State<FitResizableSheet> createState() => _FitSheetState();
 }
 
 class _FitSheetState extends State<FitResizableSheet> {

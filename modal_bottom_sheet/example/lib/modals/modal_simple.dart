@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class SimpleModal extends StatelessWidget {
-  const SimpleModal({Key? key}) : super(key: key);
+  const SimpleModal({super.key});
 
   @override
   Widget build(BuildContext context) {

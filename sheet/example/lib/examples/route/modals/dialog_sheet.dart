@@ -3,8 +3,7 @@ import 'package:sheet/route.dart';
 import 'package:sheet/sheet.dart';
 
 class DialogSheet extends StatelessWidget {
-  const DialogSheet({Key? key, required this.child, this.backgroundColor})
-      : super(key: key);
+  const DialogSheet({super.key, required this.child, this.backgroundColor});
   final Widget child;
   final Color? backgroundColor;
 

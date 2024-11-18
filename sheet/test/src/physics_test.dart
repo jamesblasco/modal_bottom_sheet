@@ -82,6 +82,7 @@ void main() {
           pixels: -20.0,
           viewportDimension: 100.0,
           axisDirection: AxisDirection.down,
+          devicePixelRatio: 1,
         );
 
         final ScrollMetrics moreOverscrolledPosition = FixedScrollMetrics(
@@ -90,6 +91,7 @@ void main() {
           pixels: -40.0,
           viewportDimension: 100.0,
           axisDirection: AxisDirection.down,
+          devicePixelRatio: 1,
         );
 
         final double lessOverscrollApplied = physicsUnderTest
@@ -118,6 +120,7 @@ void main() {
           pixels: -20.0,
           viewportDimension: 100.0,
           axisDirection: AxisDirection.down,
+          devicePixelRatio: 1,
         );
 
         final double easingApplied = physicsUnderTest.applyPhysicsToUserOffset(
@@ -131,6 +134,7 @@ void main() {
         final ScrollMetrics scrollPosition = FixedScrollMetrics(
           minScrollExtent: 0.0,
           maxScrollExtent: 1000.0,
+          devicePixelRatio: 1,
           pixels: 300.0,
           viewportDimension: 100.0,
           axisDirection: AxisDirection.down,
@@ -153,6 +157,7 @@ void main() {
           pixels: -20.0,
           viewportDimension: 100.0,
           axisDirection: AxisDirection.down,
+          devicePixelRatio: 1,
         );
 
         final double easingApplied = physicsUnderTest.applyPhysicsToUserOffset(
@@ -168,12 +173,14 @@ void main() {
           minScrollExtent: 0.0,
           maxScrollExtent: 10.0,
           pixels: -20.0,
+          devicePixelRatio: 1,
           viewportDimension: 100.0,
           axisDirection: AxisDirection.down,
         );
 
         final ScrollMetrics bigListOverscrolledPosition = FixedScrollMetrics(
           minScrollExtent: 0.0,
+          devicePixelRatio: 1,
           maxScrollExtent: 1000.0,
           pixels: -20.0,
           viewportDimension: 100.0,
@@ -199,6 +206,7 @@ void main() {
           final ScrollMetrics scrollMetrics = FixedScrollMetrics(
             minScrollExtent: 0.0,
             maxScrollExtent: 200.0,
+            devicePixelRatio: 1,
             pixels: 10.0,
             viewportDimension: 100.0,
             axisDirection: AxisDirection.down,
@@ -217,6 +225,7 @@ void main() {
             final ScrollMetrics scrollMetrics = FixedScrollMetrics(
               minScrollExtent: 0.0,
               maxScrollExtent: 200.0,
+              devicePixelRatio: 1,
               pixels: 120.0,
               viewportDimension: 100.0,
               axisDirection: AxisDirection.down,
@@ -237,6 +246,7 @@ void main() {
             final ScrollMetrics scrollMetrics = FixedScrollMetrics(
               minScrollExtent: 0.0,
               maxScrollExtent: 200.0,
+              devicePixelRatio: 1,
               pixels: -10.0,
               viewportDimension: 100.0,
               axisDirection: AxisDirection.down,
@@ -258,6 +268,7 @@ void main() {
           final ScrollMetrics scrollMetrics = FixedScrollMetrics(
             minScrollExtent: 0.0,
             maxScrollExtent: 200.0,
+            devicePixelRatio: 1,
             pixels: 120.0,
             viewportDimension: 100.0,
             axisDirection: AxisDirection.down,
@@ -275,6 +286,7 @@ void main() {
           final ScrollMetrics scrollMetrics = FixedScrollMetrics(
             minScrollExtent: 0.0,
             maxScrollExtent: 200.0,
+            devicePixelRatio: 1,
             pixels: -10.0,
             viewportDimension: 100.0,
             axisDirection: AxisDirection.down,
@@ -303,6 +315,7 @@ void main() {
           final ScrollMetrics scrollMetrics = FixedScrollMetrics(
             minScrollExtent: 0.0,
             maxScrollExtent: 200.0,
+            devicePixelRatio: 1,
             pixels: 120.0,
             viewportDimension: 100.0,
             axisDirection: AxisDirection.down,
@@ -320,6 +333,7 @@ void main() {
           final ScrollMetrics scrollMetrics = FixedScrollMetrics(
             minScrollExtent: 0.0,
             maxScrollExtent: 200.0,
+            devicePixelRatio: 1,
             pixels: -10.0,
             viewportDimension: 100.0,
             axisDirection: AxisDirection.down,

@@ -17,13 +17,12 @@ import 'package:sheet/sheet.dart';
 ///    descendants.
 class SheetPrimaryScrollController extends ScrollController {
   SheetPrimaryScrollController({
-    double initialScrollOffset = 0.0,
-    String? debugLabel,
+    super.initialScrollOffset,
+    super.debugLabel,
+    super.onAttach,
+    super.onDetach,
     required this.sheetContext,
-  }) : super(
-          debugLabel: debugLabel,
-          initialScrollOffset: initialScrollOffset,
-        );
+  });
 
   final SheetContext sheetContext;
 
@@ -43,7 +42,7 @@ class SheetPrimaryScrollController extends ScrollController {
 }
 
 class _SheetScrollActivity extends ScrollActivity {
-  _SheetScrollActivity(SheetPosition delegate) : super(delegate);
+  _SheetScrollActivity(SheetPosition super.delegate);
 
   @override
   bool get isScrolling => true;
@@ -69,26 +68,19 @@ class _SheetScrollActivity extends ScrollActivity {
 ///  * [_SheetScrollController], which uses this as its [ScrollPosition].
 class SheetPrimaryScrollPosition extends ScrollPositionWithSingleContext {
   SheetPrimaryScrollPosition({
-    required ScrollPhysics physics,
-    required ScrollContext context,
-    double initialPixels = 0.0,
-    bool keepScrollOffset = true,
+    required super.physics,
+    required super.context,
+    double super.initialPixels,
+    super.keepScrollOffset,
     required this.sheetContext,
-    ScrollPosition? oldPosition,
-    String? debugLabel,
-  }) : super(
-          physics: physics,
-          context: context,
-          initialPixels: initialPixels,
-          keepScrollOffset: keepScrollOffset,
-          oldPosition: oldPosition,
-          debugLabel: debugLabel,
-        );
+    super.oldPosition,
+    super.debugLabel,
+  });
 
   final SheetContext sheetContext;
   SheetPosition get sheetPosition => sheetContext.position;
 
-  bool sheetShouldSheetAcceptUserOffser(double delta) {
+  bool sheetShouldSheetAcceptUserOffset(double delta) {
     // Can drag down if list already on the top
     final bool canDragForward = delta >= 0 && pixels <= minScrollExtent;
 
@@ -106,63 +98,42 @@ class SheetPrimaryScrollPosition extends ScrollPositionWithSingleContext {
     if (sheetPosition.preventingDrag) {
       return;
     }
-    if (sheetShouldSheetAcceptUserOffser(delta)) {
-      final double pixels = sheetPosition.pixels -
+    if (sheetShouldSheetAcceptUserOffset(delta)) {
+      if (sheetPosition.activity is! _SheetScrollActivity) {
+        sheetPosition.beginActivity(_SheetScrollActivity(sheetPosition));
+      }
+      final double sheetDelta =
           sheetPosition.physics.applyPhysicsToUserOffset(sheetPosition, delta);
-
-      sheetPosition.forcePixels(
-        pixels.clamp(
-            sheetPosition.minScrollExtent, sheetPosition.maxScrollExtent),
-      );
-      sheetPosition.beginActivity(_SheetScrollActivity(sheetPosition));
+      sheetPosition.applyUserOffset(sheetDelta);
       return;
     } else {
       super.applyUserOffset(delta);
-      sheetPosition.goIdle();
+      if (sheetPosition.activity is! HoldScrollActivity) {
+        sheetPosition.hold(() {});
+      }
     }
   }
 
   @override
   void goBallistic(double velocity) {
     if (sheetPosition.preventingDrag) {
-      beginActivity(
-        BallisticScrollActivity(
-          this,
-          ScrollSpringSimulation(
-            SpringDescription.withDampingRatio(
-              mass: 0.5,
-              stiffness: 100.0,
-              ratio: 1.1,
-            ),
-            pixels,
-            0,
-            velocity,
-          ),
-          context.vsync,
-          true,
-        ),
-      );
-
+      goIdle();
       return;
     }
 
-    final bool sheetDragging = sheetPosition.activity!.isScrolling;
-    if (sheetDragging &&
-        sheetPosition.hasContentDimensions &&
-        !sheetPosition.preventingDrag &&
-        sheetPosition.activity!.isScrolling) {
-      sheetPosition.goBallistic(velocity);
-    } else {
-      sheetPosition.goIdle();
+    if (sheetPosition.hasContentDimensions) {
+      if (sheetContext.initialAnimationFinished) {
+        sheetPosition.goBallistic(velocity);
+      } else {
+        goIdle();
+        return;
+      }
     }
 
-    if (!sheetDragging) {
-      super.goBallistic(velocity);
-      return;
-    } else if (velocity > 0.0 &&
+    if (velocity > 0.0 &&
             sheetPosition.pixels >= sheetPosition.maxScrollExtent ||
         (velocity < 0.0 && pixels > 0)) {
-      //   super.goBallistic(velocity);
+      super.goBallistic(velocity);
       return;
     } else if (outOfRange) {
       beginActivity(
@@ -183,11 +154,9 @@ class SheetPrimaryScrollPosition extends ScrollPositionWithSingleContext {
         ),
       );
       return;
+    } else {
+      goIdle();
+      return;
     }
-
-    goIdle();
   }
-
-  //@override
-  //double get pixels => super.pixels + viewportDimension;
 }

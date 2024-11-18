@@ -24,8 +24,7 @@ class AvatarSheetRoute<T> extends SheetRoute<T> {
 }
 
 class _AvatarSheet extends StatelessWidget {
-  const _AvatarSheet({Key? key, required this.child, required this.animation})
-      : super(key: key);
+  const _AvatarSheet({required this.child, required this.animation});
   final Widget child;
   final Animation<double> animation;
 

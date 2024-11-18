@@ -1,3 +1,9 @@
+## 3.0.0 - Flutter 3.19
+
++ Migrates to Flutter 3.19 
++ ModalBottomSheetRoute has been renamed to ModalSheetRoute 
+- WillPopScope support will be replaced for PopScope functionality
+
 
 ## 3.0.0-pre - Flutter 3.7
 

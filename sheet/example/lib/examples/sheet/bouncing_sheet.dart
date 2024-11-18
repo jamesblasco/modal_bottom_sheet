@@ -20,7 +20,7 @@ class BounceTopSheet extends StatelessWidget {
 
 class BouncingSheetPage extends StatefulWidget {
   @override
-  _BouncingSheetPageState createState() => _BouncingSheetPageState();
+  State<BouncingSheetPage> createState() => _BouncingSheetPageState();
 }
 
 class _BouncingSheetPageState extends State<BouncingSheetPage> {

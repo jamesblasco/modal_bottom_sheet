@@ -33,7 +33,7 @@ typedef WidgetWithChildBuilder = Widget Function(
 class ModalBottomSheet extends StatefulWidget {
   /// Creates a bottom sheet.
   const ModalBottomSheet({
-    Key? key,
+    super.key,
     required this.animationController,
     this.animationCurve,
     this.enableDrag = true,
@@ -46,10 +46,12 @@ class ModalBottomSheet extends StatefulWidget {
     required this.child,
     this.minFlingVelocity = _minFlingVelocity,
     double? closeProgressThreshold,
-    this.willPopThreshold = _willPopThreshold,
-  })  : closeProgressThreshold =
-            closeProgressThreshold ?? _closeProgressThreshold,
-        super(key: key);
+    @Deprecated('Use preventPopThreshold instead') double? willPopThreshold,
+    double? preventPopThreshold,
+  })  : preventPopThreshold =
+            preventPopThreshold ?? willPopThreshold ?? _willPopThreshold,
+        closeProgressThreshold =
+            closeProgressThreshold ?? _closeProgressThreshold;
 
   /// The closeProgressThreshold parameter
   /// specifies when the bottom sheet will be dismissed when user drags it.
@@ -108,9 +110,9 @@ class ModalBottomSheet extends StatefulWidget {
   /// Determines how fast the sheet should be flinged before closing.
   final double minFlingVelocity;
 
-  /// The willPopThreshold parameter
+  /// The preventPopThreshold parameter
   /// Determines how far the sheet should be flinged before closing.
-  final double willPopThreshold;
+  final double preventPopThreshold;
 
   @override
   ModalBottomSheetState createState() => ModalBottomSheetState();
@@ -232,7 +234,6 @@ class ModalBottomSheetState extends State<ModalBottomSheet>
 
     if (_dismissUnderway || !isDragging) return;
     isDragging = false;
-    // ignore: unawaited_futures
     _bounceDragController.reverse();
 
     Future<void> tryClose() async {
@@ -252,7 +253,6 @@ class ModalBottomSheetState extends State<ModalBottomSheet>
       tryClose();
     } else if (hasReachedCloseThreshold) {
       if (widget.animationController.value > 0.0) {
-        // ignore: unawaited_futures
         widget.animationController.fling(velocity: -1.0);
       }
       tryClose();
@@ -274,13 +274,11 @@ class ModalBottomSheetState extends State<ModalBottomSheet>
     if (!_scrollController.hasClients) return;
 
     ScrollPosition scrollPosition;
-    // ignore: invalid_use_of_protected_member
+
     if (_scrollController.positions.length > 1) {
-      // ignore: invalid_use_of_protected_member
-      scrollPosition = _scrollController.positions
-          .firstWhere((p) => p.isScrollingNotifier.value,
-              // ignore: invalid_use_of_protected_member
-              orElse: () => _scrollController.positions.first);
+      scrollPosition = _scrollController.positions.firstWhere(
+          (p) => p.isScrollingNotifier.value,
+          orElse: () => _scrollController.positions.first);
     } else {
       scrollPosition = _scrollController.position;
     }
@@ -413,9 +411,15 @@ class ModalBottomSheetState extends State<ModalBottomSheet>
       child: RepaintBoundary(child: child),
     );
 
-    return ScrollToTopStatusBarHandler(
+    return StatusBarGestureDetector(
       child: child,
-      scrollController: _scrollController,
+      onTap: (context) {
+        _scrollController.animateTo(
+          0.0,
+          duration: const Duration(milliseconds: 1000),
+          curve: Curves.easeOutCirc,
+        );
+      },
     );
   }
 }

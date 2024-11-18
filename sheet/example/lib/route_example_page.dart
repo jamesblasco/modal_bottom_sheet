@@ -17,7 +17,9 @@ import 'package:flutter/material.dart';
 import 'package:sheet/route.dart';
 import 'package:sheet/sheet.dart';
 
+import 'examples/route/examples/modal_with_nested_scroll.dart';
 import 'examples/route/navigation/go_router.dart';
+import 'examples/route/navigation/go_router_advanced.dart';
 
 class RouteExamplePage extends StatelessWidget {
   const RouteExamplePage({super.key});
@@ -80,6 +82,16 @@ class RouteExamplePage extends StatelessWidget {
                       onTap: () => Navigator.of(context).push(
                         MaterialExtendedPageRoute<void>(
                           builder: (BuildContext context) => GoRouterBooksApp(),
+                        ),
+                      ),
+                    ),
+                    ListTile(
+                      title: const Text('Go router - ShellRoutes'),
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute<void>(
+                          fullscreenDialog: true,
+                          builder: (BuildContext context) =>
+                              AdvancedGoRouterBooksApp(),
                         ),
                       ),
                     ),
@@ -251,15 +263,14 @@ class RouteExamplePage extends StatelessWidget {
                       ),
                     ),
 
-                    // TODO(jaime): It does not work for nested scroll yet
-                    // ListTile(
-                    //   title: Text('Modal with Nested Scroll'),
-                    //   onTap: () => Navigator.of(context).push(
-                    //     CupertinoSheetRoute<void>(
-                    //       builder: (context) => NestedScrollModal(),
-                    //     ),
-                    //   ),
-                    // ),
+                    ListTile(
+                      title: Text('Modal with Nested Scroll'),
+                      onTap: () => Navigator.of(context).push(
+                        CupertinoSheetRoute<void>(
+                          builder: (context) => NestedScrollModal(),
+                        ),
+                      ),
+                    ),
                     ListTile(
                       title: const Text('Modal with PageView'),
                       onTap: () => Navigator.of(context).push(
@@ -313,11 +324,10 @@ class RouteExamplePage extends StatelessWidget {
 class SectionTitle extends StatelessWidget {
   final String title;
 
-  // ignore: sort_constructors_first
   const SectionTitle(
     this.title, {
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
   @override
   Widget build(BuildContext context) {
     return Padding(

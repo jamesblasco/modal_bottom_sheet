@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
+import 'package:meta/meta.dart';
 
 /// A widget that add a min interaction zone where hitTestSelf is true
 /// This is rarely used by its own
@@ -8,12 +9,13 @@ import 'package:flutter/rendering.dart';
 ///
 ///  * [Sheet], that uses this widget that enables to drag closed/hidden
 /// sheets
+@internal
 class MinInteractionZone extends SingleChildRenderObjectWidget {
   const MinInteractionZone({
     required this.direction,
     required this.extent,
-    required Widget child,
-  }) : super(child: child);
+    super.child,
+  });
 
   final AxisDirection direction;
 
@@ -41,7 +43,6 @@ class MinInteractionPaddingRenderBox extends RenderProxyBox {
   AxisDirection _direction;
   AxisDirection get direction => _direction;
   set direction(AxisDirection value) {
-    // ignore: always_put_control_body_on_new_line
     if (value == _direction) return;
     _direction = value;
   }
@@ -49,7 +50,6 @@ class MinInteractionPaddingRenderBox extends RenderProxyBox {
   double _extent;
   double get extent => _extent;
   set extent(double value) {
-    // ignore: always_put_control_body_on_new_line
     if (value == _extent) return;
     _extent = value;
   }
