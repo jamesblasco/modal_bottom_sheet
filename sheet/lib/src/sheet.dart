@@ -291,6 +291,53 @@ class Sheet extends StatelessWidget {
       },
     );
   }
+
+  /// Expanding [Sheet] using [SheetController] might not always work, e.g.
+  /// you are trying to animate the sheet and expand controller at the same
+  /// time (see: https://github.com/jamesblasco/modal_bottom_sheet/issues/412)
+  /// You can use [addPostLayoutCallback] in order to defer your call
+  /// to the moment [RenderSheetViewport] has finished [RenderSheetViewport.performLayout]
+  /// Additionally you can provide [timeout] after which this callback should
+  /// be called anyway incase [RenderSheetViewport.performLayout] doesn't start.
+  /// Usually (this has not been super benchmarked!) layout starts under 50ms,
+  /// putting 100ms to be on the safe side - YMMV
+  static void addPostLayoutCallback(VoidCallback callback,
+      {Duration timeout = const Duration(milliseconds: 100)}) {
+    __willClearLayoutCallbacks = false;
+    _postLayoutCallbacks.add(callback);
+
+    Future.delayed(timeout).then((_) {
+      if (_postLayoutCallbacks.isEmpty) {
+        return;
+      }
+
+      if (__willClearLayoutCallbacks) {
+        return;
+      }
+
+      _clearLayoutCallbacks();
+    });
+  }
+
+  static var __willClearLayoutCallbacks = false;
+
+  static void _willClearLayoutCallbacks() {
+    __willClearLayoutCallbacks = true;
+  }
+
+  static void _clearLayoutCallbacks() {
+    // post layout callbacks
+    final List<VoidCallback> localPostLayoutCallbacks =
+        List<VoidCallback>.of(Sheet._postLayoutCallbacks);
+
+    _postLayoutCallbacks.clear();
+    __willClearLayoutCallbacks = false;
+    for (final callback in localPostLayoutCallbacks) {
+      callback();
+    }
+  }
+
+  static final List<VoidCallback> _postLayoutCallbacks = <VoidCallback>[];
 }
 
 class _DefaultSheetScrollController extends StatelessWidget {
@@ -670,6 +717,12 @@ class RenderSheetViewport extends RenderBox
   }
 
   @override
+  void markNeedsLayout() {
+    super.markNeedsLayout();
+    Sheet._willClearLayoutCallbacks();
+  }
+
+  @override
   void setupParentData(RenderObject child) {
     // We don't actually use the offset argument in BoxParentData, so let's
     // avoid allocating it at all.
@@ -826,6 +879,8 @@ class RenderSheetViewport extends RenderBox
 
     offset.applyViewportDimension(_viewportExtent);
     offset.applyContentDimensions(_minScrollExtent, _maxScrollExtent);
+
+    Sheet._clearLayoutCallbacks();
   }
 
   Offset get _paintOffset => _paintOffsetForPosition(offset.pixels);
