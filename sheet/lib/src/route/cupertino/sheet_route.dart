@@ -101,6 +101,7 @@ class CupertinoSheetRoute<T> extends SheetRoute<T> {
     Color? backgroundColor,
     super.maintainState = true,
     super.fit,
+    super.draggable = true,
   }) : super(
           builder: (BuildContext context) {
             return _CupertinoSheetDecorationBuilder(
@@ -112,9 +113,6 @@ class CupertinoSheetRoute<T> extends SheetRoute<T> {
           animationCurve: _kCupertinoSheetCurve,
           initialExtent: initialStop,
         );
-
-  @override
-  bool get draggable => true;
 
   final SheetController _sheetController = SheetController();
 
