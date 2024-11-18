@@ -139,6 +139,10 @@ class BouncingSheetPhysics extends ScrollPhysics with SheetPhysics {
       }
       return true;
     }());
+    // Prevent scrolling beyond the maximum position
+    if (value > position.maxScrollExtent) {
+      return value - position.maxScrollExtent;
+    }
     if (!overflowViewport) {
       // overscroll
       if (position.viewportDimension <= position.pixels &&
