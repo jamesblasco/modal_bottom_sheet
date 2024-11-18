@@ -1,6 +1,7 @@
 // ignore_for_file: always_put_control_body_on_new_line
 
 import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:sheet/src/widgets/resizable_sheet.dart';
@@ -269,6 +270,7 @@ class Sheet extends StatelessWidget {
               minExtent: minExtent,
               maxExtent: maxExtent,
               fit: fit,
+              resizeable: resizable,
               child: Padding(
                 padding: padding,
                 child: ResizableSheetChild(
@@ -535,6 +537,7 @@ class SheetViewport extends SingleChildRenderObjectWidget {
     super.key,
     this.axisDirection = AxisDirection.down,
     required this.offset,
+    this.resizeable = false,
     this.minExtent,
     this.maxExtent,
     super.child,
@@ -548,6 +551,7 @@ class SheetViewport extends SingleChildRenderObjectWidget {
   final double? minExtent;
   final double? maxExtent;
   final SheetFit fit;
+  final bool resizeable;
 
   @override
   RenderSheetViewport createRenderObject(BuildContext context) {
@@ -557,6 +561,7 @@ class SheetViewport extends SingleChildRenderObjectWidget {
       clipBehavior: clipBehavior,
       minExtent: minExtent,
       maxExtent: maxExtent,
+      resizeable: resizeable,
       fit: fit,
     );
   }
@@ -587,12 +592,14 @@ class RenderSheetViewport extends RenderBox
     SheetFit fit = SheetFit.expand,
     double? minExtent,
     double? maxExtent,
+    bool? resizeable,
   })  : _axisDirection = axisDirection,
         _offset = offset,
         _fit = fit,
         _minExtent = minExtent,
         _maxExtent = maxExtent,
         _cacheExtent = cacheExtent,
+        _resizeable = resizeable ?? false,
         _clipBehavior = clipBehavior {
     this.child = child;
   }
@@ -702,6 +709,14 @@ class RenderSheetViewport extends RenderBox
     }
   }
 
+  bool get resizeable => _resizeable;
+  bool _resizeable;
+  set resizeable(bool value) {
+    if (value == _resizeable) return;
+    _resizeable = value;
+    markNeedsLayout();
+  }
+
   double get _viewportExtent {
     assert(hasSize);
     switch (axis) {
@@ -779,7 +794,13 @@ class RenderSheetViewport extends RenderBox
   void performLayout() {
     final BoxConstraints constraints = this.constraints;
     if (child == null) {
-      size = constraints.smallest;
+      if (resizeable) {
+        // Allows expanding the sheet to the maximum available space
+        size = constraints.biggest;
+      } else {
+        // Locks the sheet to the child size
+        size = constraints.smallest;
+      }
     } else {
       final bool expand = fit == SheetFit.expand;
       final double maxExtent = this.maxExtent ?? constraints.maxHeight;

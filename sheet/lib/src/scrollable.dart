@@ -409,7 +409,7 @@ class SheetState extends State<SheetScrollable>
     return newPhysics.shouldReload(oldPhysics);
   }
 
-  bool _shouldUpdatePosition(SheetScrollable oldWidget) {
+  bool _shouldUpdatePositionBasedOnPhysics(SheetScrollable oldWidget) {
     ScrollPhysics? newPhysics =
         widget.physics ?? widget.scrollBehavior?.getScrollPhysics(context);
     ScrollPhysics? oldPhysics = oldWidget.physics ??
@@ -422,6 +422,16 @@ class SheetState extends State<SheetScrollable>
     } while (newPhysics != null || oldPhysics != null);
 
     return widget.controller?.runtimeType != oldWidget.controller?.runtimeType;
+  }
+
+  bool _shouldUpdatePositionBasedOnInitialExtent(SheetScrollable oldWidget) {
+    return widget.initialExtent != oldWidget.initialExtent;
+    // return false;
+  }
+
+  bool _shouldUpdatePosition(SheetScrollable oldWidget) {
+    return _shouldUpdatePositionBasedOnPhysics(oldWidget) ||
+        _shouldUpdatePositionBasedOnInitialExtent(oldWidget);
   }
 
   @override
