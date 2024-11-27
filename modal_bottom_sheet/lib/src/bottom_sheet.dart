@@ -138,6 +138,7 @@ class ModalBottomSheet extends StatefulWidget {
 class ModalBottomSheetState extends State<ModalBottomSheet>
     with TickerProviderStateMixin {
   final GlobalKey _childKey = GlobalKey(debugLabel: 'BottomSheet child');
+  final GlobalKey _contentKey = GlobalKey(debugLabel: 'BottomSheet content');
 
   ScrollController get _scrollController => widget.scrollController;
 
@@ -145,6 +146,13 @@ class ModalBottomSheetState extends State<ModalBottomSheet>
 
   double? get _childHeight {
     final childContext = _childKey.currentContext;
+    final renderBox = childContext?.findRenderObject() as RenderBox;
+    return renderBox.size.height;
+  }
+
+
+  double? get _contentHeight {
+    final childContext = _contentKey.currentContext;
     final renderBox = childContext?.findRenderObject() as RenderBox;
     return renderBox.size.height;
   }
@@ -160,8 +168,31 @@ class ModalBottomSheetState extends State<ModalBottomSheet>
   bool get hasReachedWillPopThreshold =>
       widget.animationController.value < _willPopThreshold;
 
-  bool get hasReachedCloseThreshold =>
-      widget.animationController.value < widget.closeProgressThreshold;
+  bool get hasReachedCloseThreshold {
+    final childHeight = _childHeight;
+    final contentHeight = _contentHeight;
+
+    if (contentHeight == null || childHeight == null || childHeight <= contentHeight) {
+      return widget.animationController.value < widget.closeProgressThreshold;
+    }
+
+    // When the content view is smaller that the child view
+    // we need to change the animation value to account for
+    // the height difference between the viewport and the content
+    final closeProgressThreshold = widget.closeProgressThreshold;
+
+    // Interpolate the value intop between 1 and the lower bound
+    final value = (widget.animationController.value - _lowerBound) / (1 - _lowerBound);
+
+    return value < closeProgressThreshold;
+  }
+
+  double get _lowerBound {
+    if (_contentHeight == null || _childHeight == null) {
+      return 1;
+    }
+    return (_contentHeight! / _childHeight!).clamp(0.0, 1.0);
+  }
 
   void _close() {
     isDragging = false;
@@ -392,7 +423,10 @@ class ModalBottomSheetState extends State<ModalBottomSheet>
                           _handleScrollUpdate(notification);
                           return false;
                         },
-                        child: child!,
+                        child: KeyedSubtree(
+                          key: _contentKey,
+                          child: child!,
+                        ),
                       ),
                     ),
                   ),
