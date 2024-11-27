@@ -181,7 +181,6 @@ class ModalBottomSheetState extends State<ModalBottomSheet>
     // the height difference between the viewport and the content
     final closeProgressThreshold = widget.closeProgressThreshold;
 
-    // Interpolate the value intop between 1 and the lower bound
     final value = (widget.animationController.value - _lowerBound) / (1 - _lowerBound);
 
     return value < closeProgressThreshold;
