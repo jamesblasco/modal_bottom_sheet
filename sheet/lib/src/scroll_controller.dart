@@ -146,7 +146,7 @@ class SheetPrimaryScrollPosition extends ScrollPositionWithSingleContext {
               ratio: 1.1,
             ),
             pixels,
-            0,
+            pixels > maxScrollExtent ? maxScrollExtent : 0,
             velocity,
           ),
           context.vsync,
