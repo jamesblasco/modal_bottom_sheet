@@ -317,6 +317,7 @@ class CupertinoSheetPage<T> extends Page<T> {
   /// Creates a material page.
   const CupertinoSheetPage({
     required this.child,
+    this.draggable = true,
     this.maintainState = true,
     super.key,
     super.name,
@@ -328,10 +329,11 @@ class CupertinoSheetPage<T> extends Page<T> {
 
   /// {@macro flutter.widgets.modalRoute.maintainState}
   final bool maintainState;
+  final bool draggable;
 
   @override
   Route<T> createRoute(BuildContext context) {
-    return _PageBasedCupertinoSheetRoute<T>(page: this);
+    return _PageBasedCupertinoSheetRoute<T>(page: this, draggable: draggable);
   }
 }
 
@@ -346,6 +348,7 @@ class _PageBasedCupertinoSheetRoute<T> extends CupertinoSheetRoute<T> {
     super.initialStop,
     super.backgroundColor,
     super.maintainState,
+    super.draggable,
   }) : super(
           settings: page,
           builder: (BuildContext context) {
