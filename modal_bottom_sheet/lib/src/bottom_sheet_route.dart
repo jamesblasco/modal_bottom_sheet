@@ -16,6 +16,8 @@ class _ModalBottomSheet<T> extends StatefulWidget {
     this.expanded = false,
     this.enableDrag = true,
     this.animationCurve,
+    this.scrollPhysics,
+    this.scrollPhysicsBuilder,
   });
 
   final double? closeProgressThreshold;
@@ -25,6 +27,8 @@ class _ModalBottomSheet<T> extends StatefulWidget {
   final bool enableDrag;
   final AnimationController? secondAnimationController;
   final Curve? animationCurve;
+  final ScrollPhysics? scrollPhysics;
+  final ScrollPhysics Function(bool canScroll, ScrollPhysics parent)? scrollPhysicsBuilder;
 
   @override
   _ModalBottomSheetState<T> createState() => _ModalBottomSheetState<T>();
@@ -123,6 +127,8 @@ class _ModalBottomSheetState<T> extends State<_ModalBottomSheet<T>> {
                 bounce: widget.bounce,
                 scrollController: scrollController,
                 animationCurve: widget.animationCurve,
+                scrollPhysics: widget.scrollPhysics,
+                scrollPhysicsBuilder: widget.scrollPhysicsBuilder,
               ),
             );
           },
@@ -148,6 +154,8 @@ class ModalSheetRoute<T> extends PageRoute<T> {
     this.bounce = false,
     this.animationCurve,
     Duration? duration,
+    this.scrollPhysics,
+    this.scrollPhysicsBuilder,
     super.settings,
   }) : duration = duration ?? _bottomSheetDuration;
 
@@ -165,6 +173,9 @@ class ModalSheetRoute<T> extends PageRoute<T> {
 
   final AnimationController? secondAnimationController;
   final Curve? animationCurve;
+
+  final ScrollPhysics? scrollPhysics;
+  final ScrollPhysics Function(bool canScroll, ScrollPhysics parent)? scrollPhysicsBuilder;
 
   @override
   Duration get transitionDuration => duration;
@@ -215,6 +226,8 @@ class ModalSheetRoute<T> extends PageRoute<T> {
         bounce: bounce,
         enableDrag: enableDrag,
         animationCurve: animationCurve,
+        scrollPhysics: scrollPhysics,
+        scrollPhysicsBuilder: scrollPhysicsBuilder,
       ),
     );
     return bottomSheet;
