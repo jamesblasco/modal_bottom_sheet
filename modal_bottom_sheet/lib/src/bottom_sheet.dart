@@ -178,6 +178,7 @@ class ModalBottomSheetState extends State<ModalBottomSheet>
   // Indicates if the scrollbar is scrollable
   // when we start a drag event, we are always scrollable
   bool _canScroll = true;
+  bool _isScrolling = false;
   ScrollDirection _scrollDirection = ScrollDirection.idle;
 
   bool get hasReachedWillPopThreshold =>
@@ -246,7 +247,7 @@ class ModalBottomSheetState extends State<ModalBottomSheet>
     }
 
     // Abort if the scrollbar is scrollable
-    if (_canScroll && _scrollController.hasClients && _scrollController.position.maxScrollExtent > 0) {
+    if (_canScroll && _isScrolling) {
       return;
     }
 
@@ -331,6 +332,12 @@ class ModalBottomSheetState extends State<ModalBottomSheet>
 
     if (notification is UserScrollNotification) {
       _scrollDirection = notification.direction;
+    }
+
+    if (notification is ScrollEndNotification) {
+      _isScrolling = false;
+    } else if (notification is ScrollStartNotification){
+      _isScrolling = true;
     }
 
     if (notification is OverscrollNotification || notification is ScrollUpdateNotification) {
