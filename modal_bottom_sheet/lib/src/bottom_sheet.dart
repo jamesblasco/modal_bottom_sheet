@@ -143,6 +143,24 @@ class ModalBottomSheet extends StatefulWidget {
       vsync: vsync,
     );
   }
+
+  static ModalBottomSheetState of(BuildContext context) {
+    ModalBottomSheetState? sheetState;
+    if (context is StatefulElement && context.state is ModalBottomSheetState) {
+      sheetState = context.state as ModalBottomSheetState;
+    }
+    sheetState = sheetState ?? context.findAncestorStateOfType<ModalBottomSheetState>();
+
+    assert(() {
+      if (sheetState == null) {
+        throw FlutterError(
+          'No ModalBottomSheetState in the widget tree',
+        );
+      }
+      return true;
+    }());
+    return sheetState!;
+  }
 }
 
 class ModalBottomSheetState extends State<ModalBottomSheet>
@@ -179,6 +197,15 @@ class ModalBottomSheetState extends State<ModalBottomSheet>
   // when we start a drag event, we are always scrollable
   bool _canScroll = true;
   bool _isScrolling = false;
+  bool _allowDrag = true;
+
+  // Lets us set if dragging is allowed from userSpace
+  // ModalBottomSheet.of(context).setAllowDrag(false)
+  void setAllowDrag(bool allowDrag) {
+    _allowDrag = allowDrag;
+  }
+
+
   ScrollDirection _scrollDirection = ScrollDirection.idle;
 
   bool get hasReachedWillPopThreshold =>
@@ -243,6 +270,10 @@ class ModalBottomSheetState extends State<ModalBottomSheet>
     assert(widget.enableDrag, 'Dragging is disabled');
 
     if (_dismissUnderway) {
+      return;
+    }
+
+    if (!_allowDrag) {
       return;
     }
 
