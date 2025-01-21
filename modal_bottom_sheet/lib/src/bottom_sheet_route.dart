@@ -18,8 +18,10 @@ class _ModalBottomSheet<T> extends StatefulWidget {
     this.animationCurve,
     this.scrollPhysics,
     this.scrollPhysicsBuilder,
+    this.minFlingVelocity,
   });
 
+  final double? minFlingVelocity;
   final double? closeProgressThreshold;
   final ModalSheetRoute<T> route;
   final bool expanded;
@@ -100,6 +102,7 @@ class _ModalBottomSheetState<T> extends State<_ModalBottomSheet<T>> {
                 expanded: widget.route.expanded,
                 containerBuilder: widget.route.containerBuilder,
                 animationController: widget.route._animationController!,
+                minFlingVelocity: widget.minFlingVelocity,
                 shouldClose: widget.route.popDisposition ==
                             RoutePopDisposition.doNotPop ||
                         widget.route._hasScopedWillPopCallback
@@ -142,6 +145,7 @@ class _ModalBottomSheetState<T> extends State<_ModalBottomSheet<T>> {
 class ModalSheetRoute<T> extends PageRoute<T> {
   ModalSheetRoute({
     this.closeProgressThreshold,
+    this.minFlingVelocity,
     this.containerBuilder,
     required this.builder,
     this.scrollController,
@@ -160,6 +164,7 @@ class ModalSheetRoute<T> extends PageRoute<T> {
   }) : duration = duration ?? _bottomSheetDuration;
 
   final double? closeProgressThreshold;
+  final double? minFlingVelocity;
   final WidgetWithChildBuilder? containerBuilder;
   final WidgetBuilder builder;
   final bool expanded;
@@ -219,6 +224,7 @@ class ModalSheetRoute<T> extends PageRoute<T> {
       context: context,
       // removeTop: true,
       child: _ModalBottomSheet<T>(
+        minFlingVelocity: minFlingVelocity,
         closeProgressThreshold: closeProgressThreshold,
         route: this,
         secondAnimationController: secondAnimationController,
@@ -270,6 +276,7 @@ Future<T?> showCustomModalBottomSheet<T>({
   Duration? duration,
   RouteSettings? settings,
   double? closeProgressThreshold,
+  double? minFlingVelocity,
 }) async {
   assert(debugCheckHasMediaQuery(context));
   assert(debugCheckHasMaterialLocalizations(context));
@@ -295,6 +302,7 @@ Future<T?> showCustomModalBottomSheet<T>({
     duration: duration,
     settings: settings,
     closeProgressThreshold: closeProgressThreshold,
+    minFlingVelocity: minFlingVelocity,
   ));
   return result;
 }

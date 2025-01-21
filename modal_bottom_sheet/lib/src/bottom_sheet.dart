@@ -45,7 +45,7 @@ class ModalBottomSheet extends StatefulWidget {
     required this.expanded,
     required this.onClosing,
     required this.child,
-    this.minFlingVelocity = _minFlingVelocity,
+    double? minFlingVelocity,
     double? closeProgressThreshold,
     @Deprecated('Use preventPopThreshold instead') double? willPopThreshold,
     double? preventPopThreshold,
@@ -54,7 +54,8 @@ class ModalBottomSheet extends StatefulWidget {
   })  : preventPopThreshold =
             preventPopThreshold ?? willPopThreshold ?? _willPopThreshold,
         closeProgressThreshold =
-            closeProgressThreshold ?? _closeProgressThreshold;
+            closeProgressThreshold ?? _closeProgressThreshold,
+        minFlingVelocity = minFlingVelocity ?? _minFlingVelocity;
 
   /// The closeProgressThreshold parameter
   /// specifies when the bottom sheet will be dismissed when user drags it.
