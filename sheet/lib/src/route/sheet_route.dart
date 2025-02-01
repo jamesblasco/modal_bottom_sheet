@@ -469,6 +469,7 @@ class __SheetRouteContainerState extends State<_SheetRouteContainer>
     );
     if (route.popDisposition == RoutePopDisposition.doNotPop) {
       _sheetController.position.stopPreventingDrag();
+      _firstAnimation = true;
       route.onPopInvokedWithResult(false, null);
     } else {
       route.willPop().then(
