@@ -35,7 +35,7 @@ class BottomNavigationScaffold extends StatefulWidget {
 }
 
 class _BottomNavigationScaffoldState extends State<BottomNavigationScaffold> {
-  int _currentNavitagionIndex = 0;
+  int _currentNavigationIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +43,7 @@ class _BottomNavigationScaffoldState extends State<BottomNavigationScaffold> {
       children: <Widget>[
         Expanded(
           child: IndexedStack(
-            index: _currentNavitagionIndex,
+            index: _currentNavigationIndex,
             children: const <Widget>[
               SheetExamplesPage(),
               RouteExamplePage(),
@@ -51,10 +51,10 @@ class _BottomNavigationScaffoldState extends State<BottomNavigationScaffold> {
           ),
         ),
         BottomNavigationBar(
-            currentIndex: _currentNavitagionIndex,
+            currentIndex: _currentNavigationIndex,
             onTap: (int value) {
               setState(() {
-                _currentNavitagionIndex = value;
+                _currentNavigationIndex = value;
               });
             },
             items: const <BottomNavigationBarItem>[
