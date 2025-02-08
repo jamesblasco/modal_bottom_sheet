@@ -5,6 +5,7 @@
 import 'dart:async';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:modal_bottom_sheet/src/utils/scroll_to_top_status_bar.dart';
 
 import 'package:modal_bottom_sheet/src/utils/bottom_sheet_suspended_curve.dart';
@@ -44,14 +45,17 @@ class ModalBottomSheet extends StatefulWidget {
     required this.expanded,
     required this.onClosing,
     required this.child,
-    this.minFlingVelocity = _minFlingVelocity,
+    double? minFlingVelocity,
     double? closeProgressThreshold,
     @Deprecated('Use preventPopThreshold instead') double? willPopThreshold,
     double? preventPopThreshold,
+    this.scrollPhysics,
+    this.scrollPhysicsBuilder,
   })  : preventPopThreshold =
             preventPopThreshold ?? willPopThreshold ?? _willPopThreshold,
         closeProgressThreshold =
-            closeProgressThreshold ?? _closeProgressThreshold;
+            closeProgressThreshold ?? _closeProgressThreshold,
+        minFlingVelocity = minFlingVelocity ?? _minFlingVelocity;
 
   /// The closeProgressThreshold parameter
   /// specifies when the bottom sheet will be dismissed when user drags it.
@@ -98,6 +102,13 @@ class ModalBottomSheet extends StatefulWidget {
   ///
   final Widget child;
 
+  /// The default scroll physics for underlaying scroll views
+  /// When set, we are able to change to the NeverScrollableScrollPhysics() while
+  /// we are dragging the bottom sheet with scrollview
+  final ScrollPhysics? scrollPhysics;
+
+  final ScrollPhysics Function(bool canScroll, ScrollPhysics parent)? scrollPhysicsBuilder;
+
   /// If true, the bottom sheet can be dragged up and down and dismissed by
   /// swiping downwards.
   ///
@@ -133,11 +144,30 @@ class ModalBottomSheet extends StatefulWidget {
       vsync: vsync,
     );
   }
+
+  static ModalBottomSheetState of(BuildContext context) {
+    ModalBottomSheetState? sheetState;
+    if (context is StatefulElement && context.state is ModalBottomSheetState) {
+      sheetState = context.state as ModalBottomSheetState;
+    }
+    sheetState = sheetState ?? context.findAncestorStateOfType<ModalBottomSheetState>();
+
+    assert(() {
+      if (sheetState == null) {
+        throw FlutterError(
+          'No ModalBottomSheetState in the widget tree',
+        );
+      }
+      return true;
+    }());
+    return sheetState!;
+  }
 }
 
 class ModalBottomSheetState extends State<ModalBottomSheet>
     with TickerProviderStateMixin {
   final GlobalKey _childKey = GlobalKey(debugLabel: 'BottomSheet child');
+  final GlobalKey _contentKey = GlobalKey(debugLabel: 'BottomSheet content');
 
   ScrollController get _scrollController => widget.scrollController;
 
@@ -149,22 +179,66 @@ class ModalBottomSheetState extends State<ModalBottomSheet>
     return renderBox.size.height;
   }
 
+
+  double? get _contentHeight {
+    final childContext = _contentKey.currentContext;
+    final renderBox = childContext?.findRenderObject() as RenderBox;
+    return renderBox.size.height;
+  }
+
   bool get _dismissUnderway =>
       widget.animationController.status == AnimationStatus.reverse;
 
   // Detect if user is dragging.
   // Used on NotificationListener to detect if ScrollNotifications are
   // before or after the user stop dragging
-  bool isDragging = false;
+  bool _isDragging = false;
+
+  // Indicates if the scrollbar is scrollable
+  // when we start a drag event, we are always scrollable
+  bool _canScroll = true;
+  bool _isScrolling = false;
+  bool _allowDrag = true;
+
+  // Lets us set if dragging is allowed from userSpace
+  // ModalBottomSheet.of(context).setAllowDrag(false)
+  void setAllowDrag(bool allowDrag) {
+    _allowDrag = allowDrag;
+  }
+
+
+  ScrollDirection _scrollDirection = ScrollDirection.idle;
 
   bool get hasReachedWillPopThreshold =>
       widget.animationController.value < _willPopThreshold;
 
-  bool get hasReachedCloseThreshold =>
-      widget.animationController.value < widget.closeProgressThreshold;
+  bool get hasReachedCloseThreshold {
+    final childHeight = _childHeight;
+    final contentHeight = _contentHeight;
+
+    if (contentHeight == null || childHeight == null || childHeight <= contentHeight) {
+      return widget.animationController.value < widget.closeProgressThreshold;
+    }
+
+    // When the content view is smaller that the child view
+    // we need to change the animation value to account for
+    // the height difference between the viewport and the content
+    final closeProgressThreshold = widget.closeProgressThreshold;
+
+    final value = (widget.animationController.value - _lowerBound) / (1 - _lowerBound);
+
+    return value < closeProgressThreshold;
+  }
+
+  double get _lowerBound {
+    if (_contentHeight == null || _childHeight == null) {
+      return 1;
+    }
+    return (_contentHeight! / _childHeight!).clamp(0.0, 1.0);
+  }
 
   void _close() {
-    isDragging = false;
+    _isDragging = false;
     widget.onClosing();
   }
 
@@ -196,8 +270,20 @@ class ModalBottomSheetState extends State<ModalBottomSheet>
     animationCurve = Curves.linear;
     assert(widget.enableDrag, 'Dragging is disabled');
 
-    if (_dismissUnderway) return;
-    isDragging = true;
+    if (_dismissUnderway) {
+      return;
+    }
+
+    if (!_allowDrag) {
+      return;
+    }
+
+    // Abort if the scrollbar is scrollable
+    if (_canScroll && _isScrolling) {
+      return;
+    }
+
+    _isDragging = true;
 
     final progress = primaryDelta / (_childHeight ?? primaryDelta);
 
@@ -232,8 +318,9 @@ class ModalBottomSheetState extends State<ModalBottomSheet>
       curve: _defaultCurve,
     );
 
-    if (_dismissUnderway || !isDragging) return;
-    isDragging = false;
+    if (_dismissUnderway || !_isDragging) return;
+    _isDragging = false;
+    _canScroll = true;
     _bounceDragController.reverse();
 
     Future<void> tryClose() async {
@@ -261,88 +348,57 @@ class ModalBottomSheetState extends State<ModalBottomSheet>
     }
   }
 
-  // As we cannot access the dragGesture detector of the scroll view
-  // we can not know the DragDownDetails and therefore the end velocity.
-  // VelocityTracker it is used to calculate the end velocity  of the scroll
-  // when user is trying to close the modal by dragging
-  VelocityTracker? _velocityTracker;
-  DateTime? _startTime;
+  Curve get _defaultCurve => widget.animationCurve ?? _decelerateEasing;
 
-  void _handleScrollUpdate(ScrollNotification notification) {
-    assert(notification.context != null);
-    //Check if scrollController is used
-    if (!_scrollController.hasClients) return;
+  late final VerticalDragGestureRecognizer _verticalDragRecognizer;
 
-    ScrollPosition scrollPosition;
-
-    if (_scrollController.positions.length > 1) {
-      scrollPosition = _scrollController.positions.firstWhere(
-          (p) => p.isScrollingNotifier.value,
-          orElse: () => _scrollController.positions.first);
-    } else {
-      scrollPosition = _scrollController.position;
-    }
-
-    if (scrollPosition.axis == Axis.horizontal) return;
-
-    final isScrollReversed = scrollPosition.axisDirection == AxisDirection.down;
-    final offset = isScrollReversed
-        ? scrollPosition.pixels
-        : scrollPosition.maxScrollExtent - scrollPosition.pixels;
-
-    if (offset <= 0) {
-      // Clamping Scroll Physics end with a ScrollEndNotification with a DragEndDetail class
-      // while Bouncing Scroll Physics or other physics that Overflow don't return a drag end info
-
-      // We use the velocity from DragEndDetail in case it is available
-      if (notification is ScrollEndNotification) {
-        final dragDetails = notification.dragDetails;
-        if (dragDetails != null) {
-          _handleDragEnd(dragDetails.primaryVelocity ?? 0);
-          _velocityTracker = null;
-          _startTime = null;
-          return;
-        }
-      }
-
-      // Otherwise the calculate the velocity with a VelocityTracker
-      if (_velocityTracker == null) {
-        final pointerKind = defaultPointerDeviceKind(context);
-        _velocityTracker = VelocityTracker.withKind(pointerKind);
-        _startTime = DateTime.now();
-      }
-
-      DragUpdateDetails? dragDetails;
-      if (notification is ScrollUpdateNotification) {
-        dragDetails = notification.dragDetails;
-      }
-      if (notification is OverscrollNotification) {
-        dragDetails = notification.dragDetails;
-      }
-      assert(_velocityTracker != null);
-      assert(_startTime != null);
-      final startTime = _startTime!;
-      final velocityTracker = _velocityTracker!;
-      if (dragDetails != null) {
-        final duration = startTime.difference(DateTime.now());
-        velocityTracker.addPosition(duration, Offset(0, offset));
-        _handleDragUpdate(dragDetails.delta.dy);
-      } else if (isDragging) {
-        final velocity = velocityTracker.getVelocity().pixelsPerSecond.dy;
-        _velocityTracker = null;
-        _startTime = null;
-        _handleDragEnd(velocity);
-      }
-    }
+  void _handleRawDragUpdate(DragUpdateDetails details) {
+    _handleDragUpdate(details.delta.dy);
   }
 
-  Curve get _defaultCurve => widget.animationCurve ?? _decelerateEasing;
+  void _handleRawDragEnd(DragEndDetails details) {
+    _handleDragEnd(details.primaryVelocity ?? 0);
+  }
+
+  bool _handleScrollNotification(ScrollNotification notification) {
+
+    if (notification is UserScrollNotification) {
+      _scrollDirection = notification.direction;
+    }
+
+    if (notification is ScrollEndNotification) {
+      _isScrolling = false;
+    } else if (notification is ScrollStartNotification){
+      _isScrolling = true;
+    }
+
+    if (notification is OverscrollNotification || notification is ScrollUpdateNotification) {
+      final downwards = _scrollDirection == ScrollDirection.forward;
+      final atEdge = notification.metrics.atEdge;
+
+      // disable scrolling when we are at the edge
+      if (downwards && atEdge && _canScroll) {
+        setState(() {
+          _canScroll = false;
+        });
+      } else if (!downwards && atEdge && !_canScroll) {
+        setState(() {
+          _canScroll = true;
+        });
+      }
+    }
+    return false;
+  }
 
   @override
   void initState() {
     animationCurve = _defaultCurve;
     _bounceDragController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 300));
+
+    _verticalDragRecognizer = _AllowMultipleVerticalDragGestureRecognizer();
+    _verticalDragRecognizer.onUpdate = _handleRawDragUpdate;
+    _verticalDragRecognizer.onEnd = _handleRawDragEnd;
 
     // Todo: Check if we can remove scroll Controller
     super.initState();
@@ -380,31 +436,35 @@ class ModalBottomSheetState extends State<ModalBottomSheet>
                   animation: bounceAnimation,
                   builder: (context, _) => CustomSingleChildLayout(
                     delegate: _CustomBottomSheetLayout(bounceAnimation.value),
-                    child: GestureDetector(
-                      onVerticalDragUpdate: (details) {
-                        _handleDragUpdate(details.delta.dy);
-                      },
-                      onVerticalDragEnd: (details) {
-                        _handleDragEnd(details.primaryVelocity ?? 0);
+                    child: Listener(
+                      onPointerDown: (event) {
+                        _verticalDragRecognizer.addPointer(event);
                       },
                       child: NotificationListener<ScrollNotification>(
-                        onNotification: (ScrollNotification notification) {
-                          _handleScrollUpdate(notification);
-                          return false;
-                        },
-                        child: child!,
+                        onNotification: _handleScrollNotification,
+                        child: KeyedSubtree(
+                          key: _contentKey,
+                          child: child!,
+                        ),
                       ),
                     ),
                   ),
                 ),
               );
         return ClipRect(
-          child: CustomSingleChildLayout(
-            delegate: _ModalBottomSheetLayout(
-              animationValue,
-              widget.expanded,
+          child: ScrollConfiguration(
+            behavior: ScrollConfiguration.of(context).copyWith(
+              physics: widget.scrollPhysicsBuilder
+                  ?.call(_canScroll, ScrollConfiguration.of(context).getScrollPhysics(context))
+                ?? widget.scrollPhysics,
             ),
-            child: draggableChild,
+            child: CustomSingleChildLayout(
+              delegate: _ModalBottomSheetLayout(
+                animationValue,
+                widget.expanded,
+              ),
+              child: draggableChild,
+            ),
           ),
         );
       },
@@ -499,5 +559,14 @@ PointerDeviceKind defaultPointerDeviceKind(BuildContext context) {
       return PointerDeviceKind.mouse;
     case TargetPlatform.fuchsia:
       return PointerDeviceKind.unknown;
+  }
+}
+
+
+class _AllowMultipleVerticalDragGestureRecognizer extends VerticalDragGestureRecognizer{
+
+  @override
+  void rejectGesture(int pointer) {
+    acceptGesture(pointer);
   }
 }

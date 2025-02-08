@@ -16,8 +16,12 @@ class _ModalBottomSheet<T> extends StatefulWidget {
     this.expanded = false,
     this.enableDrag = true,
     this.animationCurve,
+    this.scrollPhysics,
+    this.scrollPhysicsBuilder,
+    this.minFlingVelocity,
   });
 
+  final double? minFlingVelocity;
   final double? closeProgressThreshold;
   final ModalSheetRoute<T> route;
   final bool expanded;
@@ -25,6 +29,8 @@ class _ModalBottomSheet<T> extends StatefulWidget {
   final bool enableDrag;
   final AnimationController? secondAnimationController;
   final Curve? animationCurve;
+  final ScrollPhysics? scrollPhysics;
+  final ScrollPhysics Function(bool canScroll, ScrollPhysics parent)? scrollPhysicsBuilder;
 
   @override
   _ModalBottomSheetState<T> createState() => _ModalBottomSheetState<T>();
@@ -96,6 +102,7 @@ class _ModalBottomSheetState<T> extends State<_ModalBottomSheet<T>> {
                 expanded: widget.route.expanded,
                 containerBuilder: widget.route.containerBuilder,
                 animationController: widget.route._animationController!,
+                minFlingVelocity: widget.minFlingVelocity,
                 shouldClose: widget.route.popDisposition ==
                             RoutePopDisposition.doNotPop ||
                         widget.route._hasScopedWillPopCallback
@@ -123,6 +130,8 @@ class _ModalBottomSheetState<T> extends State<_ModalBottomSheet<T>> {
                 bounce: widget.bounce,
                 scrollController: scrollController,
                 animationCurve: widget.animationCurve,
+                scrollPhysics: widget.scrollPhysics,
+                scrollPhysicsBuilder: widget.scrollPhysicsBuilder,
               ),
             );
           },
@@ -136,6 +145,7 @@ class _ModalBottomSheetState<T> extends State<_ModalBottomSheet<T>> {
 class ModalSheetRoute<T> extends PageRoute<T> {
   ModalSheetRoute({
     this.closeProgressThreshold,
+    this.minFlingVelocity,
     this.containerBuilder,
     required this.builder,
     this.scrollController,
@@ -148,10 +158,13 @@ class ModalSheetRoute<T> extends PageRoute<T> {
     this.bounce = false,
     this.animationCurve,
     Duration? duration,
+    this.scrollPhysics,
+    this.scrollPhysicsBuilder,
     super.settings,
   }) : duration = duration ?? _bottomSheetDuration;
 
   final double? closeProgressThreshold;
+  final double? minFlingVelocity;
   final WidgetWithChildBuilder? containerBuilder;
   final WidgetBuilder builder;
   final bool expanded;
@@ -165,6 +178,9 @@ class ModalSheetRoute<T> extends PageRoute<T> {
 
   final AnimationController? secondAnimationController;
   final Curve? animationCurve;
+
+  final ScrollPhysics? scrollPhysics;
+  final ScrollPhysics Function(bool canScroll, ScrollPhysics parent)? scrollPhysicsBuilder;
 
   @override
   Duration get transitionDuration => duration;
@@ -208,6 +224,7 @@ class ModalSheetRoute<T> extends PageRoute<T> {
       context: context,
       // removeTop: true,
       child: _ModalBottomSheet<T>(
+        minFlingVelocity: minFlingVelocity,
         closeProgressThreshold: closeProgressThreshold,
         route: this,
         secondAnimationController: secondAnimationController,
@@ -215,6 +232,8 @@ class ModalSheetRoute<T> extends PageRoute<T> {
         bounce: bounce,
         enableDrag: enableDrag,
         animationCurve: animationCurve,
+        scrollPhysics: scrollPhysics,
+        scrollPhysicsBuilder: scrollPhysicsBuilder,
       ),
     );
     return bottomSheet;
@@ -257,6 +276,7 @@ Future<T?> showCustomModalBottomSheet<T>({
   Duration? duration,
   RouteSettings? settings,
   double? closeProgressThreshold,
+  double? minFlingVelocity,
 }) async {
   assert(debugCheckHasMediaQuery(context));
   assert(debugCheckHasMaterialLocalizations(context));
@@ -282,6 +302,7 @@ Future<T?> showCustomModalBottomSheet<T>({
     duration: duration,
     settings: settings,
     closeProgressThreshold: closeProgressThreshold,
+    minFlingVelocity: minFlingVelocity,
   ));
   return result;
 }
