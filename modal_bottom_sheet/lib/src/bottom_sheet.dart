@@ -36,6 +36,7 @@ class ModalBottomSheet extends StatefulWidget {
     super.key,
     required this.animationController,
     this.animationCurve,
+    this.secondAnimationCurve,
     this.enableDrag = true,
     this.containerBuilder,
     this.bounce = true,
@@ -68,6 +69,7 @@ class ModalBottomSheet extends StatefulWidget {
   ///
   /// If no curve is provided it falls back to `decelerateEasing`.
   final Curve? animationCurve;
+  final Curve? secondAnimationCurve;
 
   /// Allows the bottom sheet to  go beyond the top bound of the content,
   /// but then bounce the content back to the edge of
@@ -191,6 +193,7 @@ class ModalBottomSheetState extends State<ModalBottomSheet>
   }
 
   ParametricCurve<double> animationCurve = Curves.linear;
+  ParametricCurve<double> secondAnimationCurve = Curves.linear;
 
   void _handleDragUpdate(double primaryDelta) async {
     animationCurve = Curves.linear;
@@ -337,10 +340,12 @@ class ModalBottomSheetState extends State<ModalBottomSheet>
   }
 
   Curve get _defaultCurve => widget.animationCurve ?? _decelerateEasing;
+  Curve get _defaultSecondCurve => widget.secondAnimationCurve ?? _decelerateEasing;
 
   @override
   void initState() {
     animationCurve = _defaultCurve;
+    secondAnimationCurve = _defaultSecondCurve;
     _bounceDragController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 300));
 
@@ -368,7 +373,7 @@ class ModalBottomSheetState extends State<ModalBottomSheet>
       animation: widget.animationController,
       builder: (context, Widget? child) {
         assert(child != null);
-        final animationValue = animationCurve.transform(
+        final animationValue = (_dismissUnderway && !isDragging ? secondAnimationCurve : animationCurve).transform(
           widget.animationController.value,
         );
 
