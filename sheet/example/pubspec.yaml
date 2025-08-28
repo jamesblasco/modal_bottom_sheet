@@ -4,18 +4,19 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-    sdk: ">=3.3.0 <4.0.0"
+  sdk: '>=3.0.0'
+  flutter: '>=3.10.0'
 
 dependencies:
   flutter:
     sdk: flutter
-  equatable: ^2.0.5
-  collection: 
-  cupertino_icons: ^1.0.6
-  provider: ^6.0.5
+  equatable: any
+  collection: any
+  cupertino_icons: any
+  provider: any
+  go_router: any
   sheet:
     path: ../
-  go_router: ^12.1.0
 
 dev_dependencies:
   flutter_test:

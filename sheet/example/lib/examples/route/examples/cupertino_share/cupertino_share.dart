@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:sheet/route.dart';
+import 'package:sheet/route.dart' as route;
 
 class CupertinoSharePage extends StatelessWidget {
   @override
@@ -67,7 +67,7 @@ class CupertinoSharePage extends StatelessWidget {
             ),
             onPressed: () {
               Navigator.of(context).push(
-                CupertinoSheetRoute<void>(
+                route.CupertinoSheetRoute<void>(
                   initialStop: 0.5,
                   stops: <double>[0, 0.5, 1],
                   backgroundColor: Colors.transparent,

@@ -4,20 +4,24 @@ publish_to: none
 version: 1.0.0+1
 
 environment:
-  sdk: ">=3.0.0 <4.0.0"
+  sdk: '>=3.0.0'
+  flutter: '>=3.10.0'
 
 dependencies:
-  cupertino_icons: ^1.0.6
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  cupertino_icons: any
+  material_design_icons_flutter: any
+  url_launcher: any
   modal_bottom_sheet:
-    path: '../'
-  url_launcher: ^6.2.1 
+    path: ../
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  lints: ^3.0.0
+  lints: any
 
 
 flutter:

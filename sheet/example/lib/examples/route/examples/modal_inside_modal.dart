@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:sheet/route.dart';
+import 'package:sheet/route.dart' as route;
 
 class ModalInsideModal extends StatelessWidget {
   const ModalInsideModal({super.key, this.reverse = false});
@@ -29,7 +29,7 @@ class ModalInsideModal extends StatelessWidget {
                 (int index) => ListTile(
                   title: Text('Item $index'),
                   onTap: () => Navigator.of(context).push(
-                    CupertinoSheetRoute<void>(
+                    route.CupertinoSheetRoute<void>(
                       builder: (BuildContext context) =>
                           ModalInsideModal(reverse: reverse),
                     ),
