@@ -16,6 +16,7 @@ class _ModalBottomSheet<T> extends StatefulWidget {
     this.expanded = false,
     this.enableDrag = true,
     this.animationCurve,
+    this.isBarrierDismissible = false,
   });
 
   final double? closeProgressThreshold;
@@ -25,6 +26,7 @@ class _ModalBottomSheet<T> extends StatefulWidget {
   final bool enableDrag;
   final AnimationController? secondAnimationController;
   final Curve? animationCurve;
+  final bool isBarrierDismissible;
 
   @override
   _ModalBottomSheetState<T> createState() => _ModalBottomSheetState<T>();
@@ -123,6 +125,7 @@ class _ModalBottomSheetState<T> extends State<_ModalBottomSheet<T>> {
                 bounce: widget.bounce,
                 scrollController: scrollController,
                 animationCurve: widget.animationCurve,
+                isBarrierDismissible: widget.isBarrierDismissible,
               ),
             );
           },
@@ -149,6 +152,7 @@ class ModalSheetRoute<T> extends PageRoute<T> {
     this.animationCurve,
     Duration? duration,
     super.settings,
+    this.isBarrierDismissible = false,
   }) : duration = duration ?? _bottomSheetDuration;
 
   final double? closeProgressThreshold;
@@ -165,6 +169,7 @@ class ModalSheetRoute<T> extends PageRoute<T> {
 
   final AnimationController? secondAnimationController;
   final Curve? animationCurve;
+  final bool isBarrierDismissible;
 
   @override
   Duration get transitionDuration => duration;
@@ -215,6 +220,7 @@ class ModalSheetRoute<T> extends PageRoute<T> {
         bounce: bounce,
         enableDrag: enableDrag,
         animationCurve: animationCurve,
+        isBarrierDismissible: isBarrierDismissible,
       ),
     );
     return bottomSheet;
@@ -257,6 +263,7 @@ Future<T?> showCustomModalBottomSheet<T>({
   Duration? duration,
   RouteSettings? settings,
   double? closeProgressThreshold,
+  bool isBarrierDismissible = false,
 }) async {
   assert(debugCheckHasMediaQuery(context));
   assert(debugCheckHasMaterialLocalizations(context));
@@ -282,6 +289,7 @@ Future<T?> showCustomModalBottomSheet<T>({
     duration: duration,
     settings: settings,
     closeProgressThreshold: closeProgressThreshold,
+    isBarrierDismissible: isBarrierDismissible,
   ));
   return result;
 }

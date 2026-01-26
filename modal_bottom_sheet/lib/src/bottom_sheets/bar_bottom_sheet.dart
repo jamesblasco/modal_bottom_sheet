@@ -93,6 +93,7 @@ Future<T?> showBarModalBottomSheet<T>({
   RouteSettings? settings,
   SystemUiOverlayStyle? overlayStyle,
   double? closeProgressThreshold,
+  bool isBarrierDismissible = false,
 }) async {
   assert(debugCheckHasMediaQuery(context));
   assert(debugCheckHasMaterialLocalizations(context));
@@ -119,6 +120,7 @@ Future<T?> showBarModalBottomSheet<T>({
     animationCurve: animationCurve,
     duration: duration,
     settings: settings,
+    isBarrierDismissible: isBarrierDismissible,
   ));
   return result;
 }

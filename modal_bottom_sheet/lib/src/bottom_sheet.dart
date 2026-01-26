@@ -48,6 +48,7 @@ class ModalBottomSheet extends StatefulWidget {
     double? closeProgressThreshold,
     @Deprecated('Use preventPopThreshold instead') double? willPopThreshold,
     double? preventPopThreshold,
+    this.isBarrierDismissible = false,
   })  : preventPopThreshold =
             preventPopThreshold ?? willPopThreshold ?? _willPopThreshold,
         closeProgressThreshold =
@@ -113,6 +114,11 @@ class ModalBottomSheet extends StatefulWidget {
   /// The preventPopThreshold parameter
   /// Determines how far the sheet should be flinged before closing.
   final double preventPopThreshold;
+
+  /// If true, the bottom sheet will be closed when barrier is tapped
+  ///
+  /// Default is true.
+  final bool isBarrierDismissible;
 
   @override
   ModalBottomSheetState createState() => ModalBottomSheetState();
@@ -381,6 +387,7 @@ class ModalBottomSheetState extends State<ModalBottomSheet>
                   builder: (context, _) => CustomSingleChildLayout(
                     delegate: _CustomBottomSheetLayout(bounceAnimation.value),
                     child: GestureDetector(
+                      onTap: widget.isBarrierDismissible ? _close : null,
                       onVerticalDragUpdate: (details) {
                         _handleDragUpdate(details.delta.dy);
                       },
