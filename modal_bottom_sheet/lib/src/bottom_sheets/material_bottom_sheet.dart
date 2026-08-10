@@ -22,6 +22,7 @@ Future<T?> showMaterialModalBottomSheet<T>({
   Duration? duration,
   RouteSettings? settings,
   double? closeProgressThreshold,
+  bool isBarrierDismissible = false,
 }) async {
   assert(debugCheckHasMediaQuery(context));
   assert(debugCheckHasMaterialLocalizations(context));
@@ -47,6 +48,7 @@ Future<T?> showMaterialModalBottomSheet<T>({
     animationCurve: animationCurve,
     duration: duration,
     settings: settings,
+    isBarrierDismissible: isBarrierDismissible,
   ));
   return result;
 }

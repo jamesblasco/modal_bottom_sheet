@@ -120,6 +120,7 @@ Future<T?> showCupertinoModalBottomSheet<T>({
   BoxShadow? shadow,
   SystemUiOverlayStyle? overlayStyle,
   double? closeProgressThreshold,
+  bool isBarrierDismissible = false,
 }) async {
   assert(debugCheckHasMediaQuery(context));
   final hasMaterialLocalizations =
@@ -131,32 +132,34 @@ Future<T?> showCupertinoModalBottomSheet<T>({
   final result =
       await Navigator.of(context, rootNavigator: useRootNavigator).push(
     CupertinoModalBottomSheetRoute<T>(
-        builder: builder,
-        containerBuilder: (context, _, child) => _CupertinoBottomSheetContainer(
-              child: child,
-              backgroundColor: backgroundColor,
-              topRadius: topRadius,
-              shadow: shadow,
-              overlayStyle: overlayStyle,
-            ),
-        secondAnimationController: secondAnimation,
-        expanded: expand,
-        closeProgressThreshold: closeProgressThreshold,
-        barrierLabel: barrierLabel,
-        elevation: elevation,
-        bounce: bounce,
-        shape: shape,
-        clipBehavior: clipBehavior,
-        isDismissible: isDismissible ?? expand == false ? true : false,
-        modalBarrierColor: barrierColor ?? Colors.black12,
-        enableDrag: enableDrag,
+      builder: builder,
+      containerBuilder: (context, _, child) => _CupertinoBottomSheetContainer(
+        child: child,
+        backgroundColor: backgroundColor,
         topRadius: topRadius,
-        animationCurve: animationCurve,
-        previousRouteAnimationCurve: previousRouteAnimationCurve,
-        duration: duration,
-        settings: settings,
-        transitionBackgroundColor: transitionBackgroundColor ?? Colors.black,
-        overlayStyle: overlayStyle),
+        shadow: shadow,
+        overlayStyle: overlayStyle,
+      ),
+      secondAnimationController: secondAnimation,
+      expanded: expand,
+      closeProgressThreshold: closeProgressThreshold,
+      barrierLabel: barrierLabel,
+      elevation: elevation,
+      bounce: bounce,
+      shape: shape,
+      clipBehavior: clipBehavior,
+      isDismissible: isDismissible ?? expand == false ? true : false,
+      modalBarrierColor: barrierColor ?? Colors.black12,
+      enableDrag: enableDrag,
+      topRadius: topRadius,
+      animationCurve: animationCurve,
+      previousRouteAnimationCurve: previousRouteAnimationCurve,
+      duration: duration,
+      settings: settings,
+      transitionBackgroundColor: transitionBackgroundColor ?? Colors.black,
+      overlayStyle: overlayStyle,
+      isBarrierDismissible: isBarrierDismissible,
+    ),
   );
   return result;
 }
@@ -199,6 +202,7 @@ class CupertinoModalBottomSheetRoute<T> extends ModalSheetRoute<T> {
     this.topRadius = _kDefaultTopRadius,
     this.previousRouteAnimationCurve,
     this.overlayStyle,
+    super.isBarrierDismissible,
   });
 
   @override
