@@ -51,11 +51,8 @@ class MaterialWithModalsPageRoute<T> extends MaterialPageRoute<T> {
     if (nextRoute != null) {
       if (!secondaryAnimation.isDismissed) {
         // Avoid default transition theme to animate when a new modal view is pushed
-        final fakeSecondaryAnimation =
-            Tween<double>(begin: 0, end: 0).animate(secondaryAnimation);
-
         final defaultTransition = theme.buildTransitions<T>(
-            this, context, animation, fakeSecondaryAnimation, child);
+            this, context, animation, kAlwaysDismissedAnimation, child);
         return nextRoute.getPreviousRouteTransition(
             context, secondaryAnimation, defaultTransition);
       } else {

@@ -4,6 +4,46 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 void main() {
+  testWidgets(
+    'keeps the default secondary transition dismissed for modal routes',
+    (tester) async {
+      final transitionsBuilder = _RecordingPageTransitionsBuilder();
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData(
+            platform: TargetPlatform.android,
+            pageTransitionsTheme: PageTransitionsTheme(
+              builders: {
+                TargetPlatform.android: transitionsBuilder,
+              },
+            ),
+          ),
+          onGenerateRoute: (_) => MaterialWithModalsPageRoute<void>(
+            builder: (context) => Scaffold(
+              body: TextButton(
+                onPressed: () => showMaterialModalBottomSheet<void>(
+                  context: context,
+                  builder: (_) => const SizedBox(height: 100),
+                ),
+                child: const Text('Open modal'),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(_textButtonWithText('Open modal'));
+      await tester.pump();
+
+      expect(transitionsBuilder.secondaryAnimation.value, 0);
+      expect(
+        transitionsBuilder.secondaryAnimation.status,
+        AnimationStatus.dismissed,
+      );
+    },
+  );
+
   group(
     'Route.mainState are well-controlled by `mainState`',
     () {
@@ -62,6 +102,22 @@ void main() {
       });
     },
   );
+}
+
+class _RecordingPageTransitionsBuilder extends PageTransitionsBuilder {
+  Animation<double> secondaryAnimation = kAlwaysDismissedAnimation;
+
+  @override
+  Widget buildTransitions<T>(
+    PageRoute<T> route,
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
+    this.secondaryAnimation = secondaryAnimation;
+    return child;
+  }
 }
 
 Future<void> _pumpWidget({
