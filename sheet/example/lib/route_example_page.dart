@@ -20,6 +20,7 @@ import 'package:sheet/sheet.dart';
 import 'examples/route/examples/modal_with_nested_scroll.dart';
 import 'examples/route/navigation/go_router.dart';
 import 'examples/route/navigation/go_router_advanced.dart';
+import 'examples/route/navigation/go_router_pop_scope.dart';
 
 class RouteExamplePage extends StatelessWidget {
   const RouteExamplePage({super.key});
@@ -92,6 +93,16 @@ class RouteExamplePage extends StatelessWidget {
                           fullscreenDialog: true,
                           builder: (BuildContext context) =>
                               AdvancedGoRouterBooksApp(),
+                        ),
+                      ),
+                    ),
+                    ListTile(
+                      title: const Text('Go router - PopScope'),
+                      onTap: () => Navigator.of(context).push(
+                        MaterialExtendedPageRoute<void>(
+                          fullscreenDialog: true,
+                          builder: (BuildContext context) =>
+                              GoRouterPopScopeApp(),
                         ),
                       ),
                     ),
