@@ -93,6 +93,7 @@ Future<T?> showBarModalBottomSheet<T>({
   RouteSettings? settings,
   SystemUiOverlayStyle? overlayStyle,
   double? closeProgressThreshold,
+  double? preventPopThreshold,
 }) async {
   assert(debugCheckHasMediaQuery(context));
   assert(debugCheckHasMaterialLocalizations(context));
@@ -101,6 +102,7 @@ Future<T?> showBarModalBottomSheet<T>({
     builder: builder,
     bounce: bounce,
     closeProgressThreshold: closeProgressThreshold,
+    preventPopThreshold: preventPopThreshold,
     containerBuilder: (_, __, child) => BarBottomSheet(
       child: child,
       control: topControl,

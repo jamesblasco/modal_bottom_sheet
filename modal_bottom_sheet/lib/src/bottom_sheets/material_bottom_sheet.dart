@@ -22,6 +22,7 @@ Future<T?> showMaterialModalBottomSheet<T>({
   Duration? duration,
   RouteSettings? settings,
   double? closeProgressThreshold,
+  double? preventPopThreshold,
 }) async {
   assert(debugCheckHasMediaQuery(context));
   assert(debugCheckHasMaterialLocalizations(context));
@@ -29,6 +30,7 @@ Future<T?> showMaterialModalBottomSheet<T>({
       .push(ModalSheetRoute<T>(
     builder: builder,
     closeProgressThreshold: closeProgressThreshold,
+    preventPopThreshold: preventPopThreshold,
     containerBuilder: _materialContainerBuilder(
       context,
       backgroundColor: backgroundColor,

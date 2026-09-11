@@ -45,6 +45,7 @@ class ModalBottomSheet extends StatefulWidget {
     required this.onClosing,
     required this.child,
     this.minFlingVelocity = _minFlingVelocity,
+    this.onDragStateChanged,
     double? closeProgressThreshold,
     @Deprecated('Use preventPopThreshold instead') double? willPopThreshold,
     double? preventPopThreshold,
@@ -114,6 +115,8 @@ class ModalBottomSheet extends StatefulWidget {
   /// Determines how far the sheet should be flinged before closing.
   final double preventPopThreshold;
 
+  final bool Function(bool isDragging)? onDragStateChanged;
+
   @override
   ModalBottomSheetState createState() => ModalBottomSheetState();
 
@@ -158,13 +161,14 @@ class ModalBottomSheetState extends State<ModalBottomSheet>
   bool isDragging = false;
 
   bool get hasReachedWillPopThreshold =>
-      widget.animationController.value < _willPopThreshold;
+      widget.animationController.value < widget.preventPopThreshold;
 
   bool get hasReachedCloseThreshold =>
       widget.animationController.value < widget.closeProgressThreshold;
 
   void _close() {
     isDragging = false;
+    widget.onDragStateChanged?.call(isDragging);
     widget.onClosing();
   }
 
@@ -198,6 +202,7 @@ class ModalBottomSheetState extends State<ModalBottomSheet>
 
     if (_dismissUnderway) return;
     isDragging = true;
+    widget.onDragStateChanged?.call(isDragging);
 
     final progress = primaryDelta / (_childHeight ?? primaryDelta);
 
@@ -234,6 +239,7 @@ class ModalBottomSheetState extends State<ModalBottomSheet>
 
     if (_dismissUnderway || !isDragging) return;
     isDragging = false;
+    widget.onDragStateChanged?.call(isDragging);
     _bounceDragController.reverse();
 
     Future<void> tryClose() async {

@@ -120,6 +120,7 @@ Future<T?> showCupertinoModalBottomSheet<T>({
   BoxShadow? shadow,
   SystemUiOverlayStyle? overlayStyle,
   double? closeProgressThreshold,
+  double? preventPopThreshold,
 }) async {
   assert(debugCheckHasMediaQuery(context));
   final hasMaterialLocalizations =
@@ -142,6 +143,7 @@ Future<T?> showCupertinoModalBottomSheet<T>({
         secondAnimationController: secondAnimation,
         expanded: expand,
         closeProgressThreshold: closeProgressThreshold,
+        preventPopThreshold: preventPopThreshold,
         barrierLabel: barrierLabel,
         elevation: elevation,
         bounce: bounce,
@@ -180,6 +182,7 @@ class CupertinoModalBottomSheetRoute<T> extends ModalSheetRoute<T> {
     required super.builder,
     super.containerBuilder,
     super.closeProgressThreshold,
+    super.preventPopThreshold,
     super.barrierLabel,
     double? elevation,
     ShapeBorder? shape,
@@ -433,6 +436,7 @@ class CupertinoScaffold extends StatefulWidget {
   static Future<T?> showCupertinoModalBottomSheet<T>({
     required BuildContext context,
     double? closeProgressThreshold,
+    double? preventPopThreshold,
     required WidgetBuilder builder,
     Curve? animationCurve,
     Curve? previousRouteAnimationCurve,
@@ -466,6 +470,7 @@ class CupertinoScaffold extends StatefulWidget {
     final result = await Navigator.of(context, rootNavigator: useRootNavigator)
         .push(CupertinoModalBottomSheetRoute<T>(
       closeProgressThreshold: closeProgressThreshold,
+      preventPopThreshold: preventPopThreshold,
       builder: builder,
       secondAnimationController: CupertinoScaffold.of(context)!.animation,
       containerBuilder: (context, _, child) => _CupertinoBottomSheetContainer(

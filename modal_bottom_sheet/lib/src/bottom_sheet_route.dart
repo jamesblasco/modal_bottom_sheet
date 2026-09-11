@@ -10,6 +10,7 @@ class _ModalBottomSheet<T> extends StatefulWidget {
   const _ModalBottomSheet({
     super.key,
     this.closeProgressThreshold,
+    this.preventPopThreshold,
     required this.route,
     this.secondAnimationController,
     this.bounce = false,
@@ -25,6 +26,7 @@ class _ModalBottomSheet<T> extends StatefulWidget {
   final bool enableDrag;
   final AnimationController? secondAnimationController;
   final Curve? animationCurve;
+  final double? preventPopThreshold;
 
   @override
   _ModalBottomSheetState<T> createState() => _ModalBottomSheetState<T>();
@@ -50,6 +52,7 @@ class _ModalBottomSheetState<T> extends State<_ModalBottomSheet<T>> {
   }
 
   ScrollController? _scrollController;
+  bool _isDragging = false;
 
   @override
   void initState() {
@@ -96,6 +99,8 @@ class _ModalBottomSheetState<T> extends State<_ModalBottomSheet<T>> {
                 expanded: widget.route.expanded,
                 containerBuilder: widget.route.containerBuilder,
                 animationController: widget.route._animationController!,
+                preventPopThreshold: widget.preventPopThreshold,
+                onDragStateChanged: (v) => _isDragging = v,
                 shouldClose: widget.route.popDisposition ==
                             RoutePopDisposition.doNotPop ||
                         widget.route._hasScopedWillPopCallback
@@ -108,7 +113,11 @@ class _ModalBottomSheetState<T> extends State<_ModalBottomSheet<T>> {
                                 popDisposition == RoutePopDisposition.doNotPop);
                         popDisposition == RoutePopDisposition.doNotPop;
                         if (!shouldClose) {
+                          if (_isDragging) return false;
+                          // ignore: deprecated_member_use
                           widget.route.onPopInvoked(false);
+                          widget.route.onPopInvokedWithResult(false, null);
+                          return !widget.route.isCurrent;
                         }
                         return shouldClose;
                       }
@@ -136,6 +145,7 @@ class _ModalBottomSheetState<T> extends State<_ModalBottomSheet<T>> {
 class ModalSheetRoute<T> extends PageRoute<T> {
   ModalSheetRoute({
     this.closeProgressThreshold,
+    this.preventPopThreshold,
     this.containerBuilder,
     required this.builder,
     this.scrollController,
@@ -182,7 +192,10 @@ class ModalSheetRoute<T> extends PageRoute<T> {
   final String? barrierLabel;
 
   @override
-  Color get barrierColor => modalBarrierColor ?? Colors.black.withOpacity(0.35);
+  Color get barrierColor =>
+      modalBarrierColor ?? Colors.black.withValues(alpha: 0.35);
+
+  final double? preventPopThreshold;
 
   AnimationController? _animationController;
 
@@ -209,6 +222,7 @@ class ModalSheetRoute<T> extends PageRoute<T> {
       // removeTop: true,
       child: _ModalBottomSheet<T>(
         closeProgressThreshold: closeProgressThreshold,
+        preventPopThreshold: preventPopThreshold,
         route: this,
         secondAnimationController: secondAnimationController,
         expanded: expanded,
