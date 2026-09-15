@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// A mixin used by routes to allow the top route define how the bottom route
 /// will animate when the top route enters and exits.

@@ -12,8 +12,8 @@ import 'package:example/examples/route/modals/dialog_sheet.dart';
 import 'package:example/examples/route/modals/floating_sheet.dart';
 import 'package:example/examples/route/modals/material_sheet.dart';
 import 'package:example/examples/route/navigation/cupertino_page.dart';
-import 'package:flutter/cupertino.dart' hide CupertinoSheetRoute;
-import 'package:flutter/material.dart';
+import 'package:cupertino_ui/cupertino_ui.dart' hide CupertinoSheetRoute;
+import 'package:material_ui/material_ui.dart';
 import 'package:sheet/route.dart';
 import 'package:sheet/sheet.dart';
 

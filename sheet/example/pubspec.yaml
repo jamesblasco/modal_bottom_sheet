@@ -9,18 +9,20 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  equatable: ^2.0.5
+  equatable: ^2.1.0
   collection: 
-  cupertino_icons: ^1.0.6
-  provider: ^6.0.5
+  cupertino_icons: ^1.0.9
+  provider: ^6.1.5+1
   sheet:
     path: ../
-  go_router: ^12.1.0
+  go_router: ^18.0.1
+  cupertino_ui: ^1.1.0
+  material_ui: ^1.3.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  lints: ^3.0.0
+  lints: ^6.1.0
 
 flutter:
   uses-material-design: true
