@@ -1,7 +1,7 @@
 import 'package:example/base_scaffold.dart';
 
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:cupertino_ui/cupertino_ui.dart';
+import 'package:material_ui/material_ui.dart';
 
 import 'editor/editor_page.dart';
 import 'examples/sheet/bouncing_overflow_sheet.dart';

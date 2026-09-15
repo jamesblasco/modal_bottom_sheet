@@ -1,8 +1,8 @@
 import 'package:example/base_scaffold.dart';
 import 'package:example/editor/editor_child.dart';
 import 'package:example/editor/editor_controller.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:cupertino_ui/cupertino_ui.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';

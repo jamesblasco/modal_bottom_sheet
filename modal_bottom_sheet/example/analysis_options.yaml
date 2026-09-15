@@ -1,1 +1,8 @@
+analyzer:
+  exclude:
+    - build/**
+    - android/**
+    - ios/**
+    - web/**
+    - macos/**
 include: package:lints/recommended.yaml

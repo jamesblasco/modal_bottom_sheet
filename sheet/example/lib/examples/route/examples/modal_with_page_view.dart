@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class ModalWithPageView extends StatelessWidget {
   const ModalWithPageView({super.key});

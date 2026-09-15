@@ -2,7 +2,7 @@
 
 import 'dart:math' as math;
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter/rendering.dart';
 import 'package:sheet/src/widgets/resizable_sheet.dart';
 import 'package:sheet/src/widgets/status_bar_gesture_detector.dart';
