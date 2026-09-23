@@ -20,6 +20,7 @@ import 'package:flutter/material.dart'
         Theme,
         ThemeData,
         debugCheckHasMaterialLocalizations;
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
@@ -61,11 +62,10 @@ class _CupertinoBottomSheetContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scopedOverlayStyle = overlayStyle;
-    final topSafeAreaPadding = MediaQuery.of(context).padding.top;
+    final topSafeAreaPadding = MediaQuery.paddingOf(context).top;
     final topPadding = _kPreviousPageVisibleOffset + topSafeAreaPadding;
 
     final shadow = this.shadow ?? _kDefaultBoxShadow;
-    BoxShadow(blurRadius: 10, color: Colors.black12, spreadRadius: 5);
     final backgroundColor = this.backgroundColor ??
         CupertinoTheme.of(context).scaffoldBackgroundColor;
     Widget bottomSheetContainer = Padding(
@@ -201,6 +201,10 @@ class CupertinoModalBottomSheetRoute<T> extends ModalSheetRoute<T> {
     this.overlayStyle,
   });
 
+  // ModalRoute.animation jumps to 1 during Hero's offstage layout pass.
+  // The visible background must follow the real transition instead.
+  Animation<double>? get _backgroundAnimation => controller?.view;
+
   @override
   Widget buildTransitions(
     BuildContext context,
@@ -208,21 +212,12 @@ class CupertinoModalBottomSheetRoute<T> extends ModalSheetRoute<T> {
     Animation<double> secondaryAnimation,
     Widget child,
   ) {
-    final paddingTop = MediaQuery.of(context).padding.top;
+    final paddingTop = MediaQuery.paddingOf(context).top;
     final distanceWithScale = (paddingTop + _kPreviousPageVisibleOffset) * 0.9;
-    final offsetY = secondaryAnimation.value * (paddingTop - distanceWithScale);
-    final scale = 1 - secondaryAnimation.value / 10;
-    return AnimatedBuilder(
-      builder: (context, child) => Transform.translate(
-        offset: Offset(0, offsetY),
-        child: Transform.scale(
-          scale: scale,
-          child: child,
-          alignment: Alignment.topCenter,
-        ),
-      ),
-      child: child,
+    return _CupertinoSheetTransform(
       animation: secondaryAnimation,
+      verticalOffset: paddingTop - distanceWithScale,
+      child: child,
     );
   }
 
@@ -258,15 +253,14 @@ class _CupertinoModalTransition extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var startRoundCorner = 0.0;
-    final paddingTop = MediaQuery.of(context).padding.top;
+    final paddingTop = MediaQuery.paddingOf(context).top;
     if (Theme.of(context).platform == TargetPlatform.iOS && paddingTop > 20) {
       startRoundCorner = 38.5;
       //https://kylebashour.com/posts/finding-the-real-iphone-x-corner-radius
     }
 
-    final curvedAnimation = CurvedAnimation(
-      parent: secondaryAnimation,
-      curve: animationCurve ?? Curves.easeOut,
+    final curvedAnimation = secondaryAnimation.drive(
+      CurveTween(curve: animationCurve ?? Curves.easeOut),
     );
 
     return AnnotatedRegion(
@@ -277,44 +271,72 @@ class _CupertinoModalTransition extends StatelessWidget {
       child: Stack(
         children: [
           Positioned.fill(child: ColoredBox(color: backgroundColor)),
-          AnimatedBuilder(
+          _CupertinoSheetTransform(
             animation: curvedAnimation,
-            child: CupertinoUserInterfaceLevel(
-              data: CupertinoUserInterfaceLevelData.base,
-              child: body,
-            ),
-            builder: (context, child) {
-              final progress = curvedAnimation.value;
-              final yOffset = progress * paddingTop;
-              final scale = 1 - progress / 10;
-              final radius = progress == 0
-                  ? 0.0
-                  : (1 - progress) * startRoundCorner + progress * topRadius.x;
-              return Transform.translate(
-                offset: Offset(0, yOffset),
-                child: Transform.scale(
-                  scale: scale,
-                  alignment: Alignment.topCenter,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(radius),
-                    child: CupertinoUserInterfaceLevel(
-                      data: CupertinoUserInterfaceLevelData.elevated,
-                      child: Builder(
-                        builder: (context) => CupertinoTheme(
-                          data: createPreviousRouteTheme(
-                            context,
-                            curvedAnimation,
-                          ),
-                          child: child!,
-                        ),
-                      ),
-                    ),
+            verticalOffset: paddingTop,
+            child: ClipRRect(
+              clipper: _CupertinoSheetClipper(
+                animation: curvedAnimation,
+                startRadius: startRoundCorner,
+                endRadius: topRadius.x,
+              ),
+              child: CupertinoUserInterfaceLevel(
+                data: CupertinoUserInterfaceLevelData.elevated,
+                child: _CupertinoPreviousRouteTheme(
+                  animation: curvedAnimation,
+                  child: CupertinoUserInterfaceLevel(
+                    data: CupertinoUserInterfaceLevelData.base,
+                    child: RepaintBoundary(child: body),
                   ),
                 ),
-              );
-            },
+              ),
+            ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _CupertinoPreviousRouteTheme extends StatefulWidget {
+  const _CupertinoPreviousRouteTheme({
+    required this.animation,
+    required this.child,
+  });
+
+  final Animation<double> animation;
+  final Widget child;
+
+  @override
+  State<_CupertinoPreviousRouteTheme> createState() =>
+      _CupertinoPreviousRouteThemeState();
+}
+
+class _CupertinoPreviousRouteThemeState
+    extends State<_CupertinoPreviousRouteTheme> {
+  late CupertinoThemeData _startTheme;
+  late CupertinoThemeData _endTheme;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _startTheme = createPreviousRouteTheme(context, kAlwaysDismissedAnimation);
+    _endTheme = createPreviousRouteTheme(context, kAlwaysCompleteAnimation);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_startTheme.scaffoldBackgroundColor ==
+            _endTheme.scaffoldBackgroundColor &&
+        _startTheme.barBackgroundColor == _endTheme.barBackgroundColor) {
+      return CupertinoTheme(data: _startTheme, child: widget.child);
+    }
+    return AnimatedBuilder(
+      animation: widget.animation,
+      child: widget.child,
+      builder: (context, child) => CupertinoTheme(
+        data: createPreviousRouteTheme(context, widget.animation),
+        child: child!,
       ),
     );
   }
@@ -459,15 +481,17 @@ class CupertinoScaffold extends StatefulWidget {
       assert(debugCheckHasMaterialLocalizations(context));
       barrierLabel = MaterialLocalizations.of(context).modalBarrierDismissLabel;
     }
-    final topRadius = CupertinoScaffold.of(context)!.topRadius;
-    final transitionBackgroundColor =
-        CupertinoScaffold.of(context)!.transitionBackgroundColor;
+    final scaffold = CupertinoScaffold.of(context)!;
+    final scaffoldState =
+        context.findAncestorStateOfType<_CupertinoScaffoldState>();
+    final topRadius = scaffold.topRadius;
+    final transitionBackgroundColor = scaffold.transitionBackgroundColor;
     final overlayStyle = overlayStyleFromColor(transitionBackgroundColor);
-    final result = await Navigator.of(context, rootNavigator: useRootNavigator)
-        .push(CupertinoModalBottomSheetRoute<T>(
+    final route = CupertinoModalBottomSheetRoute<T>(
       closeProgressThreshold: closeProgressThreshold,
       builder: builder,
-      secondAnimationController: CupertinoScaffold.of(context)!.animation,
+      secondAnimationController:
+          scaffoldState == null ? scaffold.animation : null,
       containerBuilder: (context, _, child) => _CupertinoBottomSheetContainer(
         child: child,
         backgroundColor: backgroundColor,
@@ -486,20 +510,56 @@ class CupertinoScaffold extends StatefulWidget {
       previousRouteAnimationCurve: previousRouteAnimationCurve,
       duration: duration,
       settings: settings,
-    ));
+    );
+    final result =
+        Navigator.of(context, rootNavigator: useRootNavigator).push<T>(route);
+    scaffoldState?._trackRoute(route);
     return result;
   }
 }
 
 class _CupertinoScaffoldState extends State<CupertinoScaffold>
-    with TickerProviderStateMixin {
+    with SingleTickerProviderStateMixin {
   late AnimationController animationController;
+  final Set<Animation<double>> _routeAnimations = {};
+
+  void _trackRoute(CupertinoModalBottomSheetRoute<dynamic> route) {
+    final animation = route._backgroundAnimation!;
+    _routeAnimations.add(animation);
+    animation.addListener(_updateProgress);
+    _updateProgress();
+    route.completed.then((_) {
+      if (!_routeAnimations.remove(animation)) return;
+      animation.removeListener(_updateProgress);
+      _updateProgress();
+    });
+  }
+
+  void _updateProgress() {
+    var progress = 0.0;
+    for (final animation in _routeAnimations) {
+      if (animation.value > progress) progress = animation.value;
+    }
+    if (animationController.value != progress) {
+      animationController.value = progress;
+    }
+  }
 
   @override
   void initState() {
+    super.initState();
     animationController =
         AnimationController(duration: Duration(milliseconds: 350), vsync: this);
-    super.initState();
+  }
+
+  @override
+  void dispose() {
+    for (final animation in _routeAnimations) {
+      animation.removeListener(_updateProgress);
+    }
+    _routeAnimations.clear();
+    animationController.dispose();
+    super.dispose();
   }
 
   @override
@@ -516,4 +576,94 @@ class _CupertinoScaffoldState extends State<CupertinoScaffold>
       ),
     );
   }
+}
+
+class _CupertinoSheetTransform extends SingleChildRenderObjectWidget {
+  const _CupertinoSheetTransform({
+    required this.animation,
+    required this.verticalOffset,
+    required super.child,
+  });
+
+  final Animation<double> animation;
+  final double verticalOffset;
+
+  @override
+  _RenderCupertinoSheetTransform createRenderObject(BuildContext context) =>
+      _RenderCupertinoSheetTransform(animation, verticalOffset);
+
+  @override
+  void updateRenderObject(
+      BuildContext context, _RenderCupertinoSheetTransform renderObject) {
+    renderObject.update(animation, verticalOffset);
+  }
+}
+
+// Keep transition ticks in the paint phase; RenderTransform also handles hit
+// testing and accessibility coordinates using the same matrix.
+class _RenderCupertinoSheetTransform extends RenderTransform {
+  _RenderCupertinoSheetTransform(this._animation, this._verticalOffset)
+      : super(transform: Matrix4.identity(), alignment: Alignment.topCenter) {
+    _updateTransform();
+  }
+
+  Animation<double> _animation;
+  double _verticalOffset;
+
+  void update(Animation<double> animation, double verticalOffset) {
+    if (_animation != animation) {
+      if (attached) _animation.removeListener(_updateTransform);
+      _animation = animation;
+      if (attached) _animation.addListener(_updateTransform);
+    }
+    _verticalOffset = verticalOffset;
+    _updateTransform();
+  }
+
+  void _updateTransform() {
+    final progress = _animation.value;
+    final scale = 1 - progress / 10;
+    transform = Matrix4.diagonal3Values(scale, scale, 1)
+      ..setTranslationRaw(0, progress * _verticalOffset, 0);
+  }
+
+  @override
+  void attach(PipelineOwner owner) {
+    super.attach(owner);
+    _animation.addListener(_updateTransform);
+    _updateTransform();
+  }
+
+  @override
+  void detach() {
+    _animation.removeListener(_updateTransform);
+    super.detach();
+  }
+}
+
+class _CupertinoSheetClipper extends CustomClipper<RRect> {
+  _CupertinoSheetClipper({
+    required this.animation,
+    required this.startRadius,
+    required this.endRadius,
+  }) : super(reclip: animation);
+
+  final Animation<double> animation;
+  final double startRadius;
+  final double endRadius;
+
+  @override
+  RRect getClip(Size size) {
+    final progress = animation.value;
+    final radius = progress == 0
+        ? 0.0
+        : (1 - progress) * startRadius + progress * endRadius;
+    return RRect.fromRectAndRadius(Offset.zero & size, Radius.circular(radius));
+  }
+
+  @override
+  bool shouldReclip(_CupertinoSheetClipper oldClipper) =>
+      animation != oldClipper.animation ||
+      startRadius != oldClipper.startRadius ||
+      endRadius != oldClipper.endRadius;
 }

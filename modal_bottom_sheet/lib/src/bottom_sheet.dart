@@ -17,7 +17,10 @@ const double _closeProgressThreshold = 0.6;
 const double _willPopThreshold = 0.8;
 
 typedef WidgetWithChildBuilder = Widget Function(
-    BuildContext context, Animation<double> animation, Widget child);
+  BuildContext context,
+  Animation<double> animation,
+  Widget child,
+);
 
 /// A custom bottom sheet.
 ///
@@ -40,6 +43,7 @@ class ModalBottomSheet extends StatefulWidget {
     this.containerBuilder,
     this.bounce = true,
     this.shouldClose,
+    this.shouldCheckClose,
     required this.scrollController,
     required this.expanded,
     required this.onClosing,
@@ -94,6 +98,13 @@ class ModalBottomSheet extends StatefulWidget {
   // previous position until the function is solved
   final Future<bool> Function()? shouldClose;
 
+  /// Whether a drag must consult [shouldClose] before dismissing the sheet.
+  ///
+  /// Evaluated during the gesture so route pop guards can change without
+  /// rebuilding the sheet on every animation frame. Defaults to checking
+  /// whenever [shouldClose] is provided.
+  final bool Function()? shouldCheckClose;
+
   /// A builder for the contents of the sheet.
   ///
   final Widget child;
@@ -142,6 +153,10 @@ class ModalBottomSheetState extends State<ModalBottomSheet>
   ScrollController get _scrollController => widget.scrollController;
 
   late AnimationController _bounceDragController;
+  late CurvedAnimation _bounceAnimation;
+
+  bool get _shouldCheckClose =>
+      widget.shouldClose != null && (widget.shouldCheckClose?.call() ?? true);
 
   double? get _childHeight {
     final childContext = _childKey.currentContext;
@@ -169,11 +184,13 @@ class ModalBottomSheetState extends State<ModalBottomSheet>
   }
 
   void _cancelClose() {
-    widget.animationController.forward().then((value) {
+    final animationController = widget.animationController;
+    animationController.forward().then((value) {
+      if (!mounted || widget.animationController != animationController) return;
       // When using WillPop, animation doesn't end at 1.
       // Check more in detail the problem
-      if (!widget.animationController.isCompleted) {
-        widget.animationController.value = 1;
+      if (!animationController.isCompleted) {
+        animationController.value = 1;
       }
     });
     _bounceDragController.reverse();
@@ -183,11 +200,14 @@ class ModalBottomSheetState extends State<ModalBottomSheet>
 
   FutureOr<bool> shouldClose() async {
     if (_isCheckingShouldClose) return false;
-    if (widget.shouldClose == null) return false;
+    final callback = widget.shouldClose;
+    if (callback == null) return false;
     _isCheckingShouldClose = true;
-    final result = await widget.shouldClose?.call();
-    _isCheckingShouldClose = false;
-    return result ?? false;
+    try {
+      return await callback();
+    } finally {
+      _isCheckingShouldClose = false;
+    }
   }
 
   ParametricCurve<double> animationCurve = Curves.linear;
@@ -201,9 +221,10 @@ class ModalBottomSheetState extends State<ModalBottomSheet>
 
     final progress = primaryDelta / (_childHeight ?? primaryDelta);
 
-    if (widget.shouldClose != null && hasReachedWillPopThreshold) {
+    if (_shouldCheckClose && hasReachedWillPopThreshold) {
       _cancelClose();
       final canClose = await shouldClose();
+      if (!mounted) return;
       if (canClose) {
         _close();
         return;
@@ -237,9 +258,10 @@ class ModalBottomSheetState extends State<ModalBottomSheet>
     _bounceDragController.reverse();
 
     Future<void> tryClose() async {
-      if (widget.shouldClose != null) {
+      if (_shouldCheckClose) {
         _cancelClose();
         bool canClose = await shouldClose();
+        if (!mounted) return;
         if (canClose) {
           _close();
         }
@@ -277,8 +299,9 @@ class ModalBottomSheetState extends State<ModalBottomSheet>
 
     if (_scrollController.positions.length > 1) {
       scrollPosition = _scrollController.positions.firstWhere(
-          (p) => p.isScrollingNotifier.value,
-          orElse: () => _scrollController.positions.first);
+        (p) => p.isScrollingNotifier.value,
+        orElse: () => _scrollController.positions.first,
+      );
     } else {
       scrollPosition = _scrollController.position;
     }
@@ -340,21 +363,27 @@ class ModalBottomSheetState extends State<ModalBottomSheet>
 
   @override
   void initState() {
-    animationCurve = _defaultCurve;
-    _bounceDragController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 300));
-
-    // Todo: Check if we can remove scroll Controller
     super.initState();
+    animationCurve = _defaultCurve;
+    _bounceDragController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 300),
+    );
+    _bounceAnimation = CurvedAnimation(
+      parent: _bounceDragController,
+      curve: Curves.easeOutSine,
+    );
+  }
+
+  @override
+  void dispose() {
+    _bounceAnimation.dispose();
+    _bounceDragController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final bounceAnimation = CurvedAnimation(
-      parent: _bounceDragController,
-      curve: Curves.easeOutSine,
-    );
-
     var child = widget.child;
     if (widget.containerBuilder != null) {
       child = widget.containerBuilder!(
@@ -364,51 +393,40 @@ class ModalBottomSheetState extends State<ModalBottomSheet>
       );
     }
 
-    child = AnimatedBuilder(
-      animation: widget.animationController,
-      builder: (context, Widget? child) {
-        assert(child != null);
-        final animationValue = animationCurve.transform(
-          widget.animationController.value,
-        );
-
-        final draggableChild = !widget.enableDrag
-            ? child
-            : KeyedSubtree(
-                key: _childKey,
-                child: AnimatedBuilder(
-                  animation: bounceAnimation,
-                  builder: (context, _) => CustomSingleChildLayout(
-                    delegate: _CustomBottomSheetLayout(bounceAnimation.value),
-                    child: GestureDetector(
-                      onVerticalDragUpdate: (details) {
-                        _handleDragUpdate(details.delta.dy);
-                      },
-                      onVerticalDragEnd: (details) {
-                        _handleDragEnd(details.primaryVelocity ?? 0);
-                      },
-                      child: NotificationListener<ScrollNotification>(
-                        onNotification: (ScrollNotification notification) {
-                          _handleScrollUpdate(notification);
-                          return false;
-                        },
-                        child: child!,
-                      ),
-                    ),
-                  ),
-                ),
-              );
-        return ClipRect(
-          child: CustomSingleChildLayout(
-            delegate: _ModalBottomSheetLayout(
-              animationValue,
-              widget.expanded,
+    child = RepaintBoundary(child: child);
+    if (widget.enableDrag) {
+      child = KeyedSubtree(
+        key: _childKey,
+        child: CustomSingleChildLayout(
+          delegate: _CustomBottomSheetLayout(_bounceAnimation),
+          child: GestureDetector(
+            onVerticalDragUpdate: (details) {
+              _handleDragUpdate(details.delta.dy);
+            },
+            onVerticalDragEnd: (details) {
+              _handleDragEnd(details.primaryVelocity ?? 0);
+            },
+            child: NotificationListener<ScrollNotification>(
+              onNotification: (notification) {
+                _handleScrollUpdate(notification);
+                return false;
+              },
+              child: child,
             ),
-            child: draggableChild,
           ),
-        );
-      },
-      child: RepaintBoundary(child: child),
+        ),
+      );
+    }
+
+    child = ClipRect(
+      child: CustomSingleChildLayout(
+        delegate: _ModalBottomSheetLayout(
+          widget.animationController,
+          widget.expanded,
+          () => animationCurve,
+        ),
+        child: child,
+      ),
     );
 
     return StatusBarGestureDetector(
@@ -425,10 +443,12 @@ class ModalBottomSheetState extends State<ModalBottomSheet>
 }
 
 class _ModalBottomSheetLayout extends SingleChildLayoutDelegate {
-  _ModalBottomSheetLayout(this.progress, this.expand);
+  _ModalBottomSheetLayout(this.animation, this.expand, this.curve)
+      : super(relayout: animation);
 
-  final double progress;
+  final Animation<double> animation;
   final bool expand;
+  final ParametricCurve<double> Function() curve;
 
   @override
   BoxConstraints getConstraintsForChild(BoxConstraints constraints) {
@@ -442,20 +462,22 @@ class _ModalBottomSheetLayout extends SingleChildLayoutDelegate {
 
   @override
   Offset getPositionForChild(Size size, Size childSize) {
+    final progress = curve().transform(animation.value);
     return Offset(0.0, size.height - childSize.height * progress);
   }
 
   @override
   bool shouldRelayout(_ModalBottomSheetLayout oldDelegate) {
-    return progress != oldDelegate.progress;
+    return animation != oldDelegate.animation ||
+        expand != oldDelegate.expand ||
+        curve != oldDelegate.curve;
   }
 }
 
 class _CustomBottomSheetLayout extends SingleChildLayoutDelegate {
-  _CustomBottomSheetLayout(this.progress);
+  _CustomBottomSheetLayout(this.animation) : super(relayout: animation);
 
-  final double progress;
-  double? childHeight;
+  final Animation<double> animation;
 
   @override
   BoxConstraints getConstraintsForChild(BoxConstraints constraints) {
@@ -463,23 +485,18 @@ class _CustomBottomSheetLayout extends SingleChildLayoutDelegate {
       minWidth: constraints.maxWidth,
       maxWidth: constraints.maxWidth,
       minHeight: constraints.minHeight,
-      maxHeight: constraints.maxHeight + progress * 8,
+      maxHeight: constraints.maxHeight + animation.value * 8,
     );
   }
 
   @override
   Offset getPositionForChild(Size size, Size childSize) {
-    childHeight ??= childSize.height;
     return Offset(0.0, size.height - childSize.height);
   }
 
   @override
   bool shouldRelayout(_CustomBottomSheetLayout oldDelegate) {
-    if (progress != oldDelegate.progress) {
-      childHeight = oldDelegate.childHeight;
-      return true;
-    }
-    return false;
+    return animation != oldDelegate.animation;
   }
 }
 

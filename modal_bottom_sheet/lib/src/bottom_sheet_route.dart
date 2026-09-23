@@ -53,19 +53,19 @@ class _ModalBottomSheetState<T> extends State<_ModalBottomSheet<T>> {
 
   @override
   void initState() {
-    widget.route.animation?.addListener(updateController);
+    widget.route._animationController?.addListener(updateController);
     super.initState();
   }
 
   @override
   void dispose() {
-    widget.route.animation?.removeListener(updateController);
+    widget.route._animationController?.removeListener(updateController);
     _scrollController?.dispose();
     super.dispose();
   }
 
   void updateController() {
-    final animation = widget.route.animation;
+    final animation = widget.route._animationController;
     if (animation != null) {
       widget.secondAnimationController?.value = animation.value;
     }
@@ -80,53 +80,42 @@ class _ModalBottomSheetState<T> extends State<_ModalBottomSheet<T>> {
     return ModalScrollController(
       controller: scrollController,
       child: Builder(
-        builder: (context) => AnimatedBuilder(
-          animation: widget.route._animationController!,
-          builder: (BuildContext context, final Widget? child) {
-            assert(child != null);
-            // Disable the initial animation when accessible navigation is on so
-            // that the semantics are added to the tree at the correct time.
-            return Semantics(
-              scopesRoute: true,
-              namesRoute: true,
-              label: _getRouteLabel(),
-              explicitChildNodes: true,
-              child: ModalBottomSheet(
-                closeProgressThreshold: widget.closeProgressThreshold,
-                expanded: widget.route.expanded,
-                containerBuilder: widget.route.containerBuilder,
-                animationController: widget.route._animationController!,
-                shouldClose: widget.route.popDisposition ==
-                            RoutePopDisposition.doNotPop ||
-                        widget.route._hasScopedWillPopCallback
-                    ? () async {
-                        // ignore: deprecated_member_use
-                        final willPop = await widget.route.willPop();
-                        final popDisposition = widget.route.popDisposition;
-                        final shouldClose =
-                            !(willPop == RoutePopDisposition.doNotPop ||
-                                popDisposition == RoutePopDisposition.doNotPop);
-                        popDisposition == RoutePopDisposition.doNotPop;
-                        if (!shouldClose) {
-                          widget.route.onPopInvoked(false);
-                        }
-                        return shouldClose;
-                      }
-                    : null,
-                onClosing: () {
-                  if (widget.route.isCurrent) {
-                    Navigator.of(context).pop();
-                  }
-                },
-                child: child!,
-                enableDrag: widget.enableDrag,
-                bounce: widget.bounce,
-                scrollController: scrollController,
-                animationCurve: widget.animationCurve,
-              ),
-            );
-          },
-          child: widget.route.builder(context),
+        builder: (context) => Semantics(
+          scopesRoute: true,
+          namesRoute: true,
+          label: _getRouteLabel(),
+          explicitChildNodes: true,
+          child: ModalBottomSheet(
+            closeProgressThreshold: widget.closeProgressThreshold,
+            expanded: widget.route.expanded,
+            containerBuilder: widget.route.containerBuilder,
+            animationController: widget.route._animationController!,
+            shouldCheckClose: () =>
+                widget.route.popDisposition == RoutePopDisposition.doNotPop ||
+                widget.route._hasScopedWillPopCallback,
+            shouldClose: () async {
+              final route = widget.route;
+              // ignore: deprecated_member_use
+              final willPop = await route.willPop();
+              if (!mounted || !route.isCurrent) return false;
+              final shouldClose = willPop != RoutePopDisposition.doNotPop &&
+                  route.popDisposition != RoutePopDisposition.doNotPop;
+              if (!shouldClose) {
+                route.onPopInvoked(false);
+              }
+              return shouldClose;
+            },
+            onClosing: () {
+              if (widget.route.isCurrent) {
+                Navigator.of(context).pop();
+              }
+            },
+            child: widget.route.builder(context),
+            enableDrag: widget.enableDrag,
+            bounce: widget.bounce,
+            scrollController: scrollController,
+            animationCurve: widget.animationCurve,
+          ),
         ),
       ),
     );
