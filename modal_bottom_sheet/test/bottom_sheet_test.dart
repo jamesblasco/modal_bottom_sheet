@@ -44,6 +44,59 @@ void main() {
     },
   );
 
+  group('status bar tap', () {
+    Future<void> openModal(WidgetTester tester, WidgetBuilder builder) async {
+      tester.view.padding = const FakeViewPadding(top: 60);
+      addTearDown(tester.view.resetPadding);
+
+      await _pumpWidget(
+        tester: tester,
+        onPressed: (context) => showCupertinoModalBottomSheet<void>(
+          context: context,
+          builder: builder,
+        ),
+      );
+      await tester.tap(_textButtonWithText('Press me'));
+      await tester.pumpAndSettle();
+    }
+
+    Future<void> tapStatusBar(WidgetTester tester) async {
+      await tester.tapAt(const Offset(100, 5));
+      await tester.pumpAndSettle();
+    }
+
+    testWidgets('does not throw when the sheet has no scroll view',
+        (tester) async {
+      await openModal(tester, (_) => const SizedBox(height: 300));
+
+      await tapStatusBar(tester);
+
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('scrolls the sheet content back to the top', (tester) async {
+      await openModal(
+        tester,
+        (context) => ListView.builder(
+          controller: ModalScrollController.of(context),
+          itemExtent: 50,
+          itemCount: 100,
+          itemBuilder: (_, index) => Text('Item $index'),
+        ),
+      );
+
+      final controller =
+          tester.widget<Scrollable>(find.byType(Scrollable).last).controller!;
+      controller.jumpTo(500);
+      await tester.pump();
+
+      await tapStatusBar(tester);
+
+      expect(tester.takeException(), isNull);
+      expect(controller.offset, 0);
+    });
+  });
+
   group(
     'Route.mainState are well-controlled by `mainState`',
     () {
